@@ -108,4 +108,12 @@ public class AccountDAOImpl extends AMybatisTemplate implements IAccountDAO {
     public int updateStatus(Account data) {
         return super.update(NAMESPACE.concat("update_account_status"), data);
     }
+
+    /** 
+     * @see com.std.account.dao.IAccountDAO#updateOutAmount(com.std.account.domain.Account)
+     */
+    @Override
+    public int updateOutAmount(Account data) {
+        return super.update(NAMESPACE.concat("update_out_amount"), data);
+    }
 }

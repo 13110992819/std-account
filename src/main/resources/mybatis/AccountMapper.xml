@@ -187,4 +187,12 @@
 		WHERE
 		account_number = #{accountNumber}	
 	</update>
+	
+	<update id="update_out_amount" parameterType="jour">
+		UPDATE tstd_account
+		SET
+		out_amount = #{outAmount}
+		WHERE
+		account_number = #{accountNumber}	
+	</update>
 </mapper>

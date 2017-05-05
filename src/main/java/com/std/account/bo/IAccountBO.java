@@ -92,6 +92,15 @@ public interface IAccountBO extends IPaginableBO<Account> {
             String accountNumber, Long unfreezeAmount, String lastOrder);
 
     /**
+     * 统计取现累计金额
+     * @param account
+     * @param transAmount 
+     * @create: 2017年5月5日 下午5:50:06 xieyj
+     * @history:
+     */
+    public void refreshOutAmount(Account account, Long transAmount);
+
+    /**
      * 更新账户状态
      * @param systemCode
      * @param accountNumber

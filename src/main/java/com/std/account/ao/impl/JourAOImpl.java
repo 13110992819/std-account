@@ -306,6 +306,8 @@ public class JourAOImpl implements IJourAO {
                     -data.getTransAmount(), code);
                 postAmount = preAmount;
                 preAmount = preAmount - data.getTransAmount();
+                // 更新累计取现金额
+                accountBO.refreshOutAmount(account, -data.getTransAmount());
             }
         } else {
             if (EBizType.AJ_QX.getCode().equals(data.getBizType())) {
