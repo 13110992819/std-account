@@ -126,7 +126,7 @@ public interface IAccountBO extends IPaginableBO<Account> {
             String toUserId, String toCurrency, Long transAmount,
             EJourBizType bizType, String fromBizNote, String toBizNote);
 
-    // 内部转账
+    // 内部转账：// 同样/不同账户间资金划转
     public void transAmountCZB(String fromAccountNumber,
             String toAccountNumber, Long transAmount, EJourBizType bizType,
             String fromBizNote, String toBizNote);

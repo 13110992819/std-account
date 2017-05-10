@@ -10,7 +10,7 @@ import com.std.account.exception.ParaException;
 import com.std.account.spring.SpringContextHolder;
 
 /**
- * BaofooWap端一键支付-服务端回调处理
+ * BaofooWap端一键支付-服务端回调处理，不涉及DB
  * @author: myb858 
  * @since: 2016年11月5日 下午5:16:38 
  * @history:

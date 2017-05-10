@@ -9,7 +9,7 @@ import com.std.account.exception.ParaException;
 import com.std.account.spring.SpringContextHolder;
 
 /**
- * BaofooPC端网关支付-页面跳转处理
+ * BaofooPC端网关支付-页面跳转处理，不涉及DB
  * @author: myb858 
  * @since: 2016年11月5日 下午3:43:16 
  * @history:

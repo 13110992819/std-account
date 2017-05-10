@@ -10,12 +10,7 @@ import com.std.account.exception.BizException;
 import com.std.account.exception.ParaException;
 import com.std.account.spring.SpringContextHolder;
 
-/**
- * 平台对加盟商划转资金
- * @author: myb858 
- * @since: 2017年4月3日 下午2:42:25 
- * @history:
- */
+//同币种两个用户的划转
 public class XN802402 extends AProcessor {
     private IExchangeCurrencyAO exchangeCurrencyAO = SpringContextHolder
         .getBean(IExchangeCurrencyAO.class);

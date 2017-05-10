@@ -10,7 +10,7 @@ import com.std.account.exception.ParaException;
 import com.std.account.spring.SpringContextHolder;
 
 /**
- * BaofooPC端网关支付-提交拼接
+ * BaofooPC端网关支付-提交拼接，不涉及DB
  * @author: myb858 
  * @since: 2016年11月5日 下午1:41:18 
  * @history:

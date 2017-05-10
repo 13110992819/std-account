@@ -9,7 +9,7 @@ import com.std.account.exception.ParaException;
 import com.std.account.spring.SpringContextHolder;
 
 /**
- * fuiouWap端一键支付-提交拼接
+ * fuiouWap端一键支付-提交拼接，不涉及DB
  * @author: myb858 
  * @since: 2016年11月5日 下午8:26:37 
  * @history:

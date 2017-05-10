@@ -16,6 +16,7 @@ import com.std.account.spring.SpringContextHolder;
  * @since: 2017年4月3日 下午9:00:46 
  * @history:
  */
+// 一个用户的币种转化
 public class XN802410 extends AProcessor {
     private IExchangeCurrencyAO exchangeCurrencyAO = SpringContextHolder
         .getBean(IExchangeCurrencyAO.class);

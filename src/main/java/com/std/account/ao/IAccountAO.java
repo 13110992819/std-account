@@ -33,46 +33,10 @@ public interface IAccountAO {
     public void editAccountName(String userId, String realName,
             String systemCode);
 
-    // 同样/不同账户间资金划转
-    void transAmountCZB(String fromAccountNumber, String toAccountNumber,
-            Long transAmount, String bizType, String bizNote);
-
     // 同样币种不同用户间资金划转
     void transAmountCZB(String fromUserId, String toUserId, String currency,
             Long transAmount, String bizType, String fromBizNote,
             String toBizNote);
-
-    /**
-     * 通过PC网关划转资金，属于外部划转资金
-     * @param systemCode
-     * @param companyCode
-     * @param accountName
-     * @param accountNumber
-     * @param transAmount
-     * @param bankCode 
-     * @create: 2016年11月16日 下午8:16:15 myb858
-     * @history:
-     */
-    void transAmountPC(String systemCode, String companyCode,
-            String accountName, String accountNumber, Long transAmount,
-            String bankCode);
-
-    /**
-     * 通过WAP一键划转资金，属于外部划转资金
-     * @param systemCode
-     * @param accountName
-     * @param accountNumber
-     * @param transAmount
-     * @param idType
-     * @param idNo
-     * @param name
-     * @param bankCard 
-     * @create: 2016年11月16日 下午7:53:42 myb858
-     * @history:
-     */
-    void transAmountWAP(String systemCode, String accountName,
-            String accountNumber, Long transAmount, String idType, String idNo,
-            String name, String bankCard);
 
     /**
      * 分页查询账户

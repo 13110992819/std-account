@@ -10,7 +10,7 @@ import com.std.account.exception.ParaException;
 import com.std.account.spring.SpringContextHolder;
 
 /**
- * fuiou网关PC端之“B2C/B2B支付接口”-提交拼接
+ * fuiou网关PC端之“B2C/B2B支付接口”-提交拼接，不涉及DB
  * @author: myb858 
  * @since: 2016年11月5日 下午1:09:29 
  * @history:

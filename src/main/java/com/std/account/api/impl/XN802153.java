@@ -10,7 +10,7 @@ import com.std.account.exception.ParaException;
 import com.std.account.spring.SpringContextHolder;
 
 /**
- * fuiouWap端-回调处理
+ * fuiouWap端-回调处理，不涉及DB
  * @author: xieyj 
  * @since: 2016年11月11日 下午2:09:19 
  * @history:

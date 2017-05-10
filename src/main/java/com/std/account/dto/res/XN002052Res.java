@@ -1,6 +1,6 @@
 package com.std.account.dto.res;
 
-public class XN802600Res {
+public class XN002052Res {
     // 系统编号
     private String systemCode;
 

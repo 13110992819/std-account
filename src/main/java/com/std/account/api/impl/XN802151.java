@@ -10,7 +10,7 @@ import com.std.account.exception.ParaException;
 import com.std.account.spring.SpringContextHolder;
 
 /**
- * fuiou网关之“B2C/B2B支付接口”-回调处理
+ * fuiou网关之“B2C/B2B支付接口”-回调处理，不涉及DB
  * @author: myb858 
  * @since: 2016年11月5日 下午1:11:10 
  * @history:
