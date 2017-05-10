@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.std.account.ao.IAccountAO;
 import com.std.account.api.AProcessor;
+import com.std.account.common.DateUtil;
 import com.std.account.common.JsonUtil;
 import com.std.account.core.StringValidater;
 import com.std.account.domain.Account;
@@ -41,6 +42,10 @@ public class XN802500 extends AProcessor {
             orderColumn = IAccountAO.DEFAULT_ORDER_COLUMN;
         }
         condition.setOrder(orderColumn, req.getOrderDir());
+        condition.setCreateDatetimeStart(DateUtil.strToDate(req.getDateStart(),
+            DateUtil.DATA_TIME_PATTERN_1));
+        condition.setCreateDatetimeEnd(DateUtil.strToDate(req.getDateEnd(),
+            DateUtil.DATA_TIME_PATTERN_1));
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
         return accountAO.queryAccountPage(start, limit, condition);

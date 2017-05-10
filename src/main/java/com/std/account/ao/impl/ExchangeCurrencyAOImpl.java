@@ -15,6 +15,7 @@ import com.std.account.bo.IExchangeCurrencyBO;
 import com.std.account.bo.IUserBO;
 import com.std.account.bo.base.Paginable;
 import com.std.account.common.PropertiesUtil;
+import com.std.account.common.UserUtil;
 import com.std.account.domain.Account;
 import com.std.account.domain.ExchangeCurrency;
 import com.std.account.domain.User;
@@ -52,20 +53,61 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
     @Transactional
     public Object payExchange(String fromUserId, String toUserId, Long amount,
             String currency, String payType) {
+        Object result = null;
         User fromUser = userBO.getRemoteUser(fromUserId);
         // 获取微信公众号支付prepayid
-        if (EPayType.WEIXIN_H5.getCode().equals(payType)) {
-            return weixinH5Pay(fromUser, toUserId, amount, currency, payType);
+        if (EPayType.RMB_YE.getCode().equals(payType)) {
+            rmbYePay(fromUser, toUserId, amount, currency, payType);
+        } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {
+            result = weixinH5Pay(fromUser, toUserId, amount, currency, payType);
         } else if (EPayType.WEIXIN_QR_CODE.getCode().equals(payType)) {
-            return weixinQrCodePay(fromUser, toUserId, amount, currency,
+            result = weixinQrCodePay(fromUser, toUserId, amount, currency,
                 payType);
         } else {
             throw new BizException("XN000000", "现只支持微信H5和微信二维码，其他方式不支持");
         }
+        return result;
+    }
+
+    /** 
+     * 人民币购买虚拟币
+     * @param user
+     * @param amount
+     * @param currency
+     * @param payType
+     * @return 
+     * @create: 2017年4月20日 下午6:02:46 xieyj
+     * @history: 
+     */
+    private void rmbYePay(User fromUser, String toUser, Long amount,
+            String currency, String payType) {
+        EBizType bizType = null;
+        if (ECurrency.CG_CGB.getCode().equals(currency)) {
+            bizType = EBizType.AJ_CGBGM;
+        } else {
+            throw new BizException("xn000000", "暂未支持当前币种微信扫描支付");
+        }
+
+        Long rmbAmount = AmountUtil.mulJinFen(amount, 1 / exchangeCurrencyBO
+            .getExchangeRate(ECurrency.CNY.getCode(), currency));
+        // 产生记录
+        exchangeCurrencyBO.payExchange(fromUser.getUserId(), toUser, rmbAmount,
+            amount, currency, payType, fromUser.getSystemCode());
+
+        // 去方币种兑换
+        accountAO.transAmountCZB(fromUser.getUserId(), toUser,
+            ECurrency.CNY.getCode(), rmbAmount, bizType.getCode(),
+            bizType.getValue(), UserUtil.getUserMobile(fromUser.getMobile())
+                    + bizType.getValue());
+        // 来方币种兑换
+        accountAO.transAmountCZB(toUser, fromUser.getUserId(), currency,
+            amount, bizType.getCode(),
+            UserUtil.getUserMobile(fromUser.getMobile()) + bizType.getValue(),
+            bizType.getValue());
     }
 
     /**
-     * 二维码扫描支付
+     * 二维码扫描购买虚拟币
      * @param fromUserId
      * @param toUserId
      * @param amount
@@ -78,29 +120,35 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
      */
     private Object weixinQrCodePay(User fromUser, String toUserId, Long amount,
             String currency, String payType) {
-        String bizType = null;
-        String fromBizNote = null;
-        String toBizNote = null;
-        Long rmbAmount = 0L;
+        EBizType bizType = null;
         if (ECurrency.CG_CGB.getCode().equals(currency)) {
+<<<<<<< HEAD
             bizType = EJourBizType.AJ_CGBSM.getCode();
             fromBizNote = "菜狗币购买";
             toBizNote = "菜狗币售卖";
             rmbAmount = AmountUtil.mulJinFen(amount, 1 / exchangeCurrencyBO
                 .getExchangeRate(ECurrency.CNY.getCode(), currency));
+=======
+            bizType = EBizType.AJ_CGBGM;
+>>>>>>> refs/remotes/origin/master
         } else {
             throw new BizException("xn000000", "暂未支持当前币种微信扫描支付");
         }
+
+        Long rmbAmount = AmountUtil.mulJinFen(amount, 1 / exchangeCurrencyBO
+            .getExchangeRate(ECurrency.CNY.getCode(), currency));
         String payGroup = exchangeCurrencyBO.payExchange(fromUser.getUserId(),
             toUserId, rmbAmount, amount, currency, payType,
             fromUser.getSystemCode());
+
         return weChatAO.getPrepayIdNative(fromUser.getUserId(), toUserId,
-            bizType, fromBizNote, toBizNote, rmbAmount, payGroup,
-            PropertiesUtil.Config.SELF_PAY_BACKURL);
+            bizType.getCode(), bizType.getValue(),
+            UserUtil.getUserMobile(fromUser.getMobile()) + bizType.getValue(),
+            rmbAmount, payGroup, PropertiesUtil.Config.SELF_PAY_BACKURL);
     }
 
     /** 
-     * 微信H5支付
+     * 微信H5支付购买虚拟币
      * @param user
      * @param amount
      * @param currency
@@ -111,17 +159,25 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
      */
     private Object weixinH5Pay(User fromUser, String toUser, Long amount,
             String currency, String payType) {
+        EBizType bizType = null;
+        if (ECurrency.CG_CGB.getCode().equals(currency)) {
+            bizType = EBizType.AJ_CGBGM;
+        } else {
+            throw new BizException("xn000000", "暂未支持当前币种微信扫描支付");
+        }
+
         Long rmbAmount = AmountUtil.mulJinFen(amount, 1 / exchangeCurrencyBO
             .getExchangeRate(ECurrency.CNY.getCode(), currency));
-
         String payGroup = exchangeCurrencyBO.payExchange(fromUser.getUserId(),
             toUser, rmbAmount, amount, currency, payType,
             fromUser.getSystemCode());
 
         return weChatAO.getPrepayIdH5(fromUser.getUserId(),
-            fromUser.getOpenId(), toUser, EJourBizType.EXCHANGE_CURRENCY.getCode(),
+
+        fromUser.getOpenId(), toUser, EJourBizType.EXCHANGE_CURRENCY.getCode(),
             EJourBizType.EXCHANGE_CURRENCY.getValue(),
             EJourBizType.EXCHANGE_CURRENCY.getValue(), rmbAmount, payGroup,
+
             PropertiesUtil.Config.SELF_PAY_BACKURL);
     }
 
@@ -143,7 +199,8 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
         // 去方币种兑换
         accountAO.transAmountCZB(exchangeCurrency.getToUserId(),
             exchangeCurrency.getFromUserId(), exchangeCurrency.getToCurrency(),
-            transAmount, EJourBizType.EXCHANGE_CURRENCY.getCode(), "币种兑换", "币种兑换");
+            transAmount, EJourBizType.EXCHANGE_CURRENCY.getCode(), "币种兑换",
+            "币种兑换");
     }
 
     @Override
@@ -207,6 +264,10 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
     public String applyExchange(String userId, Long fromAmount,
             String fromCurrency, String toCurrency) {
         User user = userBO.getRemoteUser(userId);
+        Account account = accountBO.getAccountByUser(userId, fromCurrency);
+        if (fromAmount > account.getAmount()) {
+            new BizException("xn000000", "余额不足");
+        }
         // 判断是否生成条件是否满足
         if (ESystemCode.ZHPAY.getCode().equals(user.getSystemCode())) {
             exchangeCurrencyBO.doCheckZH(userId, fromCurrency, toCurrency);
@@ -216,6 +277,7 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
     }
 
     @Override
+    @Transactional
     public void approveExchange(String code, String approveResult,
             String approver, String approveNote) {
         ExchangeCurrency dbOrder = exchangeCurrencyBO.getExchangeCurrency(code);
@@ -295,5 +357,27 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
             "平台对加盟商划转资金");
         accountBO.changeAmount(toAccount.getAccountNumber(), EChannelType.NBZ,
             code, amount, EJourBizType.Transfer_CURRENCY, "平台对加盟商划转资金");
+    }
+
+    /** 
+     * @see com.std.account.ao.IExchangeCurrencyAO#doTransferP2C(java.lang.String, java.lang.String, java.lang.Long, java.lang.String)
+     */
+    @Override
+    public void doTransferP2C(String fromUserId, String toUserId, Long amount,
+            String currency) {
+        if (!ECurrency.CG_CGB.getCode().equals(currency)
+                && !ECurrency.CG_JF.getCode().equals(currency)) {
+            throw new BizException("xn000000", "币种需传菜狗币或积分");
+        }
+        Account fromAccount = accountBO.getAccountByUser(fromUserId, currency);
+        Account toAccount = accountBO.getAccountByUser(toUserId, currency);
+
+        exchangeCurrencyBO.saveExchange(fromUserId, toUserId, amount, currency,
+            fromAccount.getSystemCode());
+        String bizType = EBizType.Transfer_CURRENCY.getCode();
+        accountBO.transAmount(fromAccount.getAccountNumber(), EChannelType.NBZ,
+            null, -amount, bizType, "平台对C端划转资金");
+        accountBO.transAmount(toAccount.getAccountNumber(), EChannelType.NBZ,
+            null, amount, bizType, "平台对C端划转资金");
     }
 }

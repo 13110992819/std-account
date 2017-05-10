@@ -3,7 +3,10 @@ package com.std.account.enums;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.std.account.exception.BizException;
+
 //渠道类型分两大类：外部渠道和唯一的内部渠道（内部账）
+
 public enum EChannelType {
     Yeepay_PC("11", "易宝支付-网关"), Yeepay_WAP("12", "易宝支付-WAP"), Baofoo_PC("13",
             "宝付支付-网关"), Baofoo_WAP("14", "宝付支付-WAP"), Fuiou_PC("15", "富友支付-网关"), Fuiou_WAP(
@@ -20,6 +23,15 @@ public enum EChannelType {
             map.put(type.getCode(), type);
         }
         return map;
+    }
+
+    public static EChannelType getEChannelType(String code) {
+        Map<String, EChannelType> map = getChannelTypeResultMap();
+        EChannelType channelType = map.get(code);
+        if (null == channelType) {
+            throw new BizException("xn0000", code + "对应支付渠道类型不存在");
+        }
+        return channelType;
     }
 
     EChannelType(String code, String value) {

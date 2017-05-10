@@ -9,6 +9,7 @@
 package com.std.account.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import com.std.account.dao.base.ABaseDO;
 
@@ -52,6 +53,17 @@ public class SYSConfig extends ABaseDO {
 
     // ************* 模糊查询 *****************
     private String ckeyForQuery;
+
+    // 类型列表
+    private List<String> typeList;
+
+    public List<String> getTypeList() {
+        return typeList;
+    }
+
+    public void setTypeList(List<String> typeList) {
+        this.typeList = typeList;
+    }
 
     public Long getId() {
         return id;

@@ -39,6 +39,9 @@ public class XN802520Req extends APageReq {
     // 系统编号
     private String systemCode;
 
+    // 支付编号
+    private String payGroup;
+
     // **************db properties ***************
     private String currency;
 
@@ -158,5 +161,13 @@ public class XN802520Req extends APageReq {
 
     public void setAccountType(String accountType) {
         this.accountType = accountType;
+    }
+
+    public String getPayGroup() {
+        return payGroup;
+    }
+
+    public void setPayGroup(String payGroup) {
+        this.payGroup = payGroup;
     }
 }

@@ -11,6 +11,8 @@ package com.std.account.enums;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.std.account.exception.BizException;
+
 /**
  * @author: xieyj 
  * @since: 2016年12月24日 下午1:51:38 
@@ -29,6 +31,15 @@ public enum ECurrency {
             map.put(currency.getCode(), currency);
         }
         return map;
+    }
+
+    public static ECurrency getECurrency(String code) {
+        Map<String, ECurrency> map = getCurrencyMap();
+        ECurrency currency = map.get(code);
+        if (null == currency) {
+            throw new BizException("xn0000", code + "对应币种不存在");
+        }
+        return currency;
     }
 
     ECurrency(String code, String value) {

@@ -8,6 +8,7 @@
  */
 package com.std.account.bo;
 
+import com.std.account.domain.ChannelBank;
 import com.std.account.domain.CompanyChannel;
 
 /** 
@@ -20,11 +21,11 @@ public interface ICMBBO {
     /**
      * @param accountNo 收款方账号
      * @param accountName 收款方户名
-     * @param bankCode 收款方银行编号
+     * @param bank 银行信息
      * @param amount 金额
      * @create: 2017年3月1日 下午4:33:11 haiqingzheng
      * @history:
      */
-    public void pay(String accountNo, String accountName, String bankCode,
+    public String pay(String accountNo, String accountName, ChannelBank bank,
             Long amount, String remark, CompanyChannel companyChannel);
 }

@@ -6,3 +6,4 @@ delete from  tstd_company_channel where system_code = 'CD-CCG000007';
 delete from  tstd_exchange_currency where system_code = 'CD-CCG000007';
 delete from  tstd_jour where system_code = 'CD-CCG000007';
 delete from  tsys_dict where system_code = 'CD-CCG000007';
+delete from  tsys_config where system_code = 'CD-CCG000007';

@@ -25,6 +25,7 @@ import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 
 import com.std.account.core.OrderNoGenerater;
+import com.std.account.domain.ChannelBank;
 import com.std.account.enums.EGeneratePrefix;
 
 /** 
@@ -37,59 +38,25 @@ public class CMBUtil {
 
     public static String url = "http://192.168.1.186:8080";
 
-    /**
-     * @param args
-     * @throws Exception 
-     */
     public static void main(String[] args) throws Exception {
         // query("CBN2017030118052141031");
         // query(pay());
         query("CBN2017030211461561666");
-
     }
 
     public static String pay() throws IOException {
-
-        Map<String, String> bizParams = new HashMap<>();
-        bizParams.put("BUSCOD", "N02031");
-        CMBBizRequest cmbBizRequest1 = new CMBBizRequest();
-        cmbBizRequest1.setBizName("SDKPAYRQX");
-        cmbBizRequest1.setBizParams(bizParams);
-
-        bizParams = new HashMap<>();
-        bizParams.put("YURREF",
-            OrderNoGenerater.generate(EGeneratePrefix.CMB_BIZ_NO.getCode())); // 业务参考号
-        bizParams.put("DBTACC", "579900750510806"); // 付方帐号
-        bizParams.put("DBTBBK", "57"); // 付方开户地区代码
-        bizParams.put("TRSAMT", "1"); // 交易金额
-        bizParams.put("CCYNBR", "10"); // 币种代码 币种暂时只支持10(人民币)
-        bizParams.put("STLCHN", "N"); // 结算方式代码 N：普通 F：快速
-        bizParams.put("NUSAGE", "测试"); // 用途
-        bizParams.put("BNKFLG", "Y"); // 系统内外标志 Y：招行；N：非招行
-        bizParams.put("CRTACC", "6225885867450132"); // 收方帐号
-        bizParams.put("CRTNAM", "郑海清"); // 收方帐户名
-        bizParams.put("CRTBNK", "招商银行"); // 收方开户行 跨行支付（BNKFLG=N）必填
-        CMBBizRequest cmbBizRequest2 = new CMBBizRequest();
-        cmbBizRequest2.setBizName("DCOPDPAYX");
-        cmbBizRequest2.setBizParams(bizParams);
-
-        List<CMBBizRequest> bizRequests = new ArrayList<>();
-        bizRequests.add(cmbBizRequest1);
-        bizRequests.add(cmbBizRequest2);
-
-        CMBRequest cmbRequest = new CMBRequest();
-        cmbRequest.setFunctionName("DCPAYMNT");
-        cmbRequest.setDateType("2");
-        cmbRequest.setLoginName("zhqbpay");
-        cmbRequest.setBizRequests(bizRequests);
-
+        CMBRequest cmbRequest = getPayRequest(
+            OrderNoGenerater.generate(EGeneratePrefix.CMB_BIZ_NO.getCode()),
+            "zhqb", "579901044610406", "57", 1L, "测试", "6225885867450132",
+            "郑海清", "招商银行");
         String response = doPost(url, cmbRequest);
+
         // 过滤
         String RETCOD = Jsoup.parse(response).select("RETCOD").html();
         String REQSTS = Jsoup.parse(response).select("REQSTS").html();
         String RTNFLG = Jsoup.parse(response).select("RTNFLG").html();
         String YURREF = Jsoup.parse(response).select("YURREF").html();
-        System.out.println("&*&*&* RETCOD=" + RETCOD + " REQSTS=" + REQSTS
+        logger.info("&*&*&* RETCOD=" + RETCOD + " REQSTS=" + REQSTS
                 + " RTNFLG=" + RTNFLG);
         if ("0".equals(RETCOD)) {
             if ("FIN".equals(REQSTS) && "F".equals(RTNFLG)) {
@@ -181,6 +148,57 @@ public class CMBUtil {
             e.printStackTrace();
         }
         return response;
+    }
+
+    public boolean isCMB(ChannelBank bank) {
+        boolean result = false;
+        if ("CMB".equals(bank.getBankCode())) {
+            result = true;
+        }
+        return result;
+    }
+
+    public static CMBRequest getPayRequest(String bizOrderNo, String fromName,
+            String fromAccount, String fromBank, Long transAmount,
+            String remark, String toAccount, String toAccountName,
+            String toAccountBankName) {
+        // 业务参数1
+        Map<String, String> bizParams1 = new HashMap<>();
+        bizParams1.put("BUSCOD", "N02031");
+        CMBBizRequest cmbBizRequest1 = new CMBBizRequest();
+        cmbBizRequest1.setBizName("SDKPAYRQX");
+        cmbBizRequest1.setBizParams(bizParams1);
+
+        // 业务参数2
+        Map<String, String> bizParams2 = new HashMap<>();
+        bizParams2.put("YURREF", bizOrderNo); // 业务参考号
+        bizParams2.put("DBTACC", fromAccount); // 付方帐号
+        bizParams2.put("DBTBBK", fromBank); // 付方开户地区代码
+        bizParams2.put("TRSAMT", String.valueOf(transAmount / 1000.00)); // 交易金额
+        bizParams2.put("CCYNBR", "10"); // 币种代码 币种暂时只支持10(人民币)
+        bizParams2.put("STLCHN", "N"); // 结算方式代码 N：普通 F：快速
+        bizParams2.put("NUSAGE", remark); // 用途
+        bizParams2.put("BNKFLG", "Y"); // 系统内外标志 Y：招行；N：非招行
+        bizParams2.put("CRTACC", toAccount); // 收方帐号
+        bizParams2.put("CRTNAM", toAccountName); // 收方帐户名
+        bizParams2.put("CRTBNK", toAccountBankName); // 收方开户行 跨行支付（BNKFLG=N）必填
+        CMBBizRequest cmbBizRequest2 = new CMBBizRequest();
+        cmbBizRequest2.setBizName("DCOPDPAYX");
+        cmbBizRequest2.setBizParams(bizParams2);
+
+        // 业务参数组装
+        List<CMBBizRequest> bizRequests = new ArrayList<>();
+        bizRequests.add(cmbBizRequest1);
+        bizRequests.add(cmbBizRequest2);
+
+        // 最终请求参数组装
+        CMBRequest cmbRequest = new CMBRequest();
+        cmbRequest.setFunctionName("DCPAYMNT");
+        cmbRequest.setDateType("2");
+        cmbRequest.setLoginName(fromName); // 支付U盾登录名
+        cmbRequest.setBizRequests(bizRequests);
+
+        return cmbRequest;
     }
 
 }

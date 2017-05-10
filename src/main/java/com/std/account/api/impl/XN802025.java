@@ -1,5 +1,8 @@
 package com.std.account.api.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 
 import com.std.account.ao.ISYSConfigAO;
@@ -27,7 +30,16 @@ public class XN802025 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         SYSConfig condition = new SYSConfig();
-        condition.setType(req.getType());
+        String type = req.getType();
+        if (StringUtils.isNotBlank(type)) {
+            String[] typeArrs = type.split(",");
+            List<String> bizTypeList = new ArrayList<String>();
+            for (int i = 0; i < typeArrs.length; i++) {
+                bizTypeList.add(typeArrs[i]);
+            }
+            condition.setType(null);
+            condition.setTypeList(bizTypeList);
+        }
         condition.setCkeyForQuery(req.getCkey());
         condition.setUpdater(req.getUpdater());
         condition.setCompanyCode(req.getCompanyCode());

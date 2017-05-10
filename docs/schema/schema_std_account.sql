@@ -11,7 +11,6 @@ CREATE TABLE `tstd_jour` (
   `trans_amount` bigint(32) DEFAULT NULL COMMENT '变动金额',
   `pre_amount` bigint(32) DEFAULT NULL COMMENT '变动前金额',
   `post_amount` bigint(32) DEFAULT NULL COMMENT '变动后金额',
-  `fee` bigint(32) DEFAULT NULL COMMENT '手续费',
   `status` varchar(4) DEFAULT NULL COMMENT '状态（刚生成待回调，回调不通过，回调通过，对账通过，对账不通过待调账，已调账，无需对账）',
   `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
   `rollback_user` varchar(32) DEFAULT NULL COMMENT '对账人',
@@ -22,6 +21,7 @@ CREATE TABLE `tstd_jour` (
   `adjust_user` varchar(32) DEFAULT NULL COMMENT '调账人',
   `adjust_datetime` datetime DEFAULT NULL COMMENT '调账时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  `fee` bigint(32) DEFAULT NULL COMMENT '取现手续费',
   `pay_group` varchar(32) DEFAULT NULL COMMENT '支付组号',
   `system_code` varchar(32) NOT NULL COMMENT '系统编号',
   PRIMARY KEY (`code`)
@@ -31,7 +31,7 @@ DROP TABLE IF EXISTS `tstd_account`;
 CREATE TABLE `tstd_account` (
   `account_number` varchar(32) NOT NULL DEFAULT '' COMMENT '账号',
   `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
-  `real_name` varchar(16) DEFAULT NULL COMMENT '真实姓名',
+  `real_name` varchar(64) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '真实姓名',
   `type` varchar(4) DEFAULT NULL COMMENT '类别（B端账号，C端账号，平台账号）',
   `status` varchar(2) DEFAULT NULL COMMENT '状态（正常/程序冻结/人工冻结）',
   `currency` varchar(8) DEFAULT NULL COMMENT '币种',

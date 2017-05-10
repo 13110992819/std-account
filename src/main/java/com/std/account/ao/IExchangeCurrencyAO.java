@@ -40,4 +40,8 @@ public interface IExchangeCurrencyAO {
     public void doTransferP2F(String fromUserId, String toUserId, Long amount,
             String currency);
 
+    // 平台对用户划转资金
+    public void doTransferP2C(String fromUserId, String toUserId,
+            Long amount, String currency);
+
 }

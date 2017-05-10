@@ -5,7 +5,12 @@ package com.std.account.dto.req;
  * @since: 2016年12月23日 下午7:48:53 
  * @history:
  */
-public class XN802501Req {
+public class XN802501Req extends APageReq {
+    /** 
+     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
+     */
+    private static final long serialVersionUID = 288709607414715351L;
+
     // 户名
     private String realName;
 

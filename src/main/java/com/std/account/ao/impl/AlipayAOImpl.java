@@ -193,6 +193,7 @@ public class AlipayAOImpl implements IAlipayAO {
         bizParams.put("total_amount", String.valueOf(transAmount / 1000.00)); // 订单总金额，单位为元，精确到小数点后两位，取值范围[0.01,100000000]
         bizParams.put("product_code", "QUICK_MSECURITY_PAY"); // 销售产品码，商家和支付宝签约的产品码，为固定值QUICK_MSECURITY_PAY
         bizParams.put("passback_params", backUrl);
+        bizParams.put("timeout_express", "1m");
         return JsonUtil.Object2Json(bizParams);
     }
 
@@ -228,6 +229,7 @@ public class AlipayAOImpl implements IAlipayAO {
                 String appId = paramsMap.get("app_id");
                 String alipayOrderNo = paramsMap.get("trade_no");
                 String bizBackUrl = paramsMap.get("passback_params");
+                String tradeStatus = paramsMap.get("trade_status");
                 Jour fromJour = jourBO.getJour(outTradeNo, systemCode);
                 Jour toJour = jourBO.getRelativeJour(fromJour.getCode(),
                     fromJour.getPayGroup());
@@ -241,6 +243,7 @@ public class AlipayAOImpl implements IAlipayAO {
                     StringValidater.toLong(CalculationUtil.mult(totalAmount)))
                         && sellerId.equals(companyChannel.getChannelCompany())
                         && appId.equals(companyChannel.getPrivateKey3())) {
+<<<<<<< HEAD
                     isSuccess = true;
                     jourBO.callBackChangeJour(fromJour.getCode(),
                         EBoolean.YES.getCode(), "ALIPAY", "支付宝APP支付后台自动回调",
@@ -262,7 +265,36 @@ public class AlipayAOImpl implements IAlipayAO {
                     if (!EJourStatus.todoCallBack.getCode().equals(
                         fromJour.getStatus())) {
                         throw new BizException("xn000000", "流水不处于待回调状态，重复回调");
+=======
+                    if ("TRADE_SUCCESS".equals(tradeStatus)
+                            || "TRADE_FINISHED".equals(tradeStatus)) {
+                        isSuccess = true;
+                        jourBO.callBackFromChangeJour(fromJour, "ALIPAY",
+                            "支付宝APP支付后台自动回调", alipayOrderNo);
+                        jourBO.callBackChangeJour(toJour,
+                            EBoolean.YES.getCode(), "ALIPAY", "支付宝APP支付后台自动回调",
+                            alipayOrderNo);
+                        // 收款方账户加钱
+                        accountBO.transAmountNotJour(systemCode,
+                            toJour.getAccountNumber(), toJour.getTransAmount(),
+                            toJour.getCode());
+                    } else {
+                        // 支付失败
+                        jourBO.callBackChangeJour(fromJour,
+                            EBoolean.NO.getCode(), "ALIPAY", "支付宝APP支付后台自动回调",
+                            alipayOrderNo);
+                        jourBO.callBackChangeJour(toJour,
+                            EBoolean.NO.getCode(), "ALIPAY", "支付宝APP支付后台自动回调",
+                            alipayOrderNo);
+                        if (!EJourStatus.todoCallBack.getCode().equals(
+                            fromJour.getStatus())) {
+                            throw new BizException("xn000000",
+                                "流水不处于待回调状态，重复回调");
+                        }
+>>>>>>> refs/remotes/origin/master
                     }
+                } else {
+                    throw new BizException("xn000000", "数据正确性校验失败，默认为非法回调");
                 }
 
                 return new CallbackResult(isSuccess, fromJour.getBizType(),

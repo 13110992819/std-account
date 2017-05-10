@@ -317,4 +317,14 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
         return null;
     }
 
+    /** 
+     * @see com.std.account.bo.IAccountBO#refreshOutAmount(java.lang.String, java.lang.Long)
+     */
+    @Override
+    public void refreshOutAmount(Account account, Long transAmount) {
+        Long outAmount = account.getOutAmount() + transAmount;
+        account.setOutAmount(outAmount);
+        accountDAO.updateOutAmount(account);
+    }
+
 }

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.std.account.ao.IExchangeCurrencyAO;
-import com.std.account.enums.EJourBizType;
+import com.std.account.enums.EBizType;
 
 /**
  * 币种兑换回调控制层
@@ -46,11 +46,12 @@ public class CallbackBzdhConroller {
             // 处理业务开始
             // ------------------------------
             try {
-                if (EJourBizType.AJ_CGBSM.getCode().equals(bizType)) {
-                    System.out.println("**** 进入菜狗币售卖，服务器回调 start****");
+
+                if (EBizType.AJ_CGBGM.getCode().equals(bizType)) {
+                    System.out.println("**** 进入菜狗币购买售卖，服务器回调 start****");
                     exchangeCurrencyAO.paySuccess(payGroup, payCode, amount);
-                    System.out.println("**** 进入菜狗币售卖，服务器回调 end****");
-                } else if (EJourBizType.EXCHANGE_CURRENCY.getCode().equals(bizType)) {
+                    System.out.println("**** 进入菜狗币购买售卖，服务器回调 end****");
+                } else if (EBizType.EXCHANGE_CURRENCY.getCode().equals(bizType)) {
                     System.out.println("**** 进入币种兑换，服务器回调 start****");
                     exchangeCurrencyAO.paySuccess(payGroup, payCode, amount);
                     System.out.println("**** 进入币种兑换，服务器回调 end****");

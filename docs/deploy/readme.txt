@@ -25,7 +25,7 @@
   rm -rf std-account.war
   cp ./std-account/WEB-INF/classes/application.properties .
   cp ./std-account/WEB-INF/classes/config.properties .
-  rm -rf std-account/
+  rm -rf std-account*
   mv /home/std-account.war .
   
 4,起停tomcat_STD_account
