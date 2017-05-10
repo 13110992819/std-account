@@ -21,17 +21,11 @@ public class XN802520Req extends APageReq {
     // 渠道类型
     private String channelType;
 
-    // 渠道单号
-    private String channelOrder;
-
     // 业务类型
     private String bizType;
 
     // 状态（生成待回调，无需对账，已回调待对账，对账通过，对账不通过待调账，已调账）
     private String status;
-
-    // 处理回调人
-    private String rollbackUser;
 
     // 拟对账时间
     private String workDate;
@@ -110,14 +104,6 @@ public class XN802520Req extends APageReq {
         this.channelType = channelType;
     }
 
-    public String getChannelOrder() {
-        return channelOrder;
-    }
-
-    public void setChannelOrder(String channelOrder) {
-        this.channelOrder = channelOrder;
-    }
-
     public String getBizType() {
         return bizType;
     }
@@ -132,14 +118,6 @@ public class XN802520Req extends APageReq {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public String getRollbackUser() {
-        return rollbackUser;
-    }
-
-    public void setRollbackUser(String rollbackUser) {
-        this.rollbackUser = rollbackUser;
     }
 
     public String getWorkDate() {

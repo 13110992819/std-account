@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.std.account.ao.IWeChatAO;
 import com.std.account.bo.IAccountBO;
+import com.std.account.bo.IChargeBO;
 import com.std.account.bo.ICompanyChannelBO;
 import com.std.account.bo.IExchangeCurrencyBO;
 import com.std.account.bo.IJourBO;
@@ -30,14 +31,16 @@ import com.std.account.common.PropertiesUtil;
 import com.std.account.common.SysConstant;
 import com.std.account.domain.Account;
 import com.std.account.domain.CallbackResult;
+import com.std.account.domain.Charge;
 import com.std.account.domain.CompanyChannel;
 import com.std.account.domain.Jour;
 import com.std.account.dto.res.XN002500Res;
 import com.std.account.dto.res.XN002501Res;
-import com.std.account.enums.EBizType;
 import com.std.account.enums.EBoolean;
 import com.std.account.enums.EChannelType;
+import com.std.account.enums.EChargeStatus;
 import com.std.account.enums.ECurrency;
+import com.std.account.enums.EJourBizType;
 import com.std.account.enums.EJourStatus;
 import com.std.account.enums.ESystemCode;
 import com.std.account.exception.BizException;
@@ -61,6 +64,9 @@ public class WeChatAOImpl implements IWeChatAO {
 
     @Autowired
     IJourBO jourBO;
+
+    @Autowired
+    private IChargeBO chargeBO;
 
     @Autowired
     ICompanyChannelBO companyChannelBO;
@@ -88,7 +94,7 @@ public class WeChatAOImpl implements IWeChatAO {
         String toAcccoutCurrency = ECurrency.CNY.getCode();
         Long toTransAmount = transAmount;
         if (ESystemCode.ZHPAY.getCode().equals(systemCode)
-                && EBizType.ZH_O2O.getCode().equals(bizType)) {
+                && EJourBizType.ZH_O2O.getCode().equals(bizType)) {
             toAcccoutCurrency = ECurrency.ZH_FRB.getCode();
             toTransAmount = AmountUtil.mul(transAmount, exchangeCurrencyBO
                 .getExchangeRate(ECurrency.CNY.getCode(),
@@ -232,7 +238,7 @@ public class WeChatAOImpl implements IWeChatAO {
             jourBO.callBackChangeJour(toJour.getCode(), EBoolean.YES.getCode(),
                 "WeChat_APP", "微信APP支付后台自动回调", wechatOrderNo);
             // 收款方账户加钱
-            accountBO.transAmountNotJour(systemCode, toJour.getAccountNumber(),
+            accountBO.changeAmountNotJour(toJour.getAccountNumber(),
                 toJour.getTransAmount(), toJour.getCode());
             // ------------------------------
             // 处理业务完毕
@@ -293,7 +299,7 @@ public class WeChatAOImpl implements IWeChatAO {
             jourBO.callBackChangeJour(toJour.getCode(), EBoolean.YES.getCode(),
                 "WeChat_H5", "微信公众号支付后台自动回调", wechatOrderNo);
             // 收款方账户加钱
-            accountBO.transAmountNotJour(systemCode, toJour.getAccountNumber(),
+            accountBO.changeAmountNotJour(toJour.getAccountNumber(),
                 toJour.getTransAmount(), toJour.getCode());
             // ------------------------------
             // 处理业务完毕
@@ -304,14 +310,11 @@ public class WeChatAOImpl implements IWeChatAO {
             fromJour.getTransAmount(), systemCode, companyCode, backUrl);
     }
 
-    /** 
-     * @see com.std.account.ao.IWeChatAO#doCallbackH5Qz(java.lang.String)
-     */
     @Override
     public void doCallbackH5Qz(String result) {
         String systemCode = null;
         String wechatOrderNo = null;
-        Jour jour = null;
+        Charge dbCharge = null;
         Map<String, String> map = null;
         try {
             map = XMLUtil.doXMLParse(result);
@@ -319,9 +322,9 @@ public class WeChatAOImpl implements IWeChatAO {
             String[] codes = attach.split("\\|\\|");
             systemCode = codes[0];
             wechatOrderNo = map.get("transaction_id");
-            jour = jourBO.getJour(map.get("out_trade_no"), systemCode);
-            if (!EJourStatus.todoCallBack.getCode().equals(jour.getStatus())) {
-                throw new BizException("xn000000", "充值流水不处于待回调状态，重复回调");
+            dbCharge = chargeBO.getCharge(map.get("out_trade_no"), systemCode);
+            if (!EChargeStatus.toPay.getCode().equals(dbCharge.getStatus())) {
+                throw new BizException("xn000000", "充值订单不处于待支付状态，重复回调");
             }
         } catch (JDOMException | IOException e) {
             throw new BizException("xn000000", "回调结果XML解析失败");
@@ -333,18 +336,17 @@ public class WeChatAOImpl implements IWeChatAO {
         if (!isSucc) {
             // 支付失败
             System.out.println("支付失败");
-            jourBO.callBackChangeJour(jour.getCode(), EBoolean.NO.getCode(),
-                "WeChat_H5", "微信公众号充值后台自动回调", wechatOrderNo);
+            chargeBO.callBackChange(dbCharge, false, wechatOrderNo);
         } else {
             System.out.println("===============付款成功==============");
             // ------------------------------
             // 处理业务开始
             // ------------------------------
-            jourBO.callBackChangeJour(jour.getCode(), EBoolean.YES.getCode(),
-                "WeChat_H5", "微信公众号充值后台自动回调", wechatOrderNo);
+            chargeBO.callBackChange(dbCharge, true, wechatOrderNo);
             // 账户加钱
-            accountBO.transAmountNotJour(systemCode, jour.getAccountNumber(),
-                jour.getTransAmount(), jour.getCode());
+            accountBO.changeAmount(dbCharge.getAccountNumber(),
+                EChannelType.WeChat_H5, dbCharge.getCode(),
+                dbCharge.getAmount(), EJourBizType.AJ_CZ, "微信公众号充值");
             // ------------------------------
             // 处理业务完毕
             // ------------------------------
@@ -402,7 +404,7 @@ public class WeChatAOImpl implements IWeChatAO {
             jourBO.callBackChangeJour(toJour.getCode(), EBoolean.YES.getCode(),
                 "WeChat_NATIVE", "微信扫码支付后台自动回调", wechatOrderNo);
             // 收款方账户加钱
-            accountBO.transAmountNotJour(systemCode, toJour.getAccountNumber(),
+            accountBO.changeAmountNotJour(toJour.getAccountNumber(),
                 toJour.getTransAmount(), toJour.getCode());
             // ------------------------------
             // 处理业务完毕

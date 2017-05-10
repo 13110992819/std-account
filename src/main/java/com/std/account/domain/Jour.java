@@ -20,34 +20,31 @@ public class Jour extends ABaseDO {
     // 流水编号
     private String code;
 
-    // 支付组号
-    private String payGroup;
-
-    // 用户编号
-    private String userId;
-
-    // 真实姓名
-    private String realName;
-
-    // 账号
+    // 流水所属账号
     private String accountNumber;
 
-    // 渠道类型
+    // 流水所属用户编号
+    private String userId;
+
+    // 流水所属真实姓名
+    private String realName;
+
+    // 支付渠道（线下/招商代付/支付宝/内部转账）
     private String channelType;
 
-    // 渠道单号
-    private String channelOrder;
+    // 渠道单号（外部账时就是对应渠道的单号）
+    // private String channelOrder;
+
+    // 关联订单号（业务订单）
+    private String refNo;
 
     // 业务类型
     private String bizType;
 
-    // 业务类型列表
-    private List<String> bizTypeList;
-
     // 业务说明
     private String bizNote;
 
-    // 变动金额
+    // 变动金额（有正负之分）
     private Long transAmount;
 
     // 变动前金额
@@ -56,24 +53,16 @@ public class Jour extends ABaseDO {
     // 变动后金额
     private Long postAmount;
 
-    // 状态（0生成待回调，无需对账，已回调待对账，对账通过，对账不通过待调账，已调账）
-    // todoCallBack("0", "刚生成待回调"), todoCheck("1", "已回调通过,待对账"),
-    // callBack_NO("2",
-    // "回调不通过"), Checked_YES("3", "已对账且账已平"), Checked_NO("4", "帐不平待调账"),
-    // Adjusted(
-    // "5", "已调账"), noChecked("9", "无需对账"), todoAdjust("6", "待审批"),
-    // adjusted_YES(
-    // "7", "审批通过"), adjusted_NO("8", "审批不通过");
+    // 状态
     private String status;
 
     // 创建时间
     private Date createDatetime;
 
-    // 处理回调人
-    private String rollbackUser;
-
-    // 处理回调时间
-    private Date rollbackDatetime;
+    /*
+     * // 处理回调人 private String rollbackUser; // 处理回调时间 private Date
+     * rollbackDatetime;
+     */
 
     // 拟对账时间
     private String workDate;
@@ -81,11 +70,17 @@ public class Jour extends ABaseDO {
     // 对账人
     private String checkUser;
 
+    // 对账说明
+    private String checkNote;
+
     // 对账时间
     private Date checkDatetime;
 
     // 调账人
     private String adjustUser;
+
+    // 调账说明
+    private String adjustNote;
 
     // 调账时间
     private Date adjustDatetime;
@@ -97,6 +92,8 @@ public class Jour extends ABaseDO {
     private String systemCode;
 
     // ***********************db properties *************************
+    // 业务类型列表
+    private List<String> bizTypeList;
 
     // 查询条件1：创建起始时间
     private Date createDatetimeStart;
@@ -177,14 +174,6 @@ public class Jour extends ABaseDO {
         this.code = code;
     }
 
-    public String getPayGroup() {
-        return payGroup;
-    }
-
-    public void setPayGroup(String payGroup) {
-        this.payGroup = payGroup;
-    }
-
     public String getUserId() {
         return userId;
     }
@@ -207,22 +196,6 @@ public class Jour extends ABaseDO {
 
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
-    }
-
-    public String getChannelType() {
-        return channelType;
-    }
-
-    public void setChannelType(String channelType) {
-        this.channelType = channelType;
-    }
-
-    public String getChannelOrder() {
-        return channelOrder;
-    }
-
-    public void setChannelOrder(String channelOrder) {
-        this.channelOrder = channelOrder;
     }
 
     public String getBizType() {
@@ -281,22 +254,6 @@ public class Jour extends ABaseDO {
         this.createDatetime = createDatetime;
     }
 
-    public String getRollbackUser() {
-        return rollbackUser;
-    }
-
-    public void setRollbackUser(String rollbackUser) {
-        this.rollbackUser = rollbackUser;
-    }
-
-    public Date getRollbackDatetime() {
-        return rollbackDatetime;
-    }
-
-    public void setRollbackDatetime(Date rollbackDatetime) {
-        this.rollbackDatetime = rollbackDatetime;
-    }
-
     public String getWorkDate() {
         return workDate;
     }
@@ -344,4 +301,37 @@ public class Jour extends ABaseDO {
     public void setRemark(String remark) {
         this.remark = remark;
     }
+
+    public String getRefNo() {
+        return refNo;
+    }
+
+    public void setRefNo(String refNo) {
+        this.refNo = refNo;
+    }
+
+    public String getCheckNote() {
+        return checkNote;
+    }
+
+    public void setCheckNote(String checkNote) {
+        this.checkNote = checkNote;
+    }
+
+    public String getAdjustNote() {
+        return adjustNote;
+    }
+
+    public void setAdjustNote(String adjustNote) {
+        this.adjustNote = adjustNote;
+    }
+
+    public String getChannelType() {
+        return channelType;
+    }
+
+    public void setChannelType(String channelType) {
+        this.channelType = channelType;
+    }
+
 }

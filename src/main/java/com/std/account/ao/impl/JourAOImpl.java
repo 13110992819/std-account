@@ -9,7 +9,6 @@
 package com.std.account.ao.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -20,25 +19,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.std.account.ao.IJourAO;
 import com.std.account.bo.IAccountBO;
 import com.std.account.bo.IBankcardBO;
-import com.std.account.bo.ICompanyChannelBO;
+import com.std.account.bo.IHLOrderBO;
 import com.std.account.bo.IJourBO;
-import com.std.account.bo.IUserBO;
-import com.std.account.bo.IWechatBO;
 import com.std.account.bo.base.Paginable;
-import com.std.account.common.PropertiesUtil;
-import com.std.account.common.SysConstant;
 import com.std.account.domain.Account;
-import com.std.account.domain.Bankcard;
-import com.std.account.domain.CompanyChannel;
 import com.std.account.domain.Jour;
-import com.std.account.domain.User;
-import com.std.account.enums.EBizType;
 import com.std.account.enums.EBoolean;
-import com.std.account.enums.EChannelType;
-import com.std.account.enums.ECurrency;
 import com.std.account.enums.EJourStatus;
-import com.std.account.enums.EPayType;
-import com.std.account.enums.ESysUser;
 import com.std.account.exception.BizException;
 
 /** 
@@ -50,236 +37,35 @@ import com.std.account.exception.BizException;
 public class JourAOImpl implements IJourAO {
 
     @Autowired
-    private ICompanyChannelBO companyChannelBO;
-
-    @Autowired
     private IJourBO jourBO;
 
     @Autowired
     private IAccountBO accountBO;
 
     @Autowired
-    private IUserBO userBO;
+    private IHLOrderBO hLOrderBO;
 
     @Autowired
     private IBankcardBO bankcardBO;
 
-    @Autowired
-    private IWechatBO wechatBO;
-
-    /** 
-     * @see com.std.account.ao.IJourAO#doRechargeOnline(java.lang.String, java.lang.String)
-     */
-    @Override
-    @Transactional
-    public Object doRechargeOnline(String userId, String payType, Long amount) {
-        if (EPayType.WEIXIN_H5.getCode().equals(payType)) {
-            return doWeiXinH5Qz(userId, payType, amount);
-        } else if (EPayType.WEIXIN_APP.getCode().equals(payType)) {
-        } else if (EPayType.ALIPAY.getCode().equals(payType)) {
-        } else {
-            throw new BizException("xn000000", "暂不支持该支付方式");
-        }
-        return null;
-    }
-
-    /** 
-     * @param userId
-     * @param payType
-     * @param amount 
-     * @create: 2017年4月21日 下午4:45:47 xieyj
-     * @history: 
-     */
-    private Object doWeiXinH5Qz(String userId, String payType, Long transAmount) {
-        User user = userBO.getRemoteUser(userId);
-        if (transAmount.longValue() == 0l) {
-            throw new BizException("xn000000", "发生金额为零，不能使用微信支付");
-        }
-        if (StringUtils.isBlank(user.getOpenId())) {
-            throw new BizException("xn000000", "请微信登录后再支付");
-        }
-        Account account = accountBO.getAccountByUser(userId,
-            ECurrency.CNY.getCode());
-        String systemCode = account.getSystemCode();
-        // 落地付款方流水信息
-        String jourCode = jourBO.addToChangeJour(systemCode,
-            account.getAccountNumber(), EChannelType.WeChat_H5.getCode(),
-            EBizType.AJ_CZ.getCode(), EBizType.AJ_CZ.getValue(), transAmount,
-            null);
-        // 获取微信公众号支付prepayid
-        CompanyChannel companyChannel = companyChannelBO.getCompanyChannel(
-            systemCode, systemCode, EChannelType.WeChat_H5.getCode());
-        String prepayId = wechatBO.getPrepayIdH5(companyChannel,
-            user.getOpenId(), "微信公众号充值", jourCode, transAmount, SysConstant.IP,
-            PropertiesUtil.Config.WECHAT_H5_QzBACKURL, null);
-        // 返回微信公众号支付所需信息
-        return wechatBO.getPayInfoH5(companyChannel, jourCode, prepayId);
-    }
-
-    /*
-     * 外部账支付：1、产生支付申请订单；2、返回支付链接；
-     */
-    @Override
-    public String doChangeAmount(String accountNumber, String bankcardNumber,
-            Long transAmount, String bizType, String bizNote,
-            List<String> channelTypeList, String systemCode, String tradePwd) {
-        Account account = accountBO.getAccount(accountNumber);
-        if (StringUtils.isNotBlank(tradePwd)) {
-            userBO.checkTradePwd(account.getUserId(), tradePwd);
-        }
-        String payUrl = null;
-        EChannelType channelType = companyChannelBO.getBestChannel(systemCode,
-            channelTypeList);
-        // 业务备注前端没有传进来，由程序生成
-        if (StringUtils.isNotBlank(bankcardNumber)) {
-            Bankcard bankcard = bankcardBO
-                .getBankcardByBankcardNumber(bankcardNumber);
-            if (bankcard != null) {
-                bizNote += "卡号：" + bankcardNumber + " ";
-                bizNote += "银行：" + bankcard.getBankName() + " ";
-                if (StringUtils.isNotBlank(bankcard.getSubbranch())) {
-                    bizNote += "支行：" + bankcard.getSubbranch();
-                }
-            } else {
-                bizNote = bankcardNumber;
-            }
-        } else {
-            bizNote = EBizType.getBizTypeMap().get(bizType).getValue();
-        }
-        String code = jourBO.addToChangeJour(systemCode, accountNumber,
-            channelType.getCode(), bizType, bizNote, transAmount, null);
-        // 取现冻结
-        if (EBizType.AJ_QX.getCode().equals(bizType)) {
-            if (EChannelType.CZB.getCode().equals(channelType.getCode())) {
-                accountBO.frozenAmount(systemCode, accountNumber, -transAmount,
-                    code);
-            }
-        }
-        return payUrl;
-    }
-
-    /*
-     * 外部账批量支付：1、产生支付申请订单；2、返回支付链接；
-     */
-    @Override
-    @Transactional
-    public void doChangeAmountList(List<String> accountNumberList,
-            String bankcardNumber, Long transAmount, String bizType,
-            String bizNote, List<String> channelTypeList, String systemCode) {
-        for (String accountNumber : accountNumberList) {
-            this.doChangeAmount(accountNumber, bankcardNumber, transAmount,
-                bizType, bizNote, channelTypeList, systemCode, null);
-        }
-    }
-
-    /*
-     * 回调方法： 1、审核通过扣除金额；审核不通过，资金原路返回
-     */
-    @Override
-    @Transactional
-    public void doCallBackChange(String code, String rollbackResult,
-            String rollbackUser, String rollbackNote, String systemCode) {
-        Jour data = jourBO.getJour(code, systemCode);
-        // 判断流水状态
-        if (!EJourStatus.todoCallBack.getCode().equals(data.getStatus())) {
-            throw new BizException("xn000000", "申请记录状态不是刚生成待回调状态，无法审批");
-        }
-        Account account = accountBO.getAccount(data.getAccountNumber());
-        Long preAmount = account.getAmount();
-        Long postAmount = preAmount;
-        if (EBoolean.YES.getCode().equals(rollbackResult)) {
-            if (EBizType.AJ_CZ.getCode().equals(data.getBizType())) {
-                accountBO.transAmountNotJour(data.getSystemCode(),
-                    data.getAccountNumber(), data.getTransAmount(), code);
-                // 更新发生后金额
-                postAmount = preAmount + data.getTransAmount();
-            } else if (EBizType.AJ_QX.getCode().equals(data.getBizType())) {
-                accountBO.unfrozenAmount(data.getSystemCode(),
-                    EBoolean.YES.getCode(), data.getAccountNumber(),
-                    -data.getTransAmount(), code);
-                postAmount = preAmount;
-                preAmount = preAmount - data.getTransAmount();
-            }
-        } else {
-            if (EBizType.AJ_QX.getCode().equals(data.getBizType())) {
-                accountBO.unfrozenAmount(data.getSystemCode(),
-                    EBoolean.NO.getCode(), data.getAccountNumber(),
-                    -data.getTransAmount(), code);
-                postAmount = preAmount - data.getTransAmount();
-            }
-
-        }
-        jourBO.callBackChangeJour(code, rollbackResult, rollbackUser,
-            rollbackNote, preAmount, postAmount);
-    }
-
-    @Override
-    @Transactional
-    public void doCallBackChangeList(List<String> codeList,
-            String rollbackResult, String rollbackUser, String rollbackNote,
-            String systemCode) {
-        for (String code : codeList) {
-            this.doCallBackChange(code, rollbackResult, rollbackUser,
-                rollbackNote, systemCode);
-        }
-    }
-
-    /*
-     * 人工调账： 1、判断流水账是否平，平则更改订单状态，不平则更改产生红冲蓝补订单，而后更改订单状态
-     */
     @Override
     @Transactional
     public void checkJour(String code, Long checkAmount, String checkUser,
             String checkNote, String systemCode) {
-        Jour data = jourBO.getJour(code, systemCode);
-        if (!EJourStatus.todoCheck.getCode().equals(data.getStatus())) {
-            throw new BizException("xn000000", "该单号不处于待对账状态");
+        Jour jour = jourBO.getJour(code, systemCode);
+        if (!EJourStatus.todoCheck.getCode().equals(jour.getStatus())) {
+            throw new BizException("xn000000", "该流水<" + code + ">不处于待对账状态");
         }
         if (checkAmount != 0) {
-            Account account = accountBO.getAccount(data.getAccountNumber());
-            String adjustCode = jourBO
-                .addAdjustJour(account, code, checkAmount);
-            checkNote = checkNote + ",调账单号[" + adjustCode + "]";
-            jourBO.doCheckJour(code, EBoolean.NO, checkUser, checkNote);
+            Account account = accountBO.getAccount(jour.getAccountNumber());
+            hLOrderBO.applyOrder(account, jour, checkAmount, checkUser,
+                checkNote);
+            jourBO.doCheckJour(jour, EBoolean.NO, checkAmount, checkUser,
+                checkNote);
         } else {
-            jourBO.doCheckJour(code, EBoolean.YES, checkUser, checkNote);
+            jourBO.doCheckJour(jour, EBoolean.YES, checkAmount, checkUser,
+                checkNote);
         }
-    }
-
-    @Override
-    @Transactional
-    public void adjustJour(String code, String adjustResult, String adjustUser,
-            String adjustNote, String systemCode) {
-        Jour data = jourBO.getJour(code, systemCode);
-        Account account = accountBO.getAccount(data.getAccountNumber());
-        if (!EJourStatus.todoAdjust.getCode().equals(data.getStatus())) {
-            throw new BizException("xn000000", "该单号不处于调账待审核状态");
-        }
-        // 审核通过，账户钱处理
-        Date date = new Date();
-        Long preAmount = account.getAmount();
-        Long postAmount = preAmount + data.getTransAmount();
-        if (EBoolean.YES.getCode().equals(adjustResult)) {
-            accountBO.transAmountNotJour(systemCode, data.getAccountNumber(),
-                data.getTransAmount(), code);
-            jourBO.doAdjustJour(code, EBoolean.YES, adjustUser, date,
-                adjustNote, preAmount, postAmount);
-            // 系统账户划转
-            EBizType eBizType = EBizType.AJ_HC;
-            if (data.getTransAmount() > 0) {
-                eBizType = EBizType.AJ_LB;
-            }
-            Account sysAccount = accountBO.getSysAccount(
-                ESysUser.SYS_USER.getCode(), account.getCurrency());
-            accountBO.transAmount(sysAccount.getAccountNumber(),
-                EChannelType.Adjust_ZH, null, -data.getTransAmount(),
-                eBizType.getCode(), eBizType.getValue() + "单号[" + code + "]");
-        } else {
-            jourBO.doAdjustJour(code, EBoolean.NO, adjustUser, date,
-                adjustNote, null, null);
-        }
-        jourBO.refreshOrderStatus(data.getChannelOrder(), adjustUser, date,
-            adjustNote);
     }
 
     @Override
@@ -314,9 +100,6 @@ public class JourAOImpl implements IJourAO {
         return jourBO.queryJourList(condition);
     }
 
-    /** 
-     * @see com.std.account.ao.IJourAO#getJour(java.lang.String)
-     */
     @Override
     public Jour getJour(String code, String systemCode) {
         return jourBO.getJour(code, systemCode);

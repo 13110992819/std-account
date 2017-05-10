@@ -3,6 +3,11 @@ package com.std.account.domain;
 import com.std.account.dao.base.ABaseDO;
 
 public class ChannelCompany extends ABaseDO {
+    /** 
+     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
+     */
+    private static final long serialVersionUID = -1701801001108180850L;
+
     // 公司编号
     private String companyCode;
 

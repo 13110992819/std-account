@@ -161,16 +161,7 @@
 		account_number = #{accountNumber}
 	</update>
 	
-	<update id="update_account_frozen_amount" parameterType="account">
-		UPDATE tstd_account
-		SET
-		amount= #{amount}
-		,frozen_amount = #{frozenAmount}
-		,md5 = #{md5}
-		,last_order = #{lastOrder}
-		WHERE
-		account_number = #{accountNumber}
-	</update>
+	
 	
 	<update id="update_account_realName" parameterType="account">
 		UPDATE tstd_account
@@ -186,5 +177,35 @@
 		status= #{status}
 		WHERE
 		account_number = #{accountNumber}	
+	</update>
+	
+	
+	<update id="update_frozenAmount" parameterType="account">
+		UPDATE tstd_account
+		SET
+		amount= #{amount}
+		,frozen_amount = #{frozenAmount}
+		,md5 = #{md5}
+		,last_order = #{lastOrder}
+		WHERE
+		account_number = #{accountNumber}
+	</update>
+	<update id="update_unfrozenAmount" parameterType="account">
+		UPDATE tstd_account
+		SET
+		amount= #{amount}
+		,frozen_amount = #{frozenAmount}
+		,md5 = #{md5}
+		,last_order = #{lastOrder}
+		WHERE
+		account_number = #{accountNumber}
+	</update>
+	<update id="update_cutFrozenAmount" parameterType="account">
+		UPDATE tstd_account
+		SET
+		amount= #{amount}
+		,frozen_amount = #{frozenAmount}
+		WHERE
+		account_number = #{accountNumber}
 	</update>
 </mapper>

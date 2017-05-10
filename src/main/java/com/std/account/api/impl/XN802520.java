@@ -34,10 +34,10 @@ public class XN802520 extends AProcessor {
         condition.setAccountNumber(req.getAccountNumber());
         condition.setCurrency(req.getCurrency());
         condition.setChannelType(req.getChannelType());
-        condition.setChannelOrder(req.getChannelOrder());
+
         condition.setBizType(req.getBizType());
         condition.setStatus(req.getStatus());
-        condition.setRollbackUser(req.getRollbackUser());
+
         condition.setWorkDate(req.getWorkDate());
         condition.setCheckUser(req.getCheckUser());
         condition.setAdjustUser(req.getAdjustUser());

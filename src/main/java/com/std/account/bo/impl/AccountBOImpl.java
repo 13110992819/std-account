@@ -8,19 +8,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.std.account.bo.IAccountBO;
+import com.std.account.bo.IExchangeCurrencyBO;
 import com.std.account.bo.IJourBO;
 import com.std.account.bo.base.PaginableBOImpl;
 import com.std.account.core.AccountUtil;
 import com.std.account.core.OrderNoGenerater;
 import com.std.account.dao.IAccountDAO;
 import com.std.account.domain.Account;
+import com.std.account.domain.HLOrder;
 import com.std.account.enums.EAccountStatus;
 import com.std.account.enums.EAccountType;
-import com.std.account.enums.EBoolean;
 import com.std.account.enums.EChannelType;
+import com.std.account.enums.ECurrency;
 import com.std.account.enums.EGeneratePrefix;
+import com.std.account.enums.EJourBizType;
 import com.std.account.enums.ESysUser;
 import com.std.account.exception.BizException;
+import com.std.account.util.AmountUtil;
 
 /**
  * @author: xieyj 
@@ -35,6 +39,9 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
 
     @Autowired
     private IJourBO jourBO;
+
+    @Autowired
+    private IExchangeCurrencyBO exchangeCurrencyBO;
 
     @Override
     public String distributeAccount(String userId, String realName,
@@ -65,22 +72,18 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
     }
 
     @Override
-    public void transAmount(String accountNumber, EChannelType channelType,
-            String channelOrder, Long transAmount, String bizType,
-            String bizNote) {
+    public void changeAmount(String accountNumber, EChannelType channelType,
+            String refNo, Long transAmount, EJourBizType bizType, String bizNote) {
         Account dbAccount = this.getAccount(accountNumber);
-        String systemCode = dbAccount.getSystemCode();
         Long nowAmount = dbAccount.getAmount() + transAmount;
         // 特定账户余额可为负
-        // !ESysAccount.getResultMap().containsKey(accountNumber)
         if (!dbAccount.getUserId().contains(ESysUser.SYS_USER.getCode())
                 && nowAmount < 0) {
             throw new BizException("xn000000", "账户余额不足");
         }
         // 记录流水
-        String lastOrder = jourBO.addChangedJour(systemCode, accountNumber,
-            channelType, channelOrder, bizType, bizNote, dbAccount.getAmount(),
-            transAmount);
+        String lastOrder = jourBO.addJour(dbAccount, channelType, refNo,
+            bizType, bizNote, transAmount);
         // 更改余额
         Account data = new Account();
         data.setAccountNumber(accountNumber);
@@ -97,8 +100,8 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
     }
 
     @Override
-    public void transAmountNotJour(String systemCode, String accountNumber,
-            Long transAmount, String lastOrder) {
+    public void changeAmountNotJour(String accountNumber, Long transAmount,
+            String lastOrder) {
         Account dbAccount = this.getAccount(accountNumber);
         Long nowAmount = dbAccount.getAmount() + transAmount;
         if (!dbAccount.getUserId().contains(ESysUser.SYS_USER.getCode())
@@ -120,57 +123,84 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
         accountDAO.updateAmount(data);
     }
 
-    /**
-     * 冻结：1、产生账户冻结流水；2、冻结账户金额
-     * @see com.std.account.bo.IAccountBO#frozenAmount(java.lang.String, java.lang.String, java.lang.Long, java.lang.String)
-     */
     @Override
-    public void frozenAmount(String systemCode, String accountNumber,
-            Long freezeAmount, String lastOrder) {
-        if (freezeAmount <= 0) {
-            throw new BizException("xn000000", "冻结金额需大于0");
-        }
-        Account dbAccount = this.getAccount(accountNumber);
-        Long nowAmount = dbAccount.getAmount() - freezeAmount;
-        if (!dbAccount.getUserId().contains(ESysUser.SYS_USER.getCode())
-                && nowAmount < 0) {
-            throw new BizException("xn000000", "账户余额不足");
-        }
-        Long nowFrozenAmount = dbAccount.getFrozenAmount() + freezeAmount;
+    public void changeAmountForHL(HLOrder order) {
+        Account dbAccount = this.getAccount(order.getAccountNumber());
+        Long nowAmount = dbAccount.getAmount() + order.getAmount();
+        // 记录流水
+        String lastOrder = jourBO.addJourForHL(dbAccount, order);
+        // 更改余额
         Account data = new Account();
-        data.setAccountNumber(accountNumber);
+        data.setAccountNumber(dbAccount.getAccountNumber());
         data.setAmount(nowAmount);
-        data.setFrozenAmount(nowFrozenAmount);
         data.setMd5(AccountUtil.md5(dbAccount.getMd5(), dbAccount.getAmount(),
             nowAmount));
         data.setLastOrder(lastOrder);
-        accountDAO.updateFrozenAmount(data);
+        accountDAO.updateAmount(data);
+
     }
 
     @Override
-    public void unfrozenAmount(String systemCode, String unfrozenResult,
-            String accountNumber, Long unfreezeAmount, String lastOrder) {
-        if (unfreezeAmount <= 0) {
-            throw new BizException("xn000000", "解冻金额需大于0");
+    public void frozenAmount(Account dbAccount, Long freezeAmount,
+            String withdrawCode) {
+        if (freezeAmount <= 0) {
+            throw new BizException("xn000000", "冻结金额需大于0");
         }
-        Account dbAccount = this.getAccount(accountNumber);
-        // 审核通过，扣除冻结金额，审核不通过冻结资金原路返回
-        Long nowAmount = dbAccount.getAmount();
-        if (EBoolean.NO.getCode().equals(unfrozenResult)) {
-            nowAmount = nowAmount + unfreezeAmount;
+        Long nowAmount = dbAccount.getAmount() - freezeAmount;
+        if (nowAmount < 0) {
+            throw new BizException("xn000000", "账户余额不足");
         }
-        Long nowFrozenAmount = dbAccount.getFrozenAmount() - unfreezeAmount;
-        if (nowFrozenAmount < 0) {
-            throw new BizException("xn000000", "本次解冻会使账户冻结金额小于0");
-        }
+        // 记录流水
+        String lastOrder = jourBO.addJour(dbAccount, EChannelType.Offline,
+            withdrawCode, EJourBizType.AJ_QX, "线下取现冻结金额", -freezeAmount);
+        Long nowFrozenAmount = dbAccount.getFrozenAmount() + freezeAmount;
         Account data = new Account();
-        data.setAccountNumber(accountNumber);
+        data.setAccountNumber(dbAccount.getAccountNumber());
         data.setAmount(nowAmount);
         data.setFrozenAmount(nowFrozenAmount);
         data.setMd5(AccountUtil.md5(dbAccount.getMd5(), dbAccount.getAmount(),
             nowAmount));
         data.setLastOrder(lastOrder);
-        accountDAO.updateFrozenAmount(data);
+        accountDAO.frozenAmount(data);
+    }
+
+    @Override
+    public void unfrozenAmount(Account dbAccount, Long freezeAmount,
+            String withdrawCode) {
+        if (freezeAmount <= 0) {
+            throw new BizException("xn000000", "解冻金额需大于0");
+        }
+        Long nowFrozenAmount = dbAccount.getFrozenAmount() - freezeAmount;
+        if (nowFrozenAmount < 0) {
+            throw new BizException("xn000000", "本次解冻会使账户冻结金额小于0");
+        }
+
+        // 记录流水
+        String lastOrder = jourBO.addJour(dbAccount, EChannelType.Offline,
+            withdrawCode, EJourBizType.AJ_QX, "线下取现解冻金额", freezeAmount);
+        Account data = new Account();
+        data.setAccountNumber(dbAccount.getAccountNumber());
+        data.setAmount(dbAccount.getAmount() + freezeAmount);
+        data.setFrozenAmount(nowFrozenAmount);
+        data.setMd5(AccountUtil.md5(dbAccount.getMd5(), dbAccount.getAmount(),
+            dbAccount.getAmount() + freezeAmount));
+        data.setLastOrder(lastOrder);
+        accountDAO.unfrozenAmount(data);
+    }
+
+    @Override
+    public void cutFrozenAmount(Account dbAccount, Long freezeAmount) {
+        if (freezeAmount <= 0) {
+            throw new BizException("xn000000", "解冻金额需大于0");
+        }
+        Long nowFrozenAmount = dbAccount.getFrozenAmount() - freezeAmount;
+        if (nowFrozenAmount < 0) {
+            throw new BizException("xn000000", "本次扣减会使账户冻结金额小于0");
+        }
+        Account data = new Account();
+        data.setAccountNumber(dbAccount.getAccountNumber());
+        data.setFrozenAmount(nowFrozenAmount);
+        accountDAO.cutFrozenAmount(data);
     }
 
     @Override
@@ -243,4 +273,48 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
         condition.setCurrency(currency);
         return accountDAO.select(condition);
     }
+
+    @Override
+    public void transAmountCZB(String fromUserId, String fromCurrency,
+            String toUserId, String toCurrency, Long transAmount,
+            EJourBizType bizType, String fromBizNote, String toBizNote) {
+        Account fromAccount = this.getAccountByUser(fromUserId, fromCurrency);
+        Account toAccount = this.getAccountByUser(toUserId, toCurrency);
+        transAmountCZB(fromAccount, toAccount, transAmount, bizType,
+            fromBizNote, toBizNote);
+    }
+
+    @Override
+    public void transAmountCZB(String fromAccountNumber,
+            String toAccountNumber, Long transAmount, EJourBizType bizType,
+            String fromBizNote, String toBizNote) {
+        Account fromAccount = this.getAccount(fromAccountNumber);
+        Account toAccount = this.getAccount(toAccountNumber);
+        transAmountCZB(fromAccount, toAccount, transAmount, bizType,
+            fromBizNote, toBizNote);
+    }
+
+    private void transAmountCZB(Account fromAccount, Account toAccount,
+            Long transAmount, EJourBizType bizType, String fromBizNote,
+            String toBizNote) {
+        String fromAccountNumber = fromAccount.getAccountNumber();
+        String toAccountNumber = toAccount.getAccountNumber();
+        if (fromAccountNumber.equals(toAccountNumber)) {
+            new BizException("XN0000", "来去双方账号一致，无需内部划转");
+        }
+        Double rate = exchangeCurrencyBO.getExchangeRate(
+            fromAccount.getCurrency(), toAccount.getCurrency());
+        this.changeAmount(fromAccountNumber, EChannelType.NBZ, toAccountNumber,
+            -transAmount, bizType, fromBizNote);
+        this.changeAmount(toAccountNumber, EChannelType.NBZ, fromAccountNumber,
+            AmountUtil.mul(transAmount, rate), bizType, toBizNote);
+
+    }
+
+    @Override
+    public String getSysAccountNumber(String systemCode, ECurrency currency) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

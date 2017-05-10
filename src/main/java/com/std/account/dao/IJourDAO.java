@@ -45,5 +45,5 @@ public interface IJourDAO extends IBaseDAO<Jour> {
      * @create: 2016年12月26日 下午9:29:23 xieyj
      * @history:
      */
-    public int updateAdjustStatus(Jour data);
+    public int adjustJour(Jour data);
 }

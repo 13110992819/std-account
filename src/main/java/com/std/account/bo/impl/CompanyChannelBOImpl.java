@@ -10,7 +10,6 @@ import com.std.account.bo.ICompanyChannelBO;
 import com.std.account.bo.base.PaginableBOImpl;
 import com.std.account.dao.ICompanyChannelDAO;
 import com.std.account.domain.CompanyChannel;
-import com.std.account.enums.EChannelType;
 import com.std.account.exception.BizException;
 
 /**
@@ -90,27 +89,6 @@ public class CompanyChannelBOImpl extends PaginableBOImpl<CompanyChannel>
             }
         }
         return data;
-    }
-
-    @Override
-    public EChannelType getBestChannel(String companyCode,
-            EChannelType channelType) {
-        return EChannelType.Fuiou_PC;
-    }
-
-    /** 
-     * @see com.std.account.bo.ICompanyChannelBO#getBestChannel(java.lang.String, java.util.List)
-     */
-    @Override
-    public EChannelType getBestChannel(String companyCode,
-            List<String> channelTypeList) {
-        return EChannelType.CZB;
-    }
-
-    @Override
-    public void transAmountPC(String companyCode, EChannelType channelType,
-            Long transAmount, String order, String bankCode) {
-        // TODO Auto-generated method stub
     }
 
     @Override

@@ -35,7 +35,7 @@ import com.std.account.domain.CallbackResult;
 import com.std.account.domain.CompanyChannel;
 import com.std.account.domain.Jour;
 import com.std.account.dto.res.XN002510Res;
-import com.std.account.enums.EBizType;
+import com.std.account.enums.EJourBizType;
 import com.std.account.enums.EBoolean;
 import com.std.account.enums.EChannelType;
 import com.std.account.enums.ECurrency;
@@ -92,7 +92,7 @@ public class AlipayAOImpl implements IAlipayAO {
         Long toTransAmount = transAmount;
         // 如果是正汇系统的O2O消费买单，付款至分润账户
         if ("CD-CZH000001".equals(fromAccount.getSystemCode())
-                && EBizType.ZH_O2O.getCode().equals(bizType)) {
+                && EJourBizType.ZH_O2O.getCode().equals(bizType)) {
             toAcccoutCurrency = ECurrency.ZH_FRB.getCode();
             toTransAmount = AmountUtil.mul(transAmount, exchangeCurrencyBO
                 .getExchangeRate(ECurrency.CNY.getCode(),
@@ -196,9 +196,6 @@ public class AlipayAOImpl implements IAlipayAO {
         return JsonUtil.Object2Json(bizParams);
     }
 
-    /**
-     * @see com.std.account.ao.IAlipayAO#doCallbackAPP(java.lang.String)
-     */
     @Override
     public CallbackResult doCallbackAPP(String result) {
         String systemCode = "CD-CZH000001";
@@ -252,9 +249,8 @@ public class AlipayAOImpl implements IAlipayAO {
                         EBoolean.YES.getCode(), "ALIPAY", "支付宝APP支付后台自动回调",
                         alipayOrderNo);
                     // 收款方账户加钱
-                    accountBO.transAmountNotJour(systemCode,
-                        toJour.getAccountNumber(), toJour.getTransAmount(),
-                        toJour.getCode());
+                    accountBO.changeAmountNotJour(toJour.getAccountNumber(),
+                        toJour.getTransAmount(), toJour.getCode());
                 } else {
                     // 支付失败
                     jourBO.callBackChangeJour(fromJour.getCode(),

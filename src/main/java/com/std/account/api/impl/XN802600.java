@@ -12,7 +12,7 @@ import com.std.account.exception.ParaException;
 import com.std.account.spring.SpringContextHolder;
 
 /**
- * 校对账户余额：账本的余额理论上应该保证绝对正确性，供客户放篡改用。
+ * 获取账户信息（账户余额：账本的余额理论上应该保证绝对正确性，供客户放篡改用）
  * @author: myb858 
  * @since: 2016年11月5日 下午12:45:24 
  * @history:
@@ -40,7 +40,6 @@ public class XN802600 extends AProcessor {
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN802600Req.class);
-        StringValidater.validateBlank(req.getAccountName(),
-            req.getAccountNumber());
+        StringValidater.validateBlank(req.getAccountNumber());
     }
 }

@@ -4,9 +4,12 @@ import java.util.List;
 
 import com.std.account.bo.base.IPaginableBO;
 import com.std.account.domain.Account;
+import com.std.account.domain.HLOrder;
 import com.std.account.enums.EAccountStatus;
 import com.std.account.enums.EAccountType;
 import com.std.account.enums.EChannelType;
+import com.std.account.enums.ECurrency;
+import com.std.account.enums.EJourBizType;
 
 /**
  * @author: xieyj
@@ -29,33 +32,16 @@ public interface IAccountBO extends IPaginableBO<Account> {
     public String distributeAccount(String userId, String realName,
             EAccountType accountType, String currency, String systemCode);
 
-    /**
-     * 划转资金
-     * @param systemCode
-     * @param accountNumber
-     * @param channelType
-     * @param channelOrder
-     * @param transAmount
-     * @param bizType
-     * @param bizNote 
-     * @create: 2016年12月23日 下午5:58:06 xieyj
-     * @history:
-     */
-    public void transAmount(String accountNumber, EChannelType channelType,
-            String channelOrder, Long transAmount, String bizType,
-            String bizNote);
+    // 变更账户余额：流水落地
+    public void changeAmount(String accountNumber, EChannelType channelType,
+            String refNo, Long transAmount, EJourBizType bizType, String bizNote);
 
-    /**
-     * 改变账户金额，无流水
-     * @param systemCode
-     * @param accountNumber
-     * @param transAmount
-     * @param lastOrder 
-     * @create: 2016年12月25日 下午11:21:43 xieyj
-     * @history:
-     */
-    public void transAmountNotJour(String systemCode, String accountNumber,
-            Long transAmount, String lastOrder);
+    // 仅变更账户余额：流水不落地
+    public void changeAmountNotJour(String accountNumber, Long transAmount,
+            String lastOrder);
+
+    // 红冲蓝补导致的资金变动（落地流水不需要对账）
+    public void changeAmountForHL(HLOrder order);
 
     /**
      * 更新户名
@@ -66,30 +52,16 @@ public interface IAccountBO extends IPaginableBO<Account> {
      */
     public void refreshAccountName(String userId, String realName);
 
-    /**
-     * 冻结账户金额
-     * @param systemCode
-     * @param accountNumber
-     * @param freezeAmount
-     * @param lastOrder 
-     * @create: 2016年12月23日 下午5:25:55 xieyj
-     * @history:
-     */
-    public void frozenAmount(String systemCode, String accountNumber,
-            Long freezeAmount, String lastOrder);
+    // 冻结金额（余额变动）
+    public void frozenAmount(Account dbAccount, Long freezeAmount,
+            String withdrawCode);
 
-    /**
-     * 解冻账户(审核通过，扣除冻结金额；审核不通过，冻结金额原路返回)
-     * @param systemCode
-     * @param unfrozenResult 1 通过， 0 不通过
-     * @param accountNumber
-     * @param unfreezeAmount
-     * @param lastOrder 
-     * @create: 2016年12月25日 下午2:55:10 xieyj
-     * @history:
-     */
-    public void unfrozenAmount(String systemCode, String unfrozenResult,
-            String accountNumber, Long unfreezeAmount, String lastOrder);
+    // 解冻账户(冻结金额原路返回)
+    public void unfrozenAmount(Account dbAccount, Long freezeAmount,
+            String withdrawCode);
+
+    // 扣减冻结金额
+    public void cutFrozenAmount(Account dbAccount, Long amount);
 
     /**
      * 更新账户状态
@@ -139,4 +111,18 @@ public interface IAccountBO extends IPaginableBO<Account> {
      * @history:
      */
     public List<Account> queryAccountList(Account data);
+
+    // 内部转账
+    public void transAmountCZB(String fromUserId, String fromCurrency,
+            String toUserId, String toCurrency, Long transAmount,
+            EJourBizType bizType, String fromBizNote, String toBizNote);
+
+    // 内部转账
+    public void transAmountCZB(String fromAccountNumber,
+            String toAccountNumber, Long transAmount, EJourBizType bizType,
+            String fromBizNote, String toBizNote);
+
+    // 根据系统编号和币种获取对应的系统账户编号
+    public String getSysAccountNumber(String systemCode, ECurrency currency);
+
 }

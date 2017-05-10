@@ -28,15 +28,6 @@ public interface IAccountDAO extends IBaseDAO<Account> {
      */
     public int updateAmount(Account data);
 
-    /** 
-     * 修改账户冻结金额（一定同时更改账户余额）
-     * @param data
-     * @return 
-     * @create: 2015-2-23 下午4:28:41 miyb
-     * @history: 
-     */
-    public int updateFrozenAmount(Account data);
-
     /**
      * 更新户名
      * @param data
@@ -54,4 +45,10 @@ public interface IAccountDAO extends IBaseDAO<Account> {
      * @history: 
      */
     public int updateStatus(Account data);
+
+    public int frozenAmount(Account data);
+
+    public int unfrozenAmount(Account data);
+
+    public int cutFrozenAmount(Account data);
 }

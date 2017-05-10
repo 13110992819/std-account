@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.std.account.dao.IChargeDAO">
+	<resultMap id="charge_DB_Result" type="charge">
+		<result column="code" property="code" />
+		<result column="account_number" property="accountNumber" />
+		<result column="account_name" property="accountName" />
+		<result column="amount" property="amount" />
+		<result column="pay_channel" property="payChannel" />
+		
+		<result column="pay_card_info" property="payCardInfo" />
+		<result column="pay_card_no" property="payCardNo" />
+		<result column="status" property="status" />
+		<result column="apply_user" property="applyUser" />
+		<result column="apply_note" property="applyNote" />
+		
+		<result column="apply_datetime" property="applyDatetime" />
+		<result column="pay_user" property="payUser" />
+		<result column="pay_note" property="payNote" />
+		<result column="pay_group" property="payGroup" />
+		<result column="pay_code" property="payCode" />
+		
+		<result column="pay_datetime" property="payDatetime" />
+		<result column="system_code" property="systemCode" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
+			</if>
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
+			</if>
+			<if test="type != null and type != '' ">
+				AND t.type = #{type}
+			</if>
+			<if test="dkey != null and dkey != '' ">
+				AND t.dkey = #{dkey}
+			</if>
+			<if test="parentKey != null and parentKey != '' ">
+				AND t.parent_key = #{parentKey}
+			</if>	
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_charge" parameterType="charge" resultMap="charge_DB_Result">
+		SELECT
+		id
+		,type
+		,parent_key
+		,dkey
+		
+		,dvalue
+		,updater
+		,update_datetime
+		,remark
+		,system_code
+		FROM
+		tsys_dict t 
+		<include refid="where_condition" />
+		ORDER BY id
+	</select>
+
+	<select id="select_charge_count" parameterType="charge" resultType="java.lang.Long">
+		SELECT count(1) FROM tsys_dict t 
+		<include refid="where_condition" />
+	</select>
+	
+	<insert id="insert_charge" parameterType="charge" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO tsys_dict(
+		type
+		,parent_key
+		,dkey
+		,dvalue
+		,updater
+		,update_datetime
+		,remark
+		,system_code
+		)
+		VALUES(
+		#{type}
+		,#{parentKey}
+		,#{dkey}
+		,#{dvalue}
+		,#{updater}
+		,#{updateDatetime}
+		,#{remark}
+		,#{systemCode}
+		)
+	</insert>
+
+	<delete id="delete_charge" parameterType="charge">
+		DELETE FROM tsys_dict
+		WHERE
+		id = #{id}
+	</delete>
+	
+	<update id="update_charge" parameterType="charge">
+		UPDATE tsys_dict SET
+		dvalue = #{dvalue}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark=#{remark}
+		WHERE id = #{id}
+	</update>
+</mapper>

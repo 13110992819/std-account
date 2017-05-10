@@ -85,15 +85,6 @@ public class AccountDAOImpl extends AMybatisTemplate implements IAccountDAO {
     }
 
     /** 
-     * @see com.xnjr.account.dao.ibis.account.dao.IAccountDAO#updateFrozenAmount(com.ibis.account.domain.Account)
-     */
-    @Override
-    public int updateFrozenAmount(Account data) {
-        return super.update(NAMESPACE.concat("update_account_frozen_amount"),
-            data);
-    }
-
-    /** 
      * @see com.std.account.dao.IAccountDAO#updateRealName(com.std.account.domain.Account)
      */
     @Override
@@ -107,5 +98,20 @@ public class AccountDAOImpl extends AMybatisTemplate implements IAccountDAO {
     @Override
     public int updateStatus(Account data) {
         return super.update(NAMESPACE.concat("update_account_status"), data);
+    }
+
+    @Override
+    public int frozenAmount(Account data) {
+        return super.update(NAMESPACE.concat("update_frozenAmount"), data);
+    }
+
+    @Override
+    public int unfrozenAmount(Account data) {
+        return super.update(NAMESPACE.concat("update_unfrozenAmount"), data);
+    }
+
+    @Override
+    public int cutFrozenAmount(Account data) {
+        return super.update(NAMESPACE.concat("update_cutFrozenAmount"), data);
     }
 }

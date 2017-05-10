@@ -18,7 +18,7 @@ import com.std.account.common.PropertiesUtil;
 import com.std.account.domain.Account;
 import com.std.account.domain.ExchangeCurrency;
 import com.std.account.domain.User;
-import com.std.account.enums.EBizType;
+import com.std.account.enums.EJourBizType;
 import com.std.account.enums.EBoolean;
 import com.std.account.enums.EChannelType;
 import com.std.account.enums.ECurrency;
@@ -83,7 +83,7 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
         String toBizNote = null;
         Long rmbAmount = 0L;
         if (ECurrency.CG_CGB.getCode().equals(currency)) {
-            bizType = EBizType.AJ_CGBSM.getCode();
+            bizType = EJourBizType.AJ_CGBSM.getCode();
             fromBizNote = "菜狗币购买";
             toBizNote = "菜狗币售卖";
             rmbAmount = AmountUtil.mulJinFen(amount, 1 / exchangeCurrencyBO
@@ -119,9 +119,9 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
             fromUser.getSystemCode());
 
         return weChatAO.getPrepayIdH5(fromUser.getUserId(),
-            fromUser.getOpenId(), toUser, EBizType.EXCHANGE_CURRENCY.getCode(),
-            EBizType.EXCHANGE_CURRENCY.getValue(),
-            EBizType.EXCHANGE_CURRENCY.getValue(), rmbAmount, payGroup,
+            fromUser.getOpenId(), toUser, EJourBizType.EXCHANGE_CURRENCY.getCode(),
+            EJourBizType.EXCHANGE_CURRENCY.getValue(),
+            EJourBizType.EXCHANGE_CURRENCY.getValue(), rmbAmount, payGroup,
             PropertiesUtil.Config.SELF_PAY_BACKURL);
     }
 
@@ -143,7 +143,7 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
         // 去方币种兑换
         accountAO.transAmountCZB(exchangeCurrency.getToUserId(),
             exchangeCurrency.getFromUserId(), exchangeCurrency.getToCurrency(),
-            transAmount, EBizType.EXCHANGE_CURRENCY.getCode(), "币种兑换", "币种兑换");
+            transAmount, EJourBizType.EXCHANGE_CURRENCY.getCode(), "币种兑换", "币种兑换");
     }
 
     @Override
@@ -194,12 +194,12 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
             dbOrder.getFromUserId(), dbOrder.getFromCurrency());
         Account toAccount = accountBO.getAccountByUser(dbOrder.getToUserId(),
             dbOrder.getToCurrency());
-        accountBO.transAmount(fromAccount.getAccountNumber(), EChannelType.NBZ,
-            null, -dbOrder.getFromAmount(),
-            EBizType.EXCHANGE_CURRENCY.getCode(), remark);
-        accountBO.transAmount(toAccount.getAccountNumber(), EChannelType.NBZ,
-            null, dbOrder.getToAmount(), EBizType.EXCHANGE_CURRENCY.getCode(),
-            remark);
+        accountBO.changeAmount(fromAccount.getAccountNumber(),
+            EChannelType.NBZ, dbOrder.getCode(), -dbOrder.getFromAmount(),
+            EJourBizType.EXCHANGE_CURRENCY, remark);
+        accountBO.changeAmount(toAccount.getAccountNumber(), EChannelType.NBZ,
+            dbOrder.getCode(), dbOrder.getToAmount(),
+            EJourBizType.EXCHANGE_CURRENCY, remark);
         return dbOrder.getCode();
     }
 
@@ -233,12 +233,12 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
                     dbOrder.getFromUserId(), dbOrder.getFromCurrency());
                 Account toAccount = accountBO.getAccountByUser(
                     dbOrder.getToUserId(), dbOrder.getToCurrency());
-                accountBO.transAmount(fromAccount.getAccountNumber(),
-                    EChannelType.NBZ, null, -dbOrder.getFromAmount(),
-                    EBizType.EXCHANGE_CURRENCY.getCode(), remark);
-                accountBO.transAmount(toAccount.getAccountNumber(),
-                    EChannelType.NBZ, null, dbOrder.getToAmount(),
-                    EBizType.EXCHANGE_CURRENCY.getCode(), remark);
+                accountBO.changeAmount(fromAccount.getAccountNumber(),
+                    EChannelType.NBZ, code, -dbOrder.getFromAmount(),
+                    EJourBizType.EXCHANGE_CURRENCY, remark);
+                accountBO.changeAmount(toAccount.getAccountNumber(),
+                    EChannelType.NBZ, code, dbOrder.getToAmount(),
+                    EJourBizType.EXCHANGE_CURRENCY, remark);
             } else {
                 exchangeCurrencyBO.approveExchangeNo(dbOrder, approver,
                     approveNote);
@@ -255,16 +255,16 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
         User storeUser = userBO.getRemoteUser(storeOwner);
         String toUserId = userBO.isUserExist(mobile, EUserKind.F1,
             storeUser.getSystemCode());
-        exchangeCurrencyBO.saveExchange(storeUser.getUserId(), toUserId,
-            amount, currency, storeUser.getSystemCode());
+        String code = exchangeCurrencyBO.saveExchange(storeUser.getUserId(),
+            toUserId, amount, currency, storeUser.getSystemCode());
 
         Account fromAccount = accountBO.getAccountByUser(storeOwner, currency);
         Account toAccount = accountBO.getAccountByUser(toUserId, currency);
-        String bizType = EBizType.Transfer_CURRENCY.getCode();
-        accountBO.transAmount(fromAccount.getAccountNumber(), EChannelType.NBZ,
-            null, -amount, bizType, "商户针对C端手机划转资金");
-        accountBO.transAmount(toAccount.getAccountNumber(), EChannelType.NBZ,
-            null, amount, bizType, "商户针对C端手机划转资金");
+        accountBO.changeAmount(fromAccount.getAccountNumber(),
+            EChannelType.NBZ, code, -amount, EJourBizType.Transfer_CURRENCY,
+            "商户针对C端手机划转资金");
+        accountBO.changeAmount(toAccount.getAccountNumber(), EChannelType.NBZ,
+            code, amount, EJourBizType.Transfer_CURRENCY, "商户针对C端手机划转资金");
     }
 
     @Override
@@ -273,14 +273,13 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
             String currency) {
         Account fromAccount = accountBO.getAccountByUser(fromUserId, currency);
         Account toAccount = accountBO.getAccountByUser(toUserId, currency);
-
-        exchangeCurrencyBO.saveExchange(fromUserId, toUserId, amount, currency,
-            fromAccount.getSystemCode());
-        String bizType = EBizType.Transfer_CURRENCY.getCode();
-        accountBO.transAmount(fromAccount.getAccountNumber(), EChannelType.NBZ,
-            null, -amount, bizType, "加盟商对商户划转资金");
-        accountBO.transAmount(toAccount.getAccountNumber(), EChannelType.NBZ,
-            null, amount, bizType, "加盟商对商户划转资金");
+        String code = exchangeCurrencyBO.saveExchange(fromUserId, toUserId,
+            amount, currency, fromAccount.getSystemCode());
+        accountBO.changeAmount(fromAccount.getAccountNumber(),
+            EChannelType.NBZ, code, -amount, EJourBizType.Transfer_CURRENCY,
+            "加盟商对商户划转资金");
+        accountBO.changeAmount(toAccount.getAccountNumber(), EChannelType.NBZ,
+            code, amount, EJourBizType.Transfer_CURRENCY, "加盟商对商户划转资金");
     }
 
     @Override
@@ -289,13 +288,12 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
             String currency) {
         Account fromAccount = accountBO.getAccountByUser(fromUserId, currency);
         Account toAccount = accountBO.getAccountByUser(toUserId, currency);
-
-        exchangeCurrencyBO.saveExchange(fromUserId, toUserId, amount, currency,
-            fromAccount.getSystemCode());
-        String bizType = EBizType.Transfer_CURRENCY.getCode();
-        accountBO.transAmount(fromAccount.getAccountNumber(), EChannelType.NBZ,
-            null, -amount, bizType, "平台对加盟商划转资金");
-        accountBO.transAmount(toAccount.getAccountNumber(), EChannelType.NBZ,
-            null, amount, bizType, "平台对加盟商划转资金");
+        String code = exchangeCurrencyBO.saveExchange(fromUserId, toUserId,
+            amount, currency, fromAccount.getSystemCode());
+        accountBO.changeAmount(fromAccount.getAccountNumber(),
+            EChannelType.NBZ, code, -amount, EJourBizType.Transfer_CURRENCY,
+            "平台对加盟商划转资金");
+        accountBO.changeAmount(toAccount.getAccountNumber(), EChannelType.NBZ,
+            code, amount, EJourBizType.Transfer_CURRENCY, "平台对加盟商划转资金");
     }
 }
