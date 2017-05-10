@@ -15,6 +15,7 @@ import com.std.account.bo.IExchangeCurrencyBO;
 import com.std.account.bo.IJourBO;
 import com.std.account.bo.IUserBO;
 import com.std.account.bo.base.Paginable;
+import com.std.account.core.StringValidater;
 import com.std.account.domain.Account;
 import com.std.account.enums.EAccountType;
 import com.std.account.enums.EChannelType;
@@ -185,5 +186,14 @@ public class AccountAOImpl implements IAccountAO {
         condition.setUserId(userId);
         condition.setCurrency(currency);
         return accountBO.queryAccountList(condition);
+    }
+
+    @Override
+    public void transAmount(String accountNumber, String channelType,
+            String channelOrder, String transAmount, String bizType,
+            String bizNote) {
+        EChannelType eChannelType = EChannelType.getEChannelType(channelType);
+        accountBO.transAmount(accountNumber, eChannelType, channelOrder,
+            StringValidater.toLong(transAmount), bizType, bizNote);
     }
 }

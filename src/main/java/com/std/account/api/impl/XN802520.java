@@ -46,6 +46,7 @@ public class XN802520 extends AProcessor {
         condition.setCreateDatetimeEnd(DateUtil.getFrontDate(
             req.getCreateDatetimeEnd(), true));
         condition.setSystemCode(req.getSystemCode());
+        condition.setPayGroup(req.getPayGroup());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
             orderColumn = IJourAO.DEFAULT_ORDER_COLUMN;
