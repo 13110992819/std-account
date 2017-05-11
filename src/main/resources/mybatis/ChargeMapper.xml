@@ -7,18 +7,18 @@
 		<result column="account_number" property="accountNumber" />
 		<result column="account_name" property="accountName" />
 		<result column="amount" property="amount" />
-		<result column="pay_channel" property="payChannel" />
+		<result column="channel_type" property="channelType" />
 		
 		<result column="pay_card_info" property="payCardInfo" />
 		<result column="pay_card_no" property="payCardNo" />
+		<result column="pay_group" property="payGroup" />
 		<result column="status" property="status" />
 		<result column="apply_user" property="applyUser" />
-		<result column="apply_note" property="applyNote" />
 		
+		<result column="apply_note" property="applyNote" />
 		<result column="apply_datetime" property="applyDatetime" />
 		<result column="pay_user" property="payUser" />
 		<result column="pay_note" property="payNote" />
-		<result column="pay_group" property="payGroup" />
 		<result column="pay_code" property="payCode" />
 		
 		<result column="pay_datetime" property="payDatetime" />
@@ -26,21 +26,30 @@
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
-			<if test="systemCode != null and systemCode != '' ">
-				AND t.system_code = #{systemCode}
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
 			</if>
-			<if test="systemCode != null and systemCode != '' ">
-				AND t.system_code = #{systemCode}
+			<if test="accountNumber != null and accountNumber != '' ">
+				AND t.account_number = #{accountNumber}
 			</if>
-			<if test="type != null and type != '' ">
-				AND t.type = #{type}
+			<if test="accountName != null and accountName != '' ">
+				AND t.account_name like "%"#{accountName}"%"
 			</if>
-			<if test="dkey != null and dkey != '' ">
-				AND t.dkey = #{dkey}
+			<if test="channelType != null and channelType != '' ">
+				AND t.channel_type = #{channelType}
 			</if>
-			<if test="parentKey != null and parentKey != '' ">
-				AND t.parent_key = #{parentKey}
-			</if>	
+			<if test="payCardNo != null and payCardNo != '' ">
+				AND t.pay_card_no = #{payCardNo}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="applyUser != null and applyUser != '' ">
+				AND t.apply_user = #{applyUser}
+			</if>
+			<if test="payCode != null and payCode != '' ">
+				AND t.pay_code = #{payCode}
+			</if>
 			<if test="systemCode != null and systemCode != '' ">
 				AND t.system_code = #{systemCode}
 			</if>

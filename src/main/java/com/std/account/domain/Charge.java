@@ -35,7 +35,7 @@ public class Charge extends ABaseDO {
     // 支付组号（信息流代表）
     private String payGroup;
 
-    // 状态（待审核/审核不通过/审核通过）
+    // 状态（0 待审核/1 审核通过/2 审核不通过）
     private String status;
 
     // 申请人
