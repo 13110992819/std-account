@@ -45,9 +45,6 @@ public interface IExchangeCurrencyBO extends IPaginableBO<ExchangeCurrency> {
     public int paySuccess(String code, String status, String payCode,
             Long payAmount);
 
-    public ExchangeCurrency doExchange(User user, Long fromAmount,
-            String fromCurrency, String toCurrency);
-
     public void doCheckZH(String userId, String fromCurrency, String toCurrency);
 
 }

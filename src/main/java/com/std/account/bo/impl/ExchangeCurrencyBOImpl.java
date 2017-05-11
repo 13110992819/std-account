@@ -110,29 +110,29 @@ public class ExchangeCurrencyBOImpl extends PaginableBOImpl<ExchangeCurrency>
     }
 
     @Override
-    public ExchangeCurrency doExchange(User user, Long fromAmount,
-            String fromCurrency, String toCurrency) {
+    public String saveExchange(String fromUserId, String toUserId,
+            Long transAmount, String currency, String systemCode) {
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.EXCHANGE_CURRENCY.getCode());
-        Double rate = this.getExchangeRate(fromCurrency, toCurrency);
-        Long toAmount = Double.valueOf(fromAmount * rate).longValue();
         ExchangeCurrency data = new ExchangeCurrency();
         data.setCode(code);
+        data.setToUserId(toUserId);
 
-        data.setToUserId(user.getUserId());
-        data.setToAmount(toAmount);
-        data.setToCurrency(toCurrency);
-        data.setFromUserId(user.getUserId());
-        data.setFromAmount(fromAmount);
-        data.setFromCurrency(fromCurrency);
+        data.setToAmount(transAmount);
+        data.setToCurrency(currency);
+        data.setFromUserId(fromUserId);
+        data.setFromAmount(transAmount);
+        data.setFromCurrency(currency);
 
         data.setCreateDatetime(new Date());
         data.setStatus(EExchangeCurrencyStatus.PAYED.getCode());
+        data.setPayType(EPayType.DBHZ.getCode());
+        data.setPayGroup(code);
+        data.setSystemCode(systemCode);
 
-        data.setSystemCode(user.getSystemCode());
-        data.setCompanyCode(user.getCompanyCode());
+        data.setCompanyCode(systemCode);
         exchangeCurrencyDAO.doExchange(data);
-        return data;
+        return code;
     }
 
     @Override
@@ -179,32 +179,6 @@ public class ExchangeCurrencyBOImpl extends PaginableBOImpl<ExchangeCurrency>
         dbOrder.setUpdateDatetime(new Date());
         dbOrder.setRemark(approveNote);
         exchangeCurrencyDAO.approveExchange(dbOrder);
-    }
-
-    @Override
-    public String saveExchange(String fromUserId, String toUserId,
-            Long transAmount, String currency, String systemCode) {
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.EXCHANGE_CURRENCY.getCode());
-        ExchangeCurrency data = new ExchangeCurrency();
-        data.setCode(code);
-        data.setToUserId(toUserId);
-
-        data.setToAmount(transAmount);
-        data.setToCurrency(currency);
-        data.setFromUserId(fromUserId);
-        data.setFromAmount(transAmount);
-        data.setFromCurrency(currency);
-
-        data.setCreateDatetime(new Date());
-        data.setStatus(EExchangeCurrencyStatus.PAYED.getCode());
-        data.setPayType(EPayType.DBHZ.getCode());
-        data.setPayGroup(code);
-        data.setSystemCode(systemCode);
-
-        data.setCompanyCode(systemCode);
-        exchangeCurrencyDAO.doExchange(data);
-        return code;
     }
 
     @Override

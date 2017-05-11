@@ -20,28 +20,13 @@ public interface IExchangeCurrencyAO {
 
     public void paySuccess(String payGroup, String payCode, Long transAmount);
 
-    public String doExchange(String userId, Long fromAmount,
-            String fromCurrency, String toCurrency);
-
     public Paginable<ExchangeCurrency> queryExchangeCurrencyPage(int start,
             int limit, ExchangeCurrency condition);
 
     public ExchangeCurrency getExchangeCurrency(String code);
 
-    // 商户针对C端手机划转资金
-    public void doTransferB2C(String storeOwner, String mobile, Long amount,
-            String currency);
-
-    // 加盟商对商户划转资金
-    public void doTransferF2B(String franchiseeUser, String storeOwner,
-            Long amount, String currency);
-
-    // 平台对加盟商划转资金
-    public void doTransferP2F(String fromUserId, String toUserId, Long amount,
-            String currency);
-
-    // 平台对用户划转资金
-    public void doTransferP2C(String fromUserId, String toUserId,
-            Long amount, String currency);
+    // 不同用户间同币种或不同币种划转资金
+    public void doTransfer(String fromUserId, String fromCurrency,
+            String toUserId, String toCurrency, Long amount);
 
 }

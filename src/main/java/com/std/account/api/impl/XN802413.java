@@ -4,18 +4,25 @@ import com.std.account.ao.IExchangeCurrencyAO;
 import com.std.account.api.AProcessor;
 import com.std.account.common.JsonUtil;
 import com.std.account.core.StringValidater;
-import com.std.account.dto.req.XN802401Req;
+import com.std.account.dto.req.XN802413Req;
 import com.std.account.dto.res.BooleanRes;
 import com.std.account.exception.BizException;
 import com.std.account.exception.ParaException;
 import com.std.account.spring.SpringContextHolder;
 
-//同币种两个用户的划转
-public class XN802401 extends AProcessor {
+/**
+ * 不同或者同种币种间同个用户或者不同用户的资金划转   
+ * 申请虚拟币转化，不需要审核，目前支持转化的有：菜狗币转积分（菜狗），人民币余额转菜狗币（菜狗）
+ * @author: myb858 
+ * @since: 2017年5月11日 下午2:42:31 
+ * @history:
+ */
+
+public class XN802413 extends AProcessor {
     private IExchangeCurrencyAO exchangeCurrencyAO = SpringContextHolder
         .getBean(IExchangeCurrencyAO.class);
 
-    private XN802401Req req = null;
+    private XN802413Req req = null;
 
     /** 
      * @see com.xnjr.mall.api.IProcessor#doBusiness()
@@ -23,8 +30,9 @@ public class XN802401 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         Long amount = StringValidater.toLong(req.getAmount());
-        exchangeCurrencyAO.doTransferF2B(req.getFromUserId(),
-            req.getToUserId(), amount, req.getCurrency());
+        exchangeCurrencyAO.doTransfer(req.getFromUserId(),
+            req.getFromCurrency(), req.getToUserId(), req.getToCurrency(),
+            amount);
         return new BooleanRes(true);
     }
 
@@ -33,9 +41,10 @@ public class XN802401 extends AProcessor {
      */
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN802401Req.class);
-        StringValidater.validateBlank(req.getFromUserId(), req.getToUserId(),
-            req.getAmount(), req.getCurrency());
+        req = JsonUtil.json2Bean(inputparams, XN802413Req.class);
+        StringValidater.validateBlank(req.getFromUserId(),
+            req.getFromCurrency(), req.getToUserId(), req.getToCurrency(),
+            req.getAmount());
     }
 
 }

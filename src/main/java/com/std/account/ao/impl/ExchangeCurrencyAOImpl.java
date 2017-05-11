@@ -236,31 +236,6 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
     }
 
     @Override
-    @Transactional
-    public String doExchange(String userId, Long fromAmount,
-            String fromCurrency, String toCurrency) {
-        User user = userBO.getRemoteUser(userId);
-        ExchangeCurrency dbOrder = exchangeCurrencyBO.doExchange(user,
-            fromAmount, fromCurrency, toCurrency);
-        // 开始资金划转
-        String remark = CalculationUtil.divi(fromAmount)
-                + ECurrency.getCurrencyMap().get(fromCurrency).getValue()
-                + "转化为" + CalculationUtil.divi(dbOrder.getToAmount())
-                + ECurrency.getCurrencyMap().get(toCurrency).getValue();
-        Account fromAccount = accountBO.getAccountByUser(
-            dbOrder.getFromUserId(), dbOrder.getFromCurrency());
-        Account toAccount = accountBO.getAccountByUser(dbOrder.getToUserId(),
-            dbOrder.getToCurrency());
-        accountBO.changeAmount(fromAccount.getAccountNumber(),
-            EChannelType.NBZ, dbOrder.getCode(), -dbOrder.getFromAmount(),
-            EJourBizType.EXCHANGE_CURRENCY, remark);
-        accountBO.changeAmount(toAccount.getAccountNumber(), EChannelType.NBZ,
-            dbOrder.getCode(), dbOrder.getToAmount(),
-            EJourBizType.EXCHANGE_CURRENCY, remark);
-        return dbOrder.getCode();
-    }
-
-    @Override
     public String applyExchange(String userId, Long fromAmount,
             String fromCurrency, String toCurrency) {
         User user = userBO.getRemoteUser(userId);
@@ -311,70 +286,31 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
     }
 
     @Override
-    @Transactional
-    public void doTransferB2C(String storeOwner, String mobile, Long amount,
-            String currency) {
-        User storeUser = userBO.getRemoteUser(storeOwner);
-        String toUserId = userBO.isUserExist(mobile, EUserKind.F1,
-            storeUser.getSystemCode());
-        String code = exchangeCurrencyBO.saveExchange(storeUser.getUserId(),
-            toUserId, amount, currency, storeUser.getSystemCode());
+    public void doTransfer(String fromUserId, String fromCurrency,
+            String toUserId, String toCurrency, Long amount) {
+        // 转化前提是否满足
+        /*
+         * if (!ECurrency.CG_CGB.getCode().equals(fromCurrency) &&
+         * !ECurrency.CG_JF.getCode().equals(toCurrency)) { throw new
+         * BizException("xn000000", "币种需传菜狗币或积分"); }
+         */
+        Account fromAccount = accountBO.getAccountByUser(fromUserId,
+            fromCurrency);
+        Account toAccount = accountBO.getAccountByUser(toUserId, toCurrency);
 
-        Account fromAccount = accountBO.getAccountByUser(storeOwner, currency);
-        Account toAccount = accountBO.getAccountByUser(toUserId, currency);
-        accountBO.changeAmount(fromAccount.getAccountNumber(),
-            EChannelType.NBZ, code, -amount, EJourBizType.Transfer_CURRENCY,
-            "商户针对C端手机划转资金");
-        accountBO.changeAmount(toAccount.getAccountNumber(), EChannelType.NBZ,
-            code, amount, EJourBizType.Transfer_CURRENCY, "商户针对C端手机划转资金");
-    }
+        // 开始资金划转
+        String remark = CalculationUtil.divi(amount)
+                + ECurrency.getCurrencyMap().get(fromCurrency).getValue()
+                + "转化为" + CalculationUtil.divi(dbOrder.getToAmount())
+                + ECurrency.getCurrencyMap().get(toCurrency).getValue();
 
-    @Override
-    @Transactional
-    public void doTransferF2B(String fromUserId, String toUserId, Long amount,
-            String currency) {
-        Account fromAccount = accountBO.getAccountByUser(fromUserId, currency);
-        Account toAccount = accountBO.getAccountByUser(toUserId, currency);
         String code = exchangeCurrencyBO.saveExchange(fromUserId, toUserId,
             amount, currency, fromAccount.getSystemCode());
         accountBO.changeAmount(fromAccount.getAccountNumber(),
             EChannelType.NBZ, code, -amount, EJourBizType.Transfer_CURRENCY,
-            "加盟商对商户划转资金");
+            remark);
         accountBO.changeAmount(toAccount.getAccountNumber(), EChannelType.NBZ,
-            code, amount, EJourBizType.Transfer_CURRENCY, "加盟商对商户划转资金");
-    }
+            code, amount, EJourBizType.Transfer_CURRENCY, remark);
 
-    @Override
-    @Transactional
-    public void doTransferP2F(String fromUserId, String toUserId, Long amount,
-            String currency) {
-        Account fromAccount = accountBO.getAccountByUser(fromUserId, currency);
-        Account toAccount = accountBO.getAccountByUser(toUserId, currency);
-        String code = exchangeCurrencyBO.saveExchange(fromUserId, toUserId,
-            amount, currency, fromAccount.getSystemCode());
-        accountBO.changeAmount(fromAccount.getAccountNumber(),
-            EChannelType.NBZ, code, -amount, EJourBizType.Transfer_CURRENCY,
-            "平台对加盟商划转资金");
-        accountBO.changeAmount(toAccount.getAccountNumber(), EChannelType.NBZ,
-            code, amount, EJourBizType.Transfer_CURRENCY, "平台对加盟商划转资金");
-    }
-
-    @Override
-    public void doTransferP2C(String fromUserId, String toUserId, Long amount,
-            String currency) {
-        if (!ECurrency.CG_CGB.getCode().equals(currency)
-                && !ECurrency.CG_JF.getCode().equals(currency)) {
-            throw new BizException("xn000000", "币种需传菜狗币或积分");
-        }
-        Account fromAccount = accountBO.getAccountByUser(fromUserId, currency);
-        Account toAccount = accountBO.getAccountByUser(toUserId, currency);
-
-        exchangeCurrencyBO.saveExchange(fromUserId, toUserId, amount, currency,
-            fromAccount.getSystemCode());
-        String bizType = EBizType.Transfer_CURRENCY.getCode();
-        accountBO.transAmount(fromAccount.getAccountNumber(), EChannelType.NBZ,
-            null, -amount, bizType, "平台对C端划转资金");
-        accountBO.transAmount(toAccount.getAccountNumber(), EChannelType.NBZ,
-            null, amount, bizType, "平台对C端划转资金");
     }
 }

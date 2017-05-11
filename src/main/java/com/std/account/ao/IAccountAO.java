@@ -78,7 +78,4 @@ public interface IAccountAO {
      */
     public List<Account> getAccountByUserId(String userId, String currency);
 
-    public void transAmount(String accountNumber, String channelType,
-            String channelOrder, String transAmount, String bizType,
-            String bizNote);
 }

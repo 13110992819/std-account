@@ -26,7 +26,7 @@ public class XN802420Req {
     // 购买虚拟币币种(必填)
     private String currency;
 
-    // 支付类型（必填）
+    // 支付类型（必填)
     private String payType;
 
     public String getPayType() {
