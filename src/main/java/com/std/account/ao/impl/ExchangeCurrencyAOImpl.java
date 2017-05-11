@@ -359,9 +359,6 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
             code, amount, EJourBizType.Transfer_CURRENCY, "平台对加盟商划转资金");
     }
 
-    /** 
-     * @see com.std.account.ao.IExchangeCurrencyAO#doTransferP2C(java.lang.String, java.lang.String, java.lang.Long, java.lang.String)
-     */
     @Override
     public void doTransferP2C(String fromUserId, String toUserId, Long amount,
             String currency) {
