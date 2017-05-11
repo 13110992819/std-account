@@ -65,7 +65,6 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
         data.setPayCode(payCode);
         data.setPayDatetime(new Date());
         chargeDAO.payOrder(data);
-
     }
 
     @Override

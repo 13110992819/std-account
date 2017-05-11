@@ -13,8 +13,7 @@ public class WithdrawDAOImpl extends AMybatisTemplate implements IWithdrawDAO {
 
     @Override
     public int insert(Withdraw data) {
-        // TODO Auto-generated method stub
-        return 0;
+        return super.insert(NAMESPACE.concat("insert_withdraw"), data);
     }
 
     @Override
@@ -25,38 +24,36 @@ public class WithdrawDAOImpl extends AMybatisTemplate implements IWithdrawDAO {
 
     @Override
     public Withdraw select(Withdraw condition) {
-        // TODO Auto-generated method stub
-        return null;
+        return super.select(NAMESPACE.concat("select_withdraw"), condition,
+            Withdraw.class);
     }
 
     @Override
     public long selectTotalCount(Withdraw condition) {
-        // TODO Auto-generated method stub
-        return 0;
+        return super.selectTotalCount(
+            NAMESPACE.concat("select_withdraw_count"), condition);
     }
 
     @Override
     public List<Withdraw> selectList(Withdraw condition) {
-        // TODO Auto-generated method stub
-        return null;
+        return super.selectList(NAMESPACE.concat("select_withdraw"), condition,
+            Withdraw.class);
     }
 
     @Override
     public List<Withdraw> selectList(Withdraw condition, int start, int count) {
-        // TODO Auto-generated method stub
-        return null;
+        return super.selectList(NAMESPACE.concat("select_withdraw"), start,
+            count, condition, Withdraw.class);
     }
 
     @Override
     public void approveOrder(Withdraw data) {
-        // TODO Auto-generated method stub
-
+        super.update(NAMESPACE.concat("approve_withdraw"), data);
     }
 
     @Override
     public void payOrder(Withdraw data) {
-        // TODO Auto-generated method stub
-
+        super.update(NAMESPACE.concat("pay_withdraw"), data);
     }
 
 }

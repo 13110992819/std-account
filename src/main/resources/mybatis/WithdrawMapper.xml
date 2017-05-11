@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.std.account.dao.IWithdrawDAO">
+	<resultMap id="withdraw_DB_Result" type="withdraw">
+		<result column="code" property="code" />
+		<result column="account_number" property="accountNumber" />
+		<result column="account_name" property="accountName" />
+		<result column="amount" property="amount" />
+		<result column="fee" property="fee" />
+		
+		<result column="channel_type" property="channelType" />
+		<result column="pay_card_info" property="payCardInfo" />
+		<result column="pay_card_no" property="payCardNo" />
+		<result column="status" property="status" />
+		<result column="apply_user" property="applyUser" />
+		
+		<result column="apply_note" property="applyNote" />
+		<result column="apply_datetime" property="applyDatetime" />
+		<result column="approve_user" property="approveUser" />
+		<result column="approve_note" property="approveNote" />
+		<result column="approve_datetime" property="approveDatetime" />
+		
+		<result column="pay_user" property="payUser" />
+		<result column="pay_note" property="payNote" />
+		<result column="pay_group" property="payGroup" />
+		<result column="pay_code" property="payCode" />
+		<result column="pay_datetime" property="payDatetime" />
+		
+		<result column="system_code" property="systemCode" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="accountNumber != null and accountNumber != '' ">
+				AND t.account_number = #{accountNumber}
+			</if>
+			<if test="accountName != null and accountName != '' ">
+				AND t.account_name like "%"#{accountName}"%"
+			</if>
+			<if test="channelType != null and channelType != '' ">
+				AND t.channel_type = #{channelType}
+			</if>
+			<if test="payCardNo != null and payCardNo != '' ">
+				AND t.pay_card_no = #{payCardNo}
+			</if>
+			
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="applyUser != null and applyUser != '' ">
+				AND t.apply_user = #{applyUser}
+			</if>
+			<if test="applyDatetimeStart != null and applyDatetimeStart != '' ">
+				<![CDATA[AND t.apply_datetime >= #{applyDatetimeStart}]]>
+			</if>
+			<if test="applyDatetimeEnd != null and applyDatetimeEnd != '' ">
+				<![CDATA[AND t.apply_datetime <= #{applyDatetimeEnd}]]>
+			</if>
+			<if test="approveUser != null and approveUser != '' ">
+				AND t.approve_user = #{approveUser}
+			</if>
+			
+			<if test="approveDatetimeStart != null and approveDatetimeStart != '' ">
+				<![CDATA[AND t.approve_datetime >= #{approveDatetimeStart}]]>
+			</if>
+			<if test="approveDatetimeEnd != null and approveDatetimeEnd != '' ">
+				<![CDATA[AND t.approve_datetime <= #{approveDatetimeEnd}]]>
+			</if>
+			<if test="payUser != null and payUser != '' ">
+				AND t.pay_user = #{payUser}
+			</if>
+			<if test="payGroup != null and payGroup != '' ">
+				AND t.pay_group = #{payGroup}
+			</if>
+			<if test="payCode != null and payCode != '' ">
+				AND t.pay_code = #{payCode}
+			</if>
+			
+			<if test="payDatetimeStart != null and payDatetimeStart != '' ">
+				<![CDATA[AND t.pay_datetime >= #{payDatetimeStart}]]>
+			</if>
+			<if test="payDatetimeEnd != null and payDatetimeEnd != '' ">
+				<![CDATA[AND t.pay_datetime <= #{payDatetimeEnd}]]>
+			</if>
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_withdraw" parameterType="withdraw" resultMap="withdraw_DB_Result">
+		SELECT
+		t.code
+		,t.account_number
+		,t.account_name
+		,t.amount
+		,t.fee
+		
+		,t.channel_type
+		,t.pay_card_info
+		,t.pay_card_no
+		,t.status
+		,t.apply_user
+		
+		,t.apply_note
+		,t.apply_datetime
+		,t.approve_user
+		,t.approve_note
+		,t.approve_datetime
+		
+		,t.pay_user
+		,t.pay_note
+		,t.pay_group
+		,t.pay_code
+		,t.pay_datetime
+		
+		,t.system_code
+		FROM
+		tstd_withdraw t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_withdraw_count" parameterType="withdraw"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tstd_withdraw t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_withdraw" parameterType="withdraw">
+		INSERT INTO
+		tstd_withdraw(
+		code
+		,account_number
+		,account_name
+		,amount
+		,fee
+		
+		,channel_type
+		,pay_card_info
+		,pay_card_no
+		,status
+		,apply_user
+		
+		,apply_note
+		,apply_datetime
+		,system_code
+		)
+		VALUES(
+		#{code}
+		,#{accountNumber}
+		,#{accountName}
+		,#{amount}
+		,#{fee}
+		
+		,#{channelType}
+		,#{payCardInfo}
+		,#{payCardNo}
+		,#{status}
+		,#{applyUser}
+		
+		,#{applyNote}
+		,#{applyDatetime}
+		,#{systemCode}
+		)
+	</insert>
+
+	<update id="approve_order" parameterType="withdraw">
+		UPDATE tstd_withdraw
+		SET
+		approve_user = #{approveUser}
+		,approve_note = #{approveNote}
+		,approve_datetime = #{approveDatetime}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="pay_order" parameterType="withdraw">
+		UPDATE tstd_withdraw
+		SET
+		pay_user = #{payUser}
+		,pay_note = #{payNote}
+		,pay_group = #{payGroup}
+		,pay_code = #{payCode}
+		,pay_datetime = #{payDatetime}
+		WHERE code = #{code}
+	</update>
+</mapper>

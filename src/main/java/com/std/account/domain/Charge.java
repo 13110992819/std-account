@@ -62,6 +62,19 @@ public class Charge extends ABaseDO {
     // 系统编号
     private String systemCode;
 
+    // *******************************
+    // 申请时间起
+    private Date applyDatetimeStart;
+
+    // 申请时间止
+    private Date applyDatetimeEnd;
+
+    // 支付时间起
+    private Date payDatetimeStart;
+
+    // 支付时间止
+    private Date payDatetimeEnd;
+
     public String getCode() {
         return code;
     }
@@ -198,4 +211,35 @@ public class Charge extends ABaseDO {
         this.systemCode = systemCode;
     }
 
+    public Date getApplyDatetimeStart() {
+        return applyDatetimeStart;
+    }
+
+    public void setApplyDatetimeStart(Date applyDatetimeStart) {
+        this.applyDatetimeStart = applyDatetimeStart;
+    }
+
+    public Date getApplyDatetimeEnd() {
+        return applyDatetimeEnd;
+    }
+
+    public void setApplyDatetimeEnd(Date applyDatetimeEnd) {
+        this.applyDatetimeEnd = applyDatetimeEnd;
+    }
+
+    public Date getPayDatetimeStart() {
+        return payDatetimeStart;
+    }
+
+    public void setPayDatetimeStart(Date payDatetimeStart) {
+        this.payDatetimeStart = payDatetimeStart;
+    }
+
+    public Date getPayDatetimeEnd() {
+        return payDatetimeEnd;
+    }
+
+    public void setPayDatetimeEnd(Date payDatetimeEnd) {
+        this.payDatetimeEnd = payDatetimeEnd;
+    }
 }

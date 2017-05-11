@@ -41,14 +41,34 @@
 			<if test="payCardNo != null and payCardNo != '' ">
 				AND t.pay_card_no = #{payCardNo}
 			</if>
+			
+			<if test="payGroup != null and payGroup != '' ">
+				AND t.pay_group = #{payGroup}
+			</if>
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
 			<if test="applyUser != null and applyUser != '' ">
 				AND t.apply_user = #{applyUser}
 			</if>
+			<if test="applyDatetimeStart != null and applyDatetimeStart != '' ">
+				<![CDATA[AND t.apply_datetime >= #{applyDatetimeStart}]]>
+			</if>
+			<if test="applyDatetimeEnd != null and applyDatetimeEnd != '' ">
+				<![CDATA[AND t.apply_datetime <= #{applyDatetimeEnd}]]>
+			</if>
+			
+			<if test="payUser != null and payUser != '' ">
+				AND t.pay_user = #{payUser}
+			</if>
 			<if test="payCode != null and payCode != '' ">
 				AND t.pay_code = #{payCode}
+			</if>
+			<if test="payDatetimeStart != null and payDatetimeStart != '' ">
+				<![CDATA[AND t.pay_datetime >= #{payDatetimeStart}]]>
+			</if>
+			<if test="payDatetimeEnd != null and payDatetimeEnd != '' ">
+				<![CDATA[AND t.pay_datetime <= #{payDatetimeEnd}]]>
 			</if>
 			<if test="systemCode != null and systemCode != '' ">
 				AND t.system_code = #{systemCode}
@@ -57,62 +77,80 @@
 	</sql>
 	<select id="select_charge" parameterType="charge" resultMap="charge_DB_Result">
 		SELECT
-		id
-		,type
-		,parent_key
-		,dkey
+		code
+		,account_number
+		,account_name
+		,amount
+		,channel_type
 		
-		,dvalue
-		,updater
-		,update_datetime
-		,remark
+		,pay_card_info
+		,pay_card_no
+		,pay_group
+		,status
+		,apply_user
+		
+		,apply_note
+		,apply_datetime
+		,pay_user
+		,pay_note
+		,pay_code
+		
+		,pay_datetime
 		,system_code
 		FROM
-		tsys_dict t 
+		tstd_charge t 
 		<include refid="where_condition" />
 		ORDER BY id
 	</select>
 
 	<select id="select_charge_count" parameterType="charge" resultType="java.lang.Long">
-		SELECT count(1) FROM tsys_dict t 
+		SELECT count(1) FROM tstd_charge t 
 		<include refid="where_condition" />
 	</select>
 	
 	<insert id="insert_charge" parameterType="charge" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO tsys_dict(
-		type
-		,parent_key
-		,dkey
-		,dvalue
-		,updater
-		,update_datetime
-		,remark
+		INSERT INTO tstd_charge(
+		code
+		,account_number
+		,account_name
+		,amount
+		,channel_type
+		
+		,pay_card_info
+		,pay_card_no
+		,pay_group
+		,status
+		,apply_user
+		
+		,apply_note
+		,apply_datetime
 		,system_code
 		)
 		VALUES(
-		#{type}
-		,#{parentKey}
-		,#{dkey}
-		,#{dvalue}
-		,#{updater}
-		,#{updateDatetime}
-		,#{remark}
+		#{code}
+		,#{accountNumber}
+		,#{accountName}
+		,#{amount}
+		,#{channelType}
+		
+		,#{payCardInfo}
+		,#{payCardNo}
+		,#{payGroup}
+		,#{status}
+		,#{applyUser}
+		
+		,#{applyNote}
+		,#{applyDatetime}
 		,#{systemCode}
 		)
 	</insert>
 
-	<delete id="delete_charge" parameterType="charge">
-		DELETE FROM tsys_dict
-		WHERE
-		id = #{id}
-	</delete>
-	
-	<update id="update_charge" parameterType="charge">
-		UPDATE tsys_dict SET
-		dvalue = #{dvalue}
-		,updater = #{updater}
-		,update_datetime = #{updateDatetime}
-		,remark=#{remark}
-		WHERE id = #{id}
+	<update id="pay_order" parameterType="charge">
+		UPDATE tstd_charge SET
+		pay_user = #{payUser}
+		,pay_note = #{payNote}
+		,pay_code = #{payCode}
+		,pay_datetime=#{payDatetime}
+		WHERE code = #{code}
 	</update>
 </mapper>
