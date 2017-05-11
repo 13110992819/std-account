@@ -13,8 +13,7 @@ public class ChargeDAOImpl extends AMybatisTemplate implements IChargeDAO {
 
     @Override
     public int insert(Charge data) {
-        // TODO Auto-generated method stub
-        return 0;
+        return super.insert(NAMESPACE.concat("insert_charge"), data);
     }
 
     @Override
@@ -25,32 +24,30 @@ public class ChargeDAOImpl extends AMybatisTemplate implements IChargeDAO {
 
     @Override
     public Charge select(Charge condition) {
-        // TODO Auto-generated method stub
-        return null;
+        return super.select(NAMESPACE.concat("select_charge"), condition,
+            Charge.class);
     }
 
     @Override
     public long selectTotalCount(Charge condition) {
-        // TODO Auto-generated method stub
-        return 0;
+        return super.selectTotalCount(NAMESPACE.concat("select_charge_count"),
+            condition);
     }
 
     @Override
     public List<Charge> selectList(Charge condition) {
-        // TODO Auto-generated method stub
-        return null;
+        return super.selectList(NAMESPACE.concat("select_charge"), condition,
+            Charge.class);
     }
 
     @Override
     public List<Charge> selectList(Charge condition, int start, int count) {
-        // TODO Auto-generated method stub
-        return null;
+        return super.selectList(NAMESPACE.concat("select_charge"), start,
+            count, condition, Charge.class);
     }
 
     @Override
     public void payOrder(Charge data) {
-        // TODO Auto-generated method stub
-
+        super.update(NAMESPACE.concat("pay_order"), data);
     }
-
 }
