@@ -22,23 +22,23 @@ import com.std.account.bo.IAccountBO;
 import com.std.account.bo.IBankcardBO;
 import com.std.account.bo.IHLOrderBO;
 import com.std.account.bo.IJourBO;
-<<<<<<< HEAD
-=======
 import com.std.account.bo.ISYSConfigBO;
-import com.std.account.bo.IUserBO;
 import com.std.account.bo.IWechatBO;
->>>>>>> refs/remotes/origin/master
 import com.std.account.bo.base.Paginable;
+import com.std.account.common.PropertiesUtil;
+import com.std.account.common.SysConstant;
 import com.std.account.domain.Account;
+import com.std.account.domain.Bankcard;
+import com.std.account.domain.CompanyChannel;
 import com.std.account.domain.Jour;
-<<<<<<< HEAD
-=======
 import com.std.account.domain.User;
 import com.std.account.enums.EAccountType;
 import com.std.account.enums.EBizType;
->>>>>>> refs/remotes/origin/master
 import com.std.account.enums.EBoolean;
+import com.std.account.enums.EChannelType;
+import com.std.account.enums.ECurrency;
 import com.std.account.enums.EJourStatus;
+import com.std.account.enums.EPayType;
 import com.std.account.exception.BizException;
 import com.std.account.util.AmountUtil;
 
@@ -61,7 +61,6 @@ public class JourAOImpl implements IJourAO {
 
     @Autowired
     private IBankcardBO bankcardBO;
-
 
     @Autowired
     private IWechatBO wechatBO;

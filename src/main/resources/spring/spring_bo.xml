@@ -38,7 +38,7 @@
 	</bean>	
 	
 	<bean id="chargeBO" class="com.std.account.bo.impl.ChargeBOImpl">
-		<property name="paginableDAO" ref="chargeBODAOImpl"/>
+		<property name="paginableDAO" ref="chargeDAOImpl"/>
 	</bean>	
 	
 	<bean id="withdrawBO" class="com.std.account.bo.impl.WithdrawBOImpl">
