@@ -2,18 +2,24 @@ package com.std.account.dto.req;
 
 import java.util.List;
 
+/**
+ * 批量审批线下充值订单
+ * @author: xieyj 
+ * @since: 2017年5月12日 上午9:58:24 
+ * @history:
+ */
 public class XN802701Req {
 
     // 系统编号(必填)
     private String systemCode;
 
-    // 取现订单编号(必填)
+    // 充值订单编号(必填)
     private List<String> codeList;
 
     // 支付回录人(必填)
     private String payUser;
 
-    // 审核结果(必填)
+    // 审核结果1 通过 0 不通过(必填)
     private String payResult;
 
     // 支付渠道的说明(必填)

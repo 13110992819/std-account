@@ -1,6 +1,7 @@
 package com.std.account.dto.req;
 
 /**
+ * 线下取现申请
  * @author: xieyj 
  * @since: 2016年12月25日 下午3:25:44 
  * @history:
