@@ -197,10 +197,9 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
         if (nowFrozenAmount < 0) {
             throw new BizException("xn000000", "本次扣减会使账户冻结金额小于0");
         }
-        Account data = new Account();
-        data.setAccountNumber(dbAccount.getAccountNumber());
-        data.setFrozenAmount(nowFrozenAmount);
-        accountDAO.cutFrozenAmount(data);
+        dbAccount.setAccountNumber(dbAccount.getAccountNumber());
+        dbAccount.setFrozenAmount(nowFrozenAmount);
+        accountDAO.cutFrozenAmount(dbAccount);
     }
 
     @Override
@@ -326,5 +325,4 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
         account.setOutAmount(outAmount);
         accountDAO.updateOutAmount(account);
     }
-
 }

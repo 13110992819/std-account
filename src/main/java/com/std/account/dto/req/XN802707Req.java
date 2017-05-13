@@ -22,8 +22,20 @@ public class XN802707Req {
     // 申请人
     private String applyUser;
 
+    // 申请时间起
+    private String applyDateStart;
+
+    // 申请时间止
+    private String applyDateEnd;
+
     // 支付回录人
     private String payUser;
+
+    // 支付时间起
+    private String payDateStart;
+
+    // 支付时间止
+    private String payDateEnd;
 
     // 支付组号（信息流代表）
     private String payGroup;
@@ -74,12 +86,44 @@ public class XN802707Req {
         this.applyUser = applyUser;
     }
 
+    public String getApplyDateStart() {
+        return applyDateStart;
+    }
+
+    public void setApplyDateStart(String applyDateStart) {
+        this.applyDateStart = applyDateStart;
+    }
+
+    public String getApplyDateEnd() {
+        return applyDateEnd;
+    }
+
+    public void setApplyDateEnd(String applyDateEnd) {
+        this.applyDateEnd = applyDateEnd;
+    }
+
     public String getPayUser() {
         return payUser;
     }
 
     public void setPayUser(String payUser) {
         this.payUser = payUser;
+    }
+
+    public String getPayDateStart() {
+        return payDateStart;
+    }
+
+    public void setPayDateStart(String payDateStart) {
+        this.payDateStart = payDateStart;
+    }
+
+    public String getPayDateEnd() {
+        return payDateEnd;
+    }
+
+    public void setPayDateEnd(String payDateEnd) {
+        this.payDateEnd = payDateEnd;
     }
 
     public String getPayGroup() {

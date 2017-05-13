@@ -32,7 +32,7 @@ public class Jour extends ABaseDO {
     // 支付渠道（线下/招商代付/支付宝/内部转账）
     private String channelType;
 
-    // 渠道单号（外部账时就是对应渠道的单号）
+    // // 渠道单号（外部账时就是对应渠道的单号）
     // private String channelOrder;
 
     // 关联订单号（业务订单）
@@ -88,9 +88,6 @@ public class Jour extends ABaseDO {
     // 备注
     private String remark;
 
-    // 手续费
-    private Long fee;
-
     // 系统编号
     private String systemCode;
 
@@ -112,14 +109,6 @@ public class Jour extends ABaseDO {
 
     // 币种
     private String currency;
-
-    public Long getFee() {
-        return fee;
-    }
-
-    public void setFee(Long fee) {
-        this.fee = fee;
-    }
 
     public String getCurrency() {
         return currency;
@@ -344,5 +333,4 @@ public class Jour extends ABaseDO {
     public void setChannelType(String channelType) {
         this.channelType = channelType;
     }
-
 }

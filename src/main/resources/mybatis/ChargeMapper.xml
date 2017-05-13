@@ -100,7 +100,11 @@
 		FROM
 		tstd_charge t 
 		<include refid="where_condition" />
-		ORDER BY id
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
 	</select>
 
 	<select id="select_charge_count" parameterType="charge" resultType="java.lang.Long">
@@ -147,7 +151,8 @@
 
 	<update id="pay_order" parameterType="charge">
 		UPDATE tstd_charge SET
-		pay_user = #{payUser}
+		status = #{status}
+		,pay_user = #{payUser}
 		,pay_note = #{payNote}
 		,pay_code = #{payCode}
 		,pay_datetime=#{payDatetime}

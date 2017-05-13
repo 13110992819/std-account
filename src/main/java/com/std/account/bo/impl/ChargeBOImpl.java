@@ -124,6 +124,9 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
             condition.setCode(code);
             condition.setSystemCode(systemCode);
             order = chargeDAO.select(condition);
+            if (null == order) {
+                throw new BizException("xn000000", "订单号[" + code + "]不存在");
+            }
         }
         return order;
     }

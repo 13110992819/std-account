@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.std.account.ao.IWithdrawAO;
 import com.std.account.bo.IAccountBO;
@@ -24,9 +25,13 @@ public class WithdrawAOImpl implements IWithdrawAO {
     private IWithdrawBO withdrawBO;
 
     @Override
+    @Transactional
     public String applyOrder(String accountNumber, Long amount,
             String payCardInfo, String payCardNo, String applyUser,
             String applyNote) {
+        if (amount <= 0) {
+            throw new BizException("xn000000", "提现金额需大于零");
+        }
         Account dbAccount = accountBO.getAccount(accountNumber);
         if (dbAccount.getAmount() < amount) {
             throw new BizException("xn000000", "余额不足");
@@ -41,6 +46,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
     }
 
     @Override
+    @Transactional
     public void approveOrder(String code, String approveUser,
             String approveResult, String approveNote, String systemCode) {
         Withdraw data = withdrawBO.getWithdraw(code, systemCode);
@@ -55,6 +61,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
     }
 
     @Override
+    @Transactional
     public void payOrder(String code, String payUser, String payResult,
             String payNote, String payCode, String systemCode) {
         Withdraw data = withdrawBO.getWithdraw(code, systemCode);
