@@ -21,6 +21,9 @@ public class XN802520Req extends APageReq {
     // 渠道类型
     private String channelType;
 
+    // 参考订单号
+    private String refNo;
+
     // 业务类型
     private String bizType;
 
@@ -38,9 +41,6 @@ public class XN802520Req extends APageReq {
 
     // 系统编号
     private String systemCode;
-
-    // 支付编号
-    private String payGroup;
 
     // **************db properties ***************
     private String currency;
@@ -163,11 +163,11 @@ public class XN802520Req extends APageReq {
         this.accountType = accountType;
     }
 
-    public String getPayGroup() {
-        return payGroup;
+    public String getRefNo() {
+        return refNo;
     }
 
-    public void setPayGroup(String payGroup) {
-        this.payGroup = payGroup;
+    public void setRefNo(String refNo) {
+        this.refNo = refNo;
     }
 }

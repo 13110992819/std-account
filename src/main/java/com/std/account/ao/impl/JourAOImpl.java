@@ -20,9 +20,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.std.account.ao.IJourAO;
 import com.std.account.bo.IAccountBO;
 import com.std.account.bo.IBankcardBO;
+import com.std.account.bo.ICompanyChannelBO;
 import com.std.account.bo.IHLOrderBO;
 import com.std.account.bo.IJourBO;
 import com.std.account.bo.ISYSConfigBO;
+import com.std.account.bo.IUserBO;
 import com.std.account.bo.IWechatBO;
 import com.std.account.bo.base.Paginable;
 import com.std.account.common.PropertiesUtil;
@@ -49,6 +51,12 @@ import com.std.account.util.AmountUtil;
  */
 @Service
 public class JourAOImpl implements IJourAO {
+
+    @Autowired
+    private IUserBO userBO;
+
+    @Autowired
+    private ICompanyChannelBO companyChannelBO;
 
     @Autowired
     private IJourBO jourBO;
@@ -329,7 +337,6 @@ public class JourAOImpl implements IJourAO {
     /*
      * 人工调账： 1、判断流水账是否平，平则更改订单状态，不平则更改产生红冲蓝补订单，而后更改订单状态
      */
-
     @Override
     @Transactional
     public void checkJour(String code, Long checkAmount, String checkUser,

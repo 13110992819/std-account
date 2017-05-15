@@ -1,11 +1,3 @@
-/**
- * @Title XN802516.java 
- * @Package com.std.account.api.impl 
- * @Description 
- * @author xieyj  
- * @date 2016年12月25日 下午3:49:18 
- * @version V1.0   
- */
 package com.std.account.api.impl;
 
 import com.std.account.ao.IHLOrderAO;

@@ -27,26 +27,26 @@ public class XN802520 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         Jour condition = new Jour();
-        condition.setUserId(req.getUserId());
-        condition.setRealNameQuery(req.getRealName());
-        condition.setAccountType(req.getAccountType());
-        condition.setStatus(req.getStatus());
         condition.setAccountNumber(req.getAccountNumber());
+        condition.setUserId(req.getUserId());
+        condition.setRealName(req.getRealName());
+        condition.setAccountType(req.getAccountType());
         condition.setCurrency(req.getCurrency());
-        condition.setChannelType(req.getChannelType());
 
+        condition.setChannelType(req.getChannelType());
+        condition.setRefNo(req.getRefNo());
         condition.setBizType(req.getBizType());
         condition.setStatus(req.getStatus());
+        condition.setCreateDatetimeStart(DateUtil.getFrontDate(
+            req.getCreateDatetimeStart(), false));
 
+        condition.setCreateDatetimeEnd(DateUtil.getFrontDate(
+            req.getCreateDatetimeEnd(), true));
         condition.setWorkDate(req.getWorkDate());
         condition.setCheckUser(req.getCheckUser());
         condition.setAdjustUser(req.getAdjustUser());
-        condition.setCreateDatetimeStart(DateUtil.getFrontDate(
-            req.getCreateDatetimeStart(), false));
-        condition.setCreateDatetimeEnd(DateUtil.getFrontDate(
-            req.getCreateDatetimeEnd(), true));
         condition.setSystemCode(req.getSystemCode());
-        condition.setPayGroup(req.getPayGroup());
+
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
             orderColumn = IJourAO.DEFAULT_ORDER_COLUMN;

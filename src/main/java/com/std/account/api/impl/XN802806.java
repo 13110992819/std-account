@@ -9,6 +9,12 @@ import com.std.account.exception.BizException;
 import com.std.account.exception.ParaException;
 import com.std.account.spring.SpringContextHolder;
 
+/**
+ * 详情查询红冲蓝补订单
+ * @author: xieyj 
+ * @since: 2017年5月15日 下午4:07:42 
+ * @history:
+ */
 public class XN802806 extends AProcessor {
     private IHLOrderAO hlOrderAO = SpringContextHolder
         .getBean(IHLOrderAO.class);
@@ -25,5 +31,4 @@ public class XN802806 extends AProcessor {
         req = JsonUtil.json2Bean(inputparams, XN802806Req.class);
         StringValidater.validateBlank(req.getCode(), req.getSystemCode());
     }
-
 }

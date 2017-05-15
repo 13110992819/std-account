@@ -432,34 +432,6 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
     }
 
     /** 
-     * @see com.std.account.bo.IJourBO#queryJourList(com.std.account.domain.Jour)
-     */
-    @Override
-    public List<Jour> queryJourList(Jour condition) {
-        return jourDAO.selectList(condition);
-    }
-
-    /**
-     * @see com.std.account.bo.IJourBO#getStatisticsTransAmount(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
-     */
-    @Override
-    public Long getStatisticsTransAmount(String systemCode, String userId,
-            String currency, String bizType) {
-        Long totalAmount = 0L;
-        Jour condition = new Jour();
-        condition.setSystemCode(systemCode);
-        condition.setUserId(userId);
-        condition.setCurrency(currency);
-        condition.setBizType(bizType);
-        List<Jour> jourList = jourDAO.selectList(condition);
-        for (Jour jour : jourList) {
-            totalAmount += jour.getTransAmount();
-        }
-        return totalAmount;
-
-    }
-
-    /** 
      * @see com.std.account.bo.IJourBO#doCheckExistJour(java.lang.String, java.lang.String, java.lang.String)
      */
     @Override

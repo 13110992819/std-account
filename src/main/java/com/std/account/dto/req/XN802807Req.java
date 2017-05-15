@@ -7,6 +7,9 @@ public class XN802807Req {
     // 针对户名（手机号或其他）
     private String accountName;
 
+    // 流水号
+    private String jourCode;
+
     // 红冲还是蓝补
     private String direction;
 
@@ -16,8 +19,20 @@ public class XN802807Req {
     // 对账人
     private String applyUser;
 
+    // 对账时间起
+    private String applyDateStart;
+
+    // 对账时间止
+    private String applyDateEnd;
+
     // 调账人
     private String approveUser;
+
+    // 调账时间起
+    private String approveDateStart;
+
+    // 调账时间止
+    private String approveDateEnd;
 
     // 系统编号
     private String systemCode;
@@ -68,6 +83,46 @@ public class XN802807Req {
 
     public void setApproveUser(String approveUser) {
         this.approveUser = approveUser;
+    }
+
+    public String getJourCode() {
+        return jourCode;
+    }
+
+    public void setJourCode(String jourCode) {
+        this.jourCode = jourCode;
+    }
+
+    public String getApplyDateStart() {
+        return applyDateStart;
+    }
+
+    public void setApplyDateStart(String applyDateStart) {
+        this.applyDateStart = applyDateStart;
+    }
+
+    public String getApplyDateEnd() {
+        return applyDateEnd;
+    }
+
+    public void setApplyDateEnd(String applyDateEnd) {
+        this.applyDateEnd = applyDateEnd;
+    }
+
+    public String getApproveDateStart() {
+        return approveDateStart;
+    }
+
+    public void setApproveDateStart(String approveDateStart) {
+        this.approveDateStart = approveDateStart;
+    }
+
+    public String getApproveDateEnd() {
+        return approveDateEnd;
+    }
+
+    public void setApproveDateEnd(String approveDateEnd) {
+        this.approveDateEnd = approveDateEnd;
     }
 
     public String getSystemCode() {

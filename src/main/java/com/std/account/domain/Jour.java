@@ -101,9 +101,6 @@ public class Jour extends ABaseDO {
     // 查询条件2：创建终止时间
     private Date createDatetimeEnd;
 
-    // 户名
-    private String realNameQuery;
-
     // 类型(B B端账号，C C端账号，P 平台账号)
     private String accountType;
 
@@ -132,14 +129,6 @@ public class Jour extends ABaseDO {
 
     public void setAccountType(String accountType) {
         this.accountType = accountType;
-    }
-
-    public String getRealNameQuery() {
-        return realNameQuery;
-    }
-
-    public void setRealNameQuery(String realNameQuery) {
-        this.realNameQuery = realNameQuery;
     }
 
     public Date getCreateDatetimeStart() {
