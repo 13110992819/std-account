@@ -21,11 +21,13 @@
 		<result column="work_date" property="workDate" />
 		
 		<result column="check_user" property="checkUser" />
+		<result column="check_note" property="checkNote" />
 		<result column="check_datetime" property="checkDatetime" />
 		<result column="adjust_user" property="adjustUser" />
+		<result column="adjust_note" property="adjustNote" />
+		
 		<result column="adjust_datetime" property="adjustDatetime" />
 		<result column="remark" property="remark" />
-		
 		<result column="system_code" property="systemCode" />
 	</resultMap>
 	<sql id="where_condition">
@@ -122,11 +124,13 @@
 		,t.work_date
 		,t.check_user
 		
+		,t.check_note
 		,t.check_datetime
 		,t.adjust_user
+		,t.adjust_note
 		,t.adjust_datetime
-		,t.remark
 		
+		,t.remark
 		,t.system_code
 		FROM
 		tstd_jour t inner join tstd_account ta on t.account_number = ta.account_number

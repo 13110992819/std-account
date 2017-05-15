@@ -57,7 +57,7 @@ public class JourAOImpl implements IJourAO {
     private IAccountBO accountBO;
 
     @Autowired
-    private IHLOrderBO hLOrderBO;
+    private IHLOrderBO hlOrderBO;
 
     @Autowired
     private IBankcardBO bankcardBO;
@@ -340,7 +340,7 @@ public class JourAOImpl implements IJourAO {
         }
         if (checkAmount != 0) {
             Account account = accountBO.getAccount(jour.getAccountNumber());
-            hLOrderBO.applyOrder(account, jour, checkAmount, checkUser,
+            hlOrderBO.applyOrder(account, jour, checkAmount, checkUser,
                 checkNote);
             jourBO.doCheckJour(jour, EBoolean.NO, checkAmount, checkUser,
                 checkNote);
