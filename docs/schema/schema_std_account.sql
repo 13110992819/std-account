@@ -51,27 +51,24 @@ CREATE TABLE `tstd_withdraw` (
   PRIMARY KEY (`code`) COMMENT '取现订单'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `tstd_jour`;
-CREATE TABLE `tstd_jour` (
+-- ----------------------------
+--  Table structure for `tstd_hlorder`
+-- ----------------------------
+DROP TABLE IF EXISTS `tstd_hlorder`;
+CREATE TABLE `tstd_hlorder` (
   `code` varchar(32) NOT NULL COMMENT '编号',
-  `account_number` varchar(32) DEFAULT NULL COMMENT '账号',
-  `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
-  `real_name` varchar(64) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '真实姓名',
-  `channel_type` varchar(4) DEFAULT NULL COMMENT '渠道类型',
-  `ref_no` varchar(32) DEFAULT NULL COMMENT '参考订单号',
-  `biz_type` varchar(32) DEFAULT NULL COMMENT '业务类型',
-  `biz_note` varchar(255) DEFAULT NULL COMMENT '业务类型',
-  `trans_amount` bigint(32) DEFAULT NULL COMMENT '变动金额',
-  `pre_amount` bigint(32) DEFAULT NULL COMMENT '变动前金额',
-  `post_amount` bigint(32) DEFAULT NULL COMMENT '变动后金额',
-  `status` varchar(4) DEFAULT NULL COMMENT '状态',
-  `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
-  `work_date` varchar(8) DEFAULT NULL COMMENT '拟对账时间',
-  `check_user` varchar(32) DEFAULT NULL COMMENT '对账人',
-  `check_datetime` datetime DEFAULT NULL COMMENT '对账时间',
-  `adjust_user` varchar(32) DEFAULT NULL COMMENT '调账人',
-  `adjust_datetime` datetime DEFAULT NULL COMMENT '调账时间',
-  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  `account_number` varchar(32) NOT NULL COMMENT '账号',
+  `account_name` varchar(32) DEFAULT NULL COMMENT '针对户名',
+  `jour_code` varchar(32) DEFAULT NULL COMMENT '流水号',
+  `direction` char(1) NOT NULL COMMENT '方向：1=蓝补；0=红冲',
+  `amount` bigint(20) NOT NULL COMMENT '金额（精确到厘）',
+  `status` varchar(4) NOT NULL COMMENT '状态',
+  `apply_user` varchar(32) NOT NULL COMMENT '申请人',
+  `apply_note` varchar(255) NOT NULL COMMENT '申请说明',
+  `apply_datetime` datetime DEFAULT NULL COMMENT '申请时间',
+  `approve_user` varchar(32) DEFAULT NULL COMMENT '审批人（li为程序）',
+  `approve_note` varchar(255) DEFAULT NULL COMMENT '审批说明',
+  `approve_datetime` datetime DEFAULT NULL COMMENT '审批时间',
   `system_code` varchar(32) NOT NULL COMMENT '系统编号',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -98,6 +95,30 @@ CREATE TABLE `tstd_account` (
   PRIMARY KEY (`account_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `tstd_jour`;
+CREATE TABLE `tstd_jour` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `account_number` varchar(32) DEFAULT NULL COMMENT '账号',
+  `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
+  `real_name` varchar(64) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '真实姓名',
+  `channel_type` varchar(4) DEFAULT NULL COMMENT '渠道类型',
+  `ref_no` varchar(32) DEFAULT NULL COMMENT '参考订单号',
+  `biz_type` varchar(32) DEFAULT NULL COMMENT '业务类型',
+  `biz_note` varchar(255) DEFAULT NULL COMMENT '业务类型',
+  `trans_amount` bigint(32) DEFAULT NULL COMMENT '变动金额',
+  `pre_amount` bigint(32) DEFAULT NULL COMMENT '变动前金额',
+  `post_amount` bigint(32) DEFAULT NULL COMMENT '变动后金额',
+  `status` varchar(4) DEFAULT NULL COMMENT '状态',
+  `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
+  `work_date` varchar(8) DEFAULT NULL COMMENT '拟对账时间',
+  `check_user` varchar(32) DEFAULT NULL COMMENT '对账人',
+  `check_datetime` datetime DEFAULT NULL COMMENT '对账时间',
+  `adjust_user` varchar(32) DEFAULT NULL COMMENT '调账人',
+  `adjust_datetime` datetime DEFAULT NULL COMMENT '调账时间',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  `system_code` varchar(32) NOT NULL COMMENT '系统编号',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `tstd_bankcard`;
 CREATE TABLE `tstd_bankcard` (
@@ -120,20 +141,6 @@ CREATE TABLE `tstd_bankcard` (
   `last_order` varchar(32) DEFAULT NULL COMMENT '最近一次变动对应的流水编号',
   `system_code` varchar(32) NOT NULL COMMENT '系统编号',
   PRIMARY KEY (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-DROP TABLE IF EXISTS `tsys_dict`;
-CREATE TABLE `tsys_dict` (
-  `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT '编号（自增长）',
-  `type` varchar(4) DEFAULT NULL COMMENT '类型（第一层/第二层）',
-  `parent_key` varchar(32) DEFAULT NULL COMMENT '父key',
-  `dkey` varchar(32) DEFAULT NULL COMMENT 'key',
-  `dvalue` varchar(255) DEFAULT NULL COMMENT '值',
-  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
-  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
-  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
-  `system_code` varchar(32) NOT NULL COMMENT '系统编号',
-  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `tstd_company_channel`;
@@ -199,6 +206,20 @@ CREATE TABLE `tstd_exchange_currency` (
   `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`code`) COMMENT '币种兑换'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `tsys_dict`;
+CREATE TABLE `tsys_dict` (
+  `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT '编号（自增长）',
+  `type` varchar(4) DEFAULT NULL COMMENT '类型（第一层/第二层）',
+  `parent_key` varchar(32) DEFAULT NULL COMMENT '父key',
+  `dkey` varchar(32) DEFAULT NULL COMMENT 'key',
+  `dvalue` varchar(255) DEFAULT NULL COMMENT '值',
+  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  `system_code` varchar(32) NOT NULL COMMENT '系统编号',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `tsys_config`;

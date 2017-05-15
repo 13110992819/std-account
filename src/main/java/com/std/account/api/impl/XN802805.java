@@ -19,7 +19,7 @@ import com.std.account.spring.SpringContextHolder;
  * @history:
  */
 public class XN802805 extends AProcessor {
-    private IHLOrderAO hLOrderAO = SpringContextHolder
+    private IHLOrderAO hlOrderAO = SpringContextHolder
         .getBean(IHLOrderAO.class);
 
     private XN802805Req req = null;
@@ -42,7 +42,7 @@ public class XN802805 extends AProcessor {
         condition.setOrder(orderColumn, req.getOrderDir());
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
-        return hLOrderAO.queryHLOrderPage(start, limit, condition);
+        return hlOrderAO.queryHLOrderPage(start, limit, condition);
     }
 
     @Override

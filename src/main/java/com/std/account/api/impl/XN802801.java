@@ -25,14 +25,14 @@ import com.std.account.spring.SpringContextHolder;
  * @history:
  */
 public class XN802801 extends AProcessor {
-    private IHLOrderAO hLOrderAO = SpringContextHolder
+    private IHLOrderAO hlOrderAO = SpringContextHolder
         .getBean(IHLOrderAO.class);
 
     private XN802801Req req = null;
 
     @Override
     public synchronized Object doBusiness() throws BizException {
-        hLOrderAO.approveOrder(req.getCode(), req.getAdjustResult(),
+        hlOrderAO.approveOrder(req.getCode(), req.getAdjustResult(),
             req.getAdjustUser(), req.getAdjustNote(), req.getSystemCode());
         return new BooleanRes(true);
     }

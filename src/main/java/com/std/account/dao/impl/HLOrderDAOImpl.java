@@ -11,46 +11,60 @@ import com.std.account.domain.HLOrder;
 @Repository("hlOrderDAOImpl")
 public class HLOrderDAOImpl extends AMybatisTemplate implements IHLOrderDAO {
 
+    /** 
+     * @see com.ibis.account.dao.base.IBaseDAO#insert(java.lang.Object)
+     */
     @Override
     public int insert(HLOrder data) {
-        // TODO Auto-generated method stub
-        return 0;
+        return super.insert(NAMESPACE.concat("insert_hlOrder"), data);
     }
 
+    /** 
+     * @see com.ibis.account.dao.base.IBaseDAO#delete(java.lang.Object)
+     */
     @Override
     public int delete(HLOrder data) {
-        // TODO Auto-generated method stub
         return 0;
     }
 
+    /** 
+     * @see com.ibis.account.dao.base.IBaseDAO#select(java.lang.Object)
+     */
     @Override
     public HLOrder select(HLOrder condition) {
-        // TODO Auto-generated method stub
-        return null;
+        return super.select(NAMESPACE.concat("select_hlOrder"), condition,
+            HLOrder.class);
     }
 
+    /** 
+     * @see com.ibis.account.dao.base.IBaseDAO#selectTotalCount(java.lang.Object)
+     */
     @Override
     public long selectTotalCount(HLOrder condition) {
-        // TODO Auto-generated method stub
-        return 0;
+        return super.selectTotalCount(NAMESPACE.concat("select_hlOrder_count"),
+            condition);
     }
 
+    /** 
+     * @see com.ibis.account.dao.base.IBaseDAO#selectList(java.lang.Object)
+     */
     @Override
     public List<HLOrder> selectList(HLOrder condition) {
-        // TODO Auto-generated method stub
-        return null;
+        return super.selectList(NAMESPACE.concat("select_hlOrder"), condition,
+            HLOrder.class);
     }
 
+    /** 
+     * @see com.ibis.account.dao.base.IBaseDAO#selectList(java.lang.Object, int, int)
+     */
     @Override
     public List<HLOrder> selectList(HLOrder condition, int start, int count) {
-        // TODO Auto-generated method stub
-        return null;
+        return super.selectList(NAMESPACE.concat("select_hlOrder"), start,
+            count, condition, HLOrder.class);
     }
 
     @Override
-    public void approveOrder(HLOrder order) {
-        // TODO Auto-generated method stub
-
+    public void approveOrder(HLOrder data) {
+        super.update(NAMESPACE.concat("approve_order"), data);
     }
-
 }

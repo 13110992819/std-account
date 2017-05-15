@@ -11,7 +11,7 @@ import com.std.account.exception.ParaException;
 import com.std.account.spring.SpringContextHolder;
 
 public class XN802807 extends AProcessor {
-    private IHLOrderAO hLOrderAO = SpringContextHolder
+    private IHLOrderAO hlOrderAO = SpringContextHolder
         .getBean(IHLOrderAO.class);
 
     private XN802807Req req = null;
@@ -27,7 +27,7 @@ public class XN802807 extends AProcessor {
         condition.setApproveUser(req.getApproveUser());
         condition.setSystemCode(req.getSystemCode());
 
-        return hLOrderAO.queryHLOrderList(condition);
+        return hlOrderAO.queryHLOrderList(condition);
     }
 
     @Override

@@ -2,4 +2,135 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.std.account.dao.IHLOrderDAO">
+	<resultMap id="hlOrder_DB_Result" type="hlOrder">
+		<result column="code" property="code" />
+		<result column="account_number" property="accountNumber" />
+		<result column="account_name" property="accountName" />
+		<result column="jour_code" property="jourCode" />
+		<result column="direction" property="direction" />
+		
+		<result column="amount" property="amount" />
+		<result column="status" property="status" />
+		<result column="apply_user" property="applyUser" />
+		<result column="apply_note" property="applyNote" />
+		<result column="apply_datetime" property="applyDatetime" />
+		
+		<result column="approve_user" property="approveUser" />
+		<result column="approve_note" property="approveNote" />
+		<result column="approve_datetime" property="approveDatetime" />
+		<result column="system_code" property="systemCode" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="accountNumber != null and accountNumber != '' ">
+				AND t.account_number = #{accountNumber}
+			</if>
+			<if test="accountName != null and accountName != '' ">
+				AND t.account_name like "%"#{accountName}"%"
+			</if>
+			<if test="direction != null and direction != '' ">
+				AND t.direction = #{direction}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>	
+			<if test="applyUser != null and applyUser != '' ">
+				AND t.apply_user = #{applyUser}
+			</if>
+			<if test="applyDatetimeStart != null and applyDatetimeStart != '' ">
+				<![CDATA[AND t.apply_datetime >= #{applyDatetimeStart}]]>
+			</if>
+			<if test="applyDatetimeEnd != null and applyDatetimeEnd != '' ">
+				<![CDATA[AND t.apply_datetime <= #{applyDatetimeEnd}]]>
+			</if>
+			<if test="approveUser != null and approveUser != '' ">
+				AND t.approve_user = #{approveUser}
+			</if>
+			<if test="approveDatetimeStart != null and approveDatetimeStart != '' ">
+				<![CDATA[AND t.approve_datetime >= #{approveDatetimeStart}]]>
+			</if>
+			<if test="approveDatetimeEnd != null and approveDatetimeEnd != '' ">
+				<![CDATA[AND t.approve_datetime <= #{approveDatetimeEnd}]]>
+			</if>		
+		</trim>
+	</sql>
+	<select id="select_hlOrder" parameterType="hlOrder" resultMap="hlOrder_DB_Result">
+		SELECT
+		t.code
+		,t.account_number
+		,t.account_name
+		,t.jour_code
+		,t.direction
+		
+		,t.amount
+		,t.status
+		,t.apply_user
+		,t.apply_note
+		,t.apply_datetime
+		
+		,t.approve_user
+		,t.approve_note
+		,t.approve_datetime
+		,t.system_code
+		FROM
+		tstd_hlorder t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_hlOrder_count" parameterType="hlOrder" resultType="java.lang.Long">
+		SELECT count(1) FROM tstd_hlorder t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_hlOrder" parameterType="hlOrder">
+		INSERT INTO
+		tstd_hlorder(
+		code
+		,account_number
+		,account_name
+		,jour_code
+		,direction
+		
+		,amount
+		,status
+		,apply_user
+		,apply_note
+		,apply_datetime
+		
+		,system_code
+		)
+		VALUES(
+		#{code}
+		,#{accountNumber}
+		,#{accountName}
+		,#{jourCode}
+		,#{direction}
+		
+		,#{amount}
+		,#{status}
+		,#{applyUser}
+		,#{applyNote}
+		,#{applyDatetime}
+		
+		,#{systemCode}
+		)
+	</insert>
+
+	<update id="approve_order" parameterType="hlOrder">
+		UPDATE tstd_hlorder
+		SET
+		status= #{status}
+		,approve_user = #{approveUser}
+		,approve_note = #{approveNote}
+		,approve_datetime = #{approveDatetime}
+		WHERE code = #{code}
+	</update>
 </mapper>

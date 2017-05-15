@@ -24,7 +24,7 @@ public class HLOrderAOImpl implements IHLOrderAO {
     private IAccountBO accountBO;
 
     @Autowired
-    private IHLOrderBO hLOrderBO;
+    private IHLOrderBO hlOrderBO;
 
     @Autowired
     private IJourBO jourBO;
@@ -33,7 +33,7 @@ public class HLOrderAOImpl implements IHLOrderAO {
     @Transactional
     public void approveOrder(String code, String adjustResult,
             String approveUser, String approveNote, String systemCode) {
-        HLOrder order = hLOrderBO.getHLOrder(code, systemCode);
+        HLOrder order = hlOrderBO.getHLOrder(code, systemCode);
         if (!EHLOrderStatus.toApprove.getCode().equals(order.getStatus())) {
             throw new BizException("xn000000", "该单号不处于调账待审核状态");
         }
@@ -50,14 +50,14 @@ public class HLOrderAOImpl implements IHLOrderAO {
 
     private void approveOrderNO(HLOrder order, Jour jour, String approveUser,
             String approveNote) {
-        hLOrderBO.approveOrder(order, EHLOrderStatus.Approved_NO, approveUser,
+        hlOrderBO.approveOrder(order, EHLOrderStatus.Approved_NO, approveUser,
             approveNote);
         jourBO.adjustJourNO(jour, approveUser, approveNote);
     }
 
     private void approveOrderYes(HLOrder order, Jour jour, String approveUser,
             String approveNote) {
-        hLOrderBO.approveOrder(order, EHLOrderStatus.Approved_YES, approveUser,
+        hlOrderBO.approveOrder(order, EHLOrderStatus.Approved_YES, approveUser,
             approveNote);
         jourBO.adjustJourYES(jour, approveUser, approveNote);
         accountBO.changeAmountForHL(order);
@@ -66,16 +66,16 @@ public class HLOrderAOImpl implements IHLOrderAO {
     @Override
     public Paginable<HLOrder> queryHLOrderPage(int start, int limit,
             HLOrder condition) {
-        return hLOrderBO.getPaginable(start, limit, condition);
+        return hlOrderBO.getPaginable(start, limit, condition);
     }
 
     @Override
     public List<HLOrder> queryHLOrderList(HLOrder condition) {
-        return hLOrderBO.queryHLOrderList(condition);
+        return hlOrderBO.queryHLOrderList(condition);
     }
 
     @Override
     public HLOrder getHLOrder(String code, String systemCode) {
-        return hLOrderBO.getHLOrder(code, systemCode);
+        return hlOrderBO.getHLOrder(code, systemCode);
     }
 }
