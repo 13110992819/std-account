@@ -20,8 +20,20 @@ public class Jour extends ABaseDO {
     // 流水编号
     private String code;
 
-    // 流水所属账号
+    // 订单分组组号（信息代表）---核心字段1
+    private String payGroup;
+
+    // 流水分组组号（橙账本代表）---核心字段2
+    private String refNo;
+
+    // 支付渠道单号（支付渠道代表）---核心字段3
+    private String channelOrder;
+
+    // 流水所属账号---核心字段4
     private String accountNumber;
+
+    // 变动金额（有正负之分）---核心字段5
+    private Long transAmount;
 
     // 流水所属用户编号
     private String userId;
@@ -29,23 +41,11 @@ public class Jour extends ABaseDO {
     // 流水所属真实姓名
     private String realName;
 
-    // 支付渠道（线下/招商代付/支付宝/内部转账）
-    private String channelType;
-
-    // 渠道单号（外部账时就是对应渠道的单号）
-    // private String channelOrder;
-
-    // 关联订单号（业务订单）
-    private String refNo;
-
     // 业务类型
     private String bizType;
 
     // 业务说明
     private String bizNote;
-
-    // 变动金额（有正负之分）
-    private Long transAmount;
 
     // 变动前金额
     private Long preAmount;
@@ -56,13 +56,11 @@ public class Jour extends ABaseDO {
     // 状态
     private String status;
 
+    // 备注
+    private String remark;
+
     // 创建时间
     private Date createDatetime;
-
-    /*
-     * // 处理回调人 private String rollbackUser; // 处理回调时间 private Date
-     * rollbackDatetime;
-     */
 
     // 拟对账时间
     private String workDate;
@@ -85,14 +83,14 @@ public class Jour extends ABaseDO {
     // 调账时间
     private Date adjustDatetime;
 
-    // 备注
-    private String remark;
-
-    // 手续费
-    private Long fee;
+    // 支付渠道（线下/招商代付/支付宝/内部转账）
+    private String channelType;
 
     // 系统编号
     private String systemCode;
+
+    // 公司编号
+    private String companyCode;
 
     // ***********************db properties *************************
     // 业务类型列表
@@ -112,14 +110,6 @@ public class Jour extends ABaseDO {
 
     // 币种
     private String currency;
-
-    public Long getFee() {
-        return fee;
-    }
-
-    public void setFee(Long fee) {
-        this.fee = fee;
-    }
 
     public String getCurrency() {
         return currency;
@@ -313,12 +303,36 @@ public class Jour extends ABaseDO {
         this.remark = remark;
     }
 
+    public String getPayGroup() {
+        return payGroup;
+    }
+
+    public void setPayGroup(String payGroup) {
+        this.payGroup = payGroup;
+    }
+
     public String getRefNo() {
         return refNo;
     }
 
     public void setRefNo(String refNo) {
         this.refNo = refNo;
+    }
+
+    public String getChannelOrder() {
+        return channelOrder;
+    }
+
+    public void setChannelOrder(String channelOrder) {
+        this.channelOrder = channelOrder;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 
     public String getCheckNote() {

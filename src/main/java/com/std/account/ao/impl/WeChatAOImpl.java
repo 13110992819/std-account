@@ -34,6 +34,7 @@ import com.std.account.domain.CallbackResult;
 import com.std.account.domain.Charge;
 import com.std.account.domain.CompanyChannel;
 import com.std.account.domain.Jour;
+import com.std.account.domain.User;
 import com.std.account.dto.res.XN002500Res;
 import com.std.account.dto.res.XN002501Res;
 import com.std.account.enums.EBoolean;
@@ -332,23 +333,15 @@ public class WeChatAOImpl implements IWeChatAO {
         if (!isSucc) {
             // 支付失败
             System.out.println("支付失败");
-<<<<<<< HEAD
+
             chargeBO.callBackChange(dbCharge, false, wechatOrderNo);
-=======
-            jourBO.callBackChangeJour(jour, EBoolean.NO.getCode(), "WeChat_H5",
-                "微信公众号充值后台自动回调", wechatOrderNo);
->>>>>>> refs/remotes/origin/master
+
         } else {
             System.out.println("===============付款成功==============");
             // ------------------------------
             // 处理业务开始
             // ------------------------------
-<<<<<<< HEAD
             chargeBO.callBackChange(dbCharge, true, wechatOrderNo);
-=======
-            jourBO.callBackChangeJour(jour, EBoolean.YES.getCode(),
-                "WeChat_H5", "微信公众号充值后台自动回调", wechatOrderNo);
->>>>>>> refs/remotes/origin/master
             // 账户加钱
             accountBO.changeAmount(dbCharge.getAccountNumber(),
                 EChannelType.WeChat_H5, dbCharge.getCode(),
@@ -491,5 +484,31 @@ public class WeChatAOImpl implements IWeChatAO {
         } catch (Exception e) {
             throw new BizException("xn000000", "回调业务biz异常");
         }
+    }
+
+    @Override
+    // 阿精写
+    @Transactional
+    public Object doWechatH5(String userId, Long amount) {
+        if (amount == 0) {
+            throw new BizException("xn000000", "充值金额不能为0");
+        }
+        User dbUser = userBO.getRemoteUser(userId);
+        if (StringUtils.isBlank(dbUser.getOpenId())) {
+            throw new BizException("xn000000", "请微信登录后再支付");
+        }
+        Account dbAccount = accountBO.getAccountByUser(userId,
+            ECurrency.CNY.getCode());
+        // 生成充值订单
+        String chagerCode = chargeBO.onlineOrder(dbAccount, dbUser, amount,
+            EChannelType.WeChat_H5);
+        // 返回微信H5充值参数给前端
+        String systemCode = dbAccount.getSystemCode();
+        CompanyChannel companyChannel = companyChannelBO.getCompanyChannel(
+            systemCode, systemCode, EChannelType.WeChat_H5.getCode());
+        String prepayId = wechatBO.getPrepayIdH5(companyChannel,
+            dbUser.getOpenId(), "微信公众号充值", chagerCode, amount, SysConstant.IP,
+            PropertiesUtil.Config.WECHAT_H5_QzBACKURL, null);
+        return wechatBO.getPayInfoH5(companyChannel, chagerCode, prepayId);
     }
 }

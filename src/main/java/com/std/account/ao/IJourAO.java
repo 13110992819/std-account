@@ -23,43 +23,15 @@ import com.std.account.domain.Jour;
 public interface IJourAO {
     String DEFAULT_ORDER_COLUMN = "code";
 
-    // 流水对账
-
-    /**
-     * 线上充值(微信，支付宝)
-     * @param userId
-     * @param payType
-     * @param amount
-     * @return 
-     * @create: 2017年4月21日 下午4:09:39 xieyj
-     * @history:
-     */
+    // 未调用
     public Object doRechargeOnline(String userId, String payType, Long amount);
 
-    /**
-     * 线下充值申请
-     * @param accountNumberList
-     * @param bankcardNumber
-     * @param transAmount
-     * @param bizType
-     * @param bizNote
-     * @param systemCode 
-     * @create: 2017年5月2日 下午2:04:59 xieyj
-     * @history:
-     */
+    // 未调用
     public void doChangeAmountList(List<String> accountNumberList,
             String bankcardNumber, Long transAmount, String bizType,
             String bizNote, String systemCode);
 
-    /**
-     * 取现申请
-     * @param accountNumber
-     * @param bankcardNumber
-     * @param transAmount
-     * @param systemCode 
-     * @create: 2016年12月23日 下午9:09:43 xieyj
-     * @history:
-     */
+    // 未调用
     public void doOfflineWith(String accountNumber, String bankcardNumber,
             Long transAmount, String systemCode, String tradePwd);
 
@@ -76,16 +48,7 @@ public interface IJourAO {
     public void doCallBackOffChange(String code, String rollbackResult,
             String rollbackUser, String rollbackNote, String systemCode);
 
-    /**
-     * 批量回调支付
-     * @param codeList
-     * @param rollbackResult
-     * @param rollbackUser
-     * @param rollbackNote
-     * @param systemCode 
-     * @create: 2016年12月24日 上午8:21:37 xieyj
-     * @history:
-     */
+    // 未调用
     public void doCallBackChangeList(List<String> codeList,
             String rollbackResult, String rollbackUser, String rollbackNote,
             String systemCode);

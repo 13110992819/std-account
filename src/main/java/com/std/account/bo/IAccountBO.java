@@ -34,7 +34,8 @@ public interface IAccountBO extends IPaginableBO<Account> {
 
     // 变更账户余额：流水落地
     public void changeAmount(String accountNumber, EChannelType channelType,
-            String refNo, Long transAmount, EJourBizType bizType, String bizNote);
+            String channelOrder, String payGroup, String refNo,
+            EJourBizType bizType, String bizNote, Long transAmount);
 
     // 仅变更账户余额：流水不落地
     public void changeAmountNotJour(String accountNumber, Long transAmount,

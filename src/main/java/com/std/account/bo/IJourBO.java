@@ -18,7 +18,8 @@ import com.std.account.enums.EJourBizType;
 public interface IJourBO extends IPaginableBO<Jour> {
 
     public String addJour(Account dbAccount, EChannelType channelType,
-            String refNo, EJourBizType bizType, String bizNote, Long transAmount);
+            String channelOrder, String payGroup, String refNo,
+            EJourBizType bizType, String bizNote, Long transAmount);
 
     // 对账结果录入
     public void doCheckJour(Jour jour, EBoolean checkResult, Long checkAmount,
@@ -27,19 +28,6 @@ public interface IJourBO extends IPaginableBO<Jour> {
     public String addWithChangeJour(String systemCode, String accountNumber,
             String channelType, String bizType, String bizNote,
             Long transAmount, Long fee, String payGroup);
-
-    /**
-     * from线上划账成功回调处理流水(发生前金额，发生后金额不变)
-     * @param data
-     * @param rollbackUser
-     * @param rollbackNote
-     * @param channelOrder
-     * @return 
-     * @create: 2017年5月3日 下午1:04:33 xieyj
-     * @history:
-     */
-    public int callBackFromChangeJour(Jour data, String rollbackUser,
-            String rollbackNote, String channelOrder);
 
     /**
      * 线上充值/to线上划账回调处理流水(发生前金额，发生后金额内部设置)

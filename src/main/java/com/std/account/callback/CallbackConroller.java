@@ -133,7 +133,7 @@ public class CallbackConroller {
             HttpServletResponse response) {
 
         try {
-            // 获取回调参数
+            // 获取支付宝回调的参数
             PrintWriter out = response.getWriter();
             InputStream inStream = request.getInputStream();
             ByteArrayOutputStream outSteam = new ByteArrayOutputStream();
@@ -145,16 +145,12 @@ public class CallbackConroller {
             outSteam.close();
             inStream.close();
             String result = new String(outSteam.toByteArray(), "utf-8");
-            logger.info("**** APP支付回调结果： ****：" + result);
-            // 解析回调结果
-            CallbackResult callbackResult = alipayAO.doCallbackAPP(result);
-            logger.info("**** 回调业务biz参数： ****：" + callbackResult);
-            // 回调业务biz，通知支付结果
-            alipayAO.doBizCallback(callbackResult);
-            // 通知支付宝服务器(我已收到请求，不用再继续回调我了)
+            // 回调业务biz
+            alipayAO.doCallbackAPP(result);
+            // 通知支付宝我已收到请求，不用再继续回调我了
             out.print("success");
         } catch (Exception e) {
-            logger.info("APP支付回调异常,原因：" + e.getMessage());
+            logger.error("APP支付回调异常,原因：" + e.getMessage());
         }
     }
 

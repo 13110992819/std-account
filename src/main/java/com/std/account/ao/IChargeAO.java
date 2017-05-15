@@ -16,8 +16,6 @@ public interface IChargeAO {
     public void payOrder(String code, String payUser, String payResult,
             String payNote, String payCode, String systemCode);
 
-    public Object doWechatH5(String userId, Long amount);
-
     public Paginable<Charge> queryChargePage(int start, int limit,
             Charge condition);
 

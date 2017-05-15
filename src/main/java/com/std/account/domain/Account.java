@@ -11,9 +11,7 @@ import com.std.account.dao.base.ABaseDO;
  * @history:
  */
 public class Account extends ABaseDO {
-    /** 
-     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
-     */
+
     private static final long serialVersionUID = 8322573358554172531L;
 
     // 账户编号
@@ -60,6 +58,9 @@ public class Account extends ABaseDO {
 
     // 系统编号
     private String systemCode;
+
+    // 公司编号
+    private String companyCode;
 
     // **************************db properties **************************
 
@@ -226,4 +227,13 @@ public class Account extends ABaseDO {
     public void setOutAmount(Long outAmount) {
         this.outAmount = outAmount;
     }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
+
 }

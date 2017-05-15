@@ -14,17 +14,26 @@ public class Charge extends ABaseDO {
     // 充值编号
     private String code;
 
-    // 针对账号
+    // 订单分组组号（信息代表）---核心字段1
+    private String payGroup;
+
+    // 流水分组组号（橙账本代表）---核心字段2
+    private String refNo;
+
+    // 针对账号---核心字段4
     private String accountNumber;
 
-    // 针对户名（手机号或其他）
-    private String accountName;
-
-    // 充值金额
+    // 充值金额---核心字段5
     private Long amount;
 
-    // 支付渠道
-    private String channelType;
+    // 针对户名
+    private String accountName;
+
+    // 业务类型编号（因为什么业务类型而充值）
+    private String bizType;
+
+    // 业务类型说明（因为什么业务类型而充值）
+    private String bizNote;
 
     // 支付渠道账号信息（如开户支行）
     private String payCardInfo;
@@ -32,17 +41,11 @@ public class Charge extends ABaseDO {
     // 支付渠道账号（如银行卡号）
     private String payCardNo;
 
-    // 支付组号（信息流代表）
-    private String payGroup;
-
     // 状态（0 待审核/1 审核通过/2 审核不通过）
     private String status;
 
     // 申请人
     private String applyUser;
-
-    // 申请说明
-    private String applyNote;
 
     // 申请时间
     private Date applyDatetime;
@@ -53,14 +56,17 @@ public class Charge extends ABaseDO {
     // 支付渠道的说明
     private String payNote;
 
-    // 支付渠道的订单编号（支付渠道代表）
-    private String payCode;
-
     // 支付时间
     private Date payDatetime;
 
+    // 支付渠道
+    private String channelType;
+
     // 系统编号
     private String systemCode;
+
+    // 公司编号
+    private String companyCode;
 
     // *******************************
     // 申请时间起
@@ -147,14 +153,6 @@ public class Charge extends ABaseDO {
         this.applyUser = applyUser;
     }
 
-    public String getApplyNote() {
-        return applyNote;
-    }
-
-    public void setApplyNote(String applyNote) {
-        this.applyNote = applyNote;
-    }
-
     public Date getApplyDatetime() {
         return applyDatetime;
     }
@@ -185,14 +183,6 @@ public class Charge extends ABaseDO {
 
     public void setPayGroup(String payGroup) {
         this.payGroup = payGroup;
-    }
-
-    public String getPayCode() {
-        return payCode;
-    }
-
-    public void setPayCode(String payCode) {
-        this.payCode = payCode;
     }
 
     public Date getPayDatetime() {
@@ -242,4 +232,37 @@ public class Charge extends ABaseDO {
     public void setPayDatetimeEnd(Date payDatetimeEnd) {
         this.payDatetimeEnd = payDatetimeEnd;
     }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
+
+    public String getBizType() {
+        return bizType;
+    }
+
+    public void setBizType(String bizType) {
+        this.bizType = bizType;
+    }
+
+    public String getBizNote() {
+        return bizNote;
+    }
+
+    public void setBizNote(String bizNote) {
+        this.bizNote = bizNote;
+    }
+
+    public String getRefNo() {
+        return refNo;
+    }
+
+    public void setRefNo(String refNo) {
+        this.refNo = refNo;
+    }
+
 }

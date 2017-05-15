@@ -73,7 +73,8 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
 
     @Override
     public void changeAmount(String accountNumber, EChannelType channelType,
-            String refNo, Long transAmount, EJourBizType bizType, String bizNote) {
+            String channelOrder, String payGroup, String refNo,
+            EJourBizType bizType, String bizNote, Long transAmount) {
         Account dbAccount = this.getAccount(accountNumber);
         Long nowAmount = dbAccount.getAmount() + transAmount;
         // 特定账户余额可为负
@@ -82,8 +83,8 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
             throw new BizException("xn000000", "账户余额不足");
         }
         // 记录流水
-        String lastOrder = jourBO.addJour(dbAccount, channelType, refNo,
-            bizType, bizNote, transAmount);
+        String lastOrder = jourBO.addJour(dbAccount, channelType, channelOrder,
+            payGroup, refNo, bizType, bizNote, transAmount);
         // 更改余额
         Account data = new Account();
         data.setAccountNumber(accountNumber);

@@ -13,10 +13,10 @@ import com.std.account.core.OrderNoGenerater;
 import com.std.account.dao.IChargeDAO;
 import com.std.account.domain.Account;
 import com.std.account.domain.Charge;
-import com.std.account.domain.User;
 import com.std.account.enums.EChannelType;
 import com.std.account.enums.EChargeStatus;
 import com.std.account.enums.EGeneratePrefix;
+import com.std.account.enums.EJourBizType;
 import com.std.account.exception.BizException;
 
 @Component
@@ -25,8 +25,9 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
     private IChargeDAO chargeDAO;
 
     @Override
-    public String applyOrder(Account account, Long amount, String payCardInfo,
-            String payCardNo, String applyUser, String applyNote) {
+    public String applyOrderOffline(Account account, Long amount,
+            String payCardInfo, String payCardNo, String applyUser,
+            String applyNote) {
         if (amount == 0) {
             throw new BizException("xn000000", "充值金额不能为0");
         }
@@ -34,20 +35,55 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
             .getCode());
         Charge data = new Charge();
         data.setCode(code);
+        data.setPayGroup(null);
+        data.setRefNo(null);
         data.setAccountNumber(account.getAccountNumber());
-        data.setAccountName(account.getRealName());
         data.setAmount(amount);
-        data.setChannelType(EChannelType.Offline.getCode());
 
+        data.setAccountName(account.getRealName());
+        data.setBizType(EJourBizType.AJ_CZ.getCode());
+        data.setBizNote(EJourBizType.AJ_CZ.getValue());
         data.setPayCardInfo(payCardInfo);
         data.setPayCardNo(payCardNo);
-        data.setPayGroup(null);
+
         data.setStatus(EChargeStatus.toPay.getCode());
         data.setApplyUser(applyUser);
-
-        data.setApplyNote(applyNote);
         data.setApplyDatetime(new Date());
+        data.setChannelType(EChannelType.Offline.getCode());
         data.setSystemCode(account.getSystemCode());
+        data.setCompanyCode(account.getCompanyCode());
+        chargeDAO.insert(data);
+        return code;
+    }
+
+    @Override
+    public String applyOrderOnline(Account account, String payGroup,
+            String refNo, EJourBizType bizType, String bizNote,
+            Long transAmount, EChannelType channelType, String applyUser) {
+        if (transAmount == 0) {
+            throw new BizException("xn000000", "充值金额不能为0");
+        }
+        String code = OrderNoGenerater.generate(EGeneratePrefix.Charge
+            .getCode());
+        Charge data = new Charge();
+        data.setCode(code);
+        data.setPayGroup(payGroup);
+        data.setRefNo(refNo);
+        data.setAccountNumber(account.getAccountNumber());
+        data.setAmount(transAmount);
+
+        data.setAccountName(account.getRealName());
+        data.setBizType(bizType.getCode());
+        data.setBizNote(bizNote);
+        data.setPayCardInfo(null);
+        data.setPayCardNo(null);
+
+        data.setStatus(EChargeStatus.toPay.getCode());
+        data.setApplyUser(applyUser);
+        data.setApplyDatetime(new Date());
+        data.setChannelType(channelType.getCode());
+        data.setSystemCode(account.getSystemCode());
+        data.setCompanyCode(account.getCompanyCode());
         chargeDAO.insert(data);
         return code;
     }
@@ -62,42 +98,12 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
         }
         data.setPayUser(payUser);
         data.setPayNote(payNote);
-        data.setPayCode(payCode);
         data.setPayDatetime(new Date());
         chargeDAO.payOrder(data);
     }
 
     @Override
-    public String onlineOrder(Account dbAccount, User dbUser, Long amount,
-            EChannelType channelType) {
-        if (amount == 0) {
-            throw new BizException("xn000000", "充值金额不能为0");
-        }
-        String code = OrderNoGenerater.generate(EGeneratePrefix.Charge
-            .getCode());
-        Charge data = new Charge();
-        data.setCode(code);
-        data.setAccountNumber(dbAccount.getAccountNumber());
-        data.setAccountName(dbAccount.getRealName());
-        data.setAmount(amount);
-        data.setChannelType(channelType.getCode());
-
-        data.setPayCardInfo(null);
-        data.setPayCardNo(null);
-        data.setPayGroup(code);
-        data.setStatus(EChargeStatus.toPay.getCode());
-        data.setApplyUser(dbUser.getUserId());
-
-        data.setApplyNote("在线充值");
-        data.setApplyDatetime(new Date());
-        data.setSystemCode(dbAccount.getSystemCode());
-        chargeDAO.insert(data);
-        return code;
-    }
-
-    @Override
-    public void callBackChange(Charge dbCharge, boolean booleanFlag,
-            String payCode) {
+    public void callBackChange(Charge dbCharge, boolean booleanFlag) {
         if (booleanFlag) {
             dbCharge.setStatus(EChargeStatus.Pay_YES.getCode());
         } else {
@@ -105,7 +111,6 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
         }
         dbCharge.setPayUser(null);
         dbCharge.setPayNote("在线充值自动回调");
-        dbCharge.setPayCode(payCode);
         dbCharge.setPayDatetime(new Date());
         chargeDAO.payOrder(dbCharge);
 

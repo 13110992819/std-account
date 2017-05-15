@@ -18,7 +18,7 @@ import com.std.account.exception.ParaException;
 import com.std.account.spring.SpringContextHolder;
 
 /** 
- * 微信公众号支付请求接口，返回预付单信息
+ * 微信H5支付请求接口，返回预付单信息
  * @author: haiqingzheng 
  * @since: 2016年12月23日 上午9:23:43 
  * @history:

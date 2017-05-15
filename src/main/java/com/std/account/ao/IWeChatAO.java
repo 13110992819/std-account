@@ -43,4 +43,6 @@ public interface IWeChatAO {
 
     public void doBizCallback(CallbackResult callbackResult);
 
+    public Object doWechatH5(String userId, Long amount);
+
 }

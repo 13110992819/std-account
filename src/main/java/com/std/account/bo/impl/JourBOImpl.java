@@ -25,7 +25,6 @@ import com.std.account.dao.IJourDAO;
 import com.std.account.domain.Account;
 import com.std.account.domain.HLOrder;
 import com.std.account.domain.Jour;
-import com.std.account.enums.EBizType;
 import com.std.account.enums.EBoolean;
 import com.std.account.enums.EChannelType;
 import com.std.account.enums.EGeneratePrefix;
@@ -48,9 +47,13 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
 
     @Override
     public String addJour(Account dbAccount, EChannelType channelType,
-            String refNo, EJourBizType bizType, String bizNote, Long transAmount) {
-        if (StringUtils.isBlank(refNo)) {// 必须要有的判断。每一次流水新增，必有有对应业务订单号
-            throw new BizException("xn000000", "新增流水关联订单号不能为空");
+            String channelOrder, String payGroup, String refNo,
+            EJourBizType bizType, String bizNote, Long transAmount) {
+        if (StringUtils.isBlank(payGroup)) {// 必须要有的判断。每一次流水新增，必有有对应业务分组
+            throw new BizException("xn000000", "新增流水业务分组不能为空");
+        }
+        if (StringUtils.isBlank(refNo)) {// 必须要有的判断。每一次流水新增，必有有对应流水分组
+            throw new BizException("xn000000", "新增流水流水分组不能为空");
         }
         if (transAmount == 0) {
             throw new BizException("xn000000", "新增流水变动金额不能为0");
@@ -60,23 +63,29 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
 
         Jour data = new Jour();
         data.setCode(code);
+
+        data.setPayGroup(payGroup);
+        data.setRefNo(refNo);
+        data.setChannelOrder(channelOrder);// 内部转账时为空，外部转账时必定有
         data.setAccountNumber(dbAccount.getAccountNumber());
+        data.setTransAmount(transAmount);
+
         data.setUserId(dbAccount.getUserId());
         data.setRealName(dbAccount.getRealName());
-        data.setChannelType(channelType.getCode());
-
-        data.setRefNo(refNo);
         data.setBizType(bizType.getCode());
         data.setBizNote(bizNote);
-        data.setTransAmount(transAmount);
         data.setPreAmount(dbAccount.getAmount());
-
         data.setPostAmount(dbAccount.getAmount() + transAmount);
+
         data.setStatus(EJourStatus.todoCheck.getCode());
+        data.setRemark("记得对账哦");
         data.setCreateDatetime(new Date());
         data.setWorkDate(DateUtil.dateToStr(new Date(),
             DateUtil.DB_DATE_FORMAT_STRING));
+
+        data.setChannelType(channelType.getCode());
         data.setSystemCode(dbAccount.getSystemCode());
+        data.setCompanyCode(dbAccount.getCompanyCode());
         jourDAO.insert(data);
         return code;
     }

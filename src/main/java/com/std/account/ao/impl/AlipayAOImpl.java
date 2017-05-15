@@ -11,7 +11,6 @@ package com.std.account.ao.impl;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -23,27 +22,20 @@ import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.internal.util.WebUtils;
 import com.std.account.ao.IAlipayAO;
 import com.std.account.bo.IAccountBO;
+import com.std.account.bo.IAlipayBO;
+import com.std.account.bo.IChargeBO;
 import com.std.account.bo.ICompanyChannelBO;
-import com.std.account.bo.IExchangeCurrencyBO;
-import com.std.account.bo.IJourBO;
 import com.std.account.common.DateUtil;
 import com.std.account.common.JsonUtil;
 import com.std.account.common.PropertiesUtil;
-import com.std.account.core.StringValidater;
 import com.std.account.domain.Account;
 import com.std.account.domain.CallbackResult;
 import com.std.account.domain.CompanyChannel;
-import com.std.account.domain.Jour;
 import com.std.account.dto.res.XN002510Res;
-import com.std.account.enums.EJourBizType;
-import com.std.account.enums.EBoolean;
 import com.std.account.enums.EChannelType;
 import com.std.account.enums.ECurrency;
-import com.std.account.enums.EJourStatus;
+import com.std.account.enums.EJourBizType;
 import com.std.account.exception.BizException;
-import com.std.account.http.PostSimulater;
-import com.std.account.util.AmountUtil;
-import com.std.account.util.CalculationUtil;
 import com.std.account.util.alipay.AlipayConfig;
 import com.std.account.util.alipay.AlipayCore;
 
@@ -59,66 +51,45 @@ public class AlipayAOImpl implements IAlipayAO {
     public static final String CHARSET = "utf-8";
 
     @Autowired
-    IJourBO jourBO;
-
-    @Autowired
     ICompanyChannelBO companyChannelBO;
 
     @Autowired
     IAccountBO accountBO;
 
     @Autowired
-    IExchangeCurrencyBO exchangeCurrencyBO;
+    IAlipayBO alipayBO;
 
-    /** 
-     * @see com.std.account.ao.IAlipayAO#getPrepayIdApp(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.Long, java.lang.String)
-     */
+    @Autowired
+    IChargeBO chargeBO;
+
     // 配置说明
     // channel_company —— 卖家支付宝用户号
     // private_key1 —— APP_PRIVATE_KEY，开发者应用私钥，由开发者自己生成
     // private_key2 —— ALIPAY_PUBLIC_KEY，支付宝公钥，由支付宝生成
     // private_key3 —— APP_ID，APPID即创建应用后生成
     @Override
-    public Object getSignedOrder(String fromUserId, String toUserId,
-            String bizType, String fromBizNote, String toBizNote,
-            Long transAmount, String payGroup, String backUrl) {
+    public Object getSignedOrder(String applyUser, String toUser,
+            String payGroup, String refNo, String bizType, String bizNote,
+            Long transAmount, String backUrl) {
         if (transAmount.longValue() == 0l) {
             throw new BizException("xn000000", "发生金额为零，不能使用支付宝支付");
         }
         // 获取来去方账户信息
-        Account fromAccount = accountBO.getAccountByUser(fromUserId,
+        Account toAccount = accountBO.getAccountByUser(toUser,
             ECurrency.CNY.getCode());
-        String toAcccoutCurrency = null;
-        Long toTransAmount = transAmount;
-        // 如果是正汇系统的O2O消费买单，付款至分润账户
-        if ("CD-CZH000001".equals(fromAccount.getSystemCode())
-                && EJourBizType.ZH_O2O.getCode().equals(bizType)) {
-            toAcccoutCurrency = ECurrency.ZH_FRB.getCode();
-            toTransAmount = AmountUtil.mul(transAmount, exchangeCurrencyBO
-                .getExchangeRate(ECurrency.CNY.getCode(),
-                    ECurrency.ZH_FRB.getCode()));
-        } else { // 其他系统，付款至现金账户
-            toAcccoutCurrency = ECurrency.CNY.getCode();
-        }
-        Account toAccount = accountBO.getAccountByUser(toUserId,
-            toAcccoutCurrency);
-        String systemCode = fromAccount.getSystemCode();
-        String companyCode = fromAccount.getSystemCode();
-
         // 落地付款方和收款方流水信息
-        String jourCode = jourBO.addToChangeJour(systemCode,
-            fromAccount.getAccountNumber(), EChannelType.Alipay.getCode(),
-            bizType, fromBizNote, transAmount, payGroup);
-        jourBO.addToChangeJour(systemCode, toAccount.getAccountNumber(),
-            EChannelType.Alipay.getCode(), bizType, toBizNote, toTransAmount,
-            payGroup);
+        String chargeOrderCode = chargeBO.applyOrderOnline(toAccount, payGroup,
+            refNo, EJourBizType.getBizType(bizType), bizNote, transAmount,
+            EChannelType.Alipay, applyUser);
 
         // 获取支付宝支付配置参数
+        String systemCode = toAccount.getSystemCode();
+        String companyCode = toAccount.getCompanyCode();
         CompanyChannel companyChannel = companyChannelBO.getCompanyChannel(
             companyCode, systemCode, EChannelType.Alipay.getCode());
 
         // 生成业务参数(bizContent)json字符串
-        String bizContentJson = getBizContentJson(fromBizNote, jourCode,
+        String bizContentJson = getBizContentJson(bizNote, chargeOrderCode,
             transAmount, backUrl);
 
         // 1、按照key=value&key=value方式拼接的未签名原始字符串
@@ -139,7 +110,7 @@ public class AlipayAOImpl implements IAlipayAO {
         logger.info("*****签名并Encode后的请求字符串*****\n" + encodedParams);
 
         XN002510Res res = new XN002510Res();
-        res.setJourCode(jourCode);
+        res.setPayCode(chargeOrderCode);
         res.setSignOrder(encodedParams);
         return res;
     }
@@ -198,150 +169,13 @@ public class AlipayAOImpl implements IAlipayAO {
     }
 
     @Override
-    public CallbackResult doCallbackAPP(String result) {
-        String systemCode = "CD-CZH000001";
-        String companyCode = "CD-CZH000001";
-        // 目前只有正汇钱包使用支付宝，暂时写死 todo：如何判断公司编号和系统编号???
-        CompanyChannel companyChannel = companyChannelBO.getCompanyChannel(
-            companyCode, systemCode, EChannelType.Alipay.getCode());
-        try {
-            // 参数进行url_decode
-            // String params = URLDecoder.decode(result, CHARSET);
-            // 将异步通知中收到的待验证所有参数都存放到map中
-            Map<String, String> paramsMap = split(result);
-            // 过滤+排序
-            Map<String, String> filterMap = AlipayCore.paraFilter(paramsMap);
-            String content = AlipayCore.createLinkString(filterMap);
-            // 拿到签名
-            String sign = paramsMap.get("sign");
-            filterMap.put("sign", sign);
-            // 调用SDK验证签名
-            boolean signVerified = AlipaySignature.rsa256CheckContent(content,
-                sign, companyChannel.getPrivateKey2(), CHARSET);
-            logger.info("验签结果：" + signVerified);
-            boolean isSuccess = false;
-            if (signVerified) {
-                // TODO 验签成功后
-                // 按照支付结果异步通知中的描述，对支付结果中的业务内容进行1\2\3\4二次校验，校验成功后在response中返回success，校验失败返回failure
-                String outTradeNo = paramsMap.get("out_trade_no");
-                String totalAmount = paramsMap.get("total_amount");
-                String sellerId = paramsMap.get("seller_id");
-                String appId = paramsMap.get("app_id");
-                String alipayOrderNo = paramsMap.get("trade_no");
-                String bizBackUrl = paramsMap.get("passback_params");
-                String tradeStatus = paramsMap.get("trade_status");
-                Jour fromJour = jourBO.getJour(outTradeNo, systemCode);
-                Jour toJour = jourBO.getRelativeJour(fromJour.getCode(),
-                    fromJour.getPayGroup());
-                if (!EJourStatus.todoCallBack.getCode().equals(
-                    fromJour.getStatus())) {
-                    throw new BizException("xn000000", "流水不处于待回调状态，重复回调");
-                }
-
-                // 数据正确性校验
-                if (fromJour.getTransAmount().equals(
-                    StringValidater.toLong(CalculationUtil.mult(totalAmount)))
-                        && sellerId.equals(companyChannel.getChannelCompany())
-                        && appId.equals(companyChannel.getPrivateKey3())) {
-<<<<<<< HEAD
-                    isSuccess = true;
-                    jourBO.callBackChangeJour(fromJour.getCode(),
-                        EBoolean.YES.getCode(), "ALIPAY", "支付宝APP支付后台自动回调",
-                        alipayOrderNo);
-                    jourBO.callBackChangeJour(toJour.getCode(),
-                        EBoolean.YES.getCode(), "ALIPAY", "支付宝APP支付后台自动回调",
-                        alipayOrderNo);
-                    // 收款方账户加钱
-                    accountBO.changeAmountNotJour(toJour.getAccountNumber(),
-                        toJour.getTransAmount(), toJour.getCode());
-                } else {
-                    // 支付失败
-                    jourBO.callBackChangeJour(fromJour.getCode(),
-                        EBoolean.NO.getCode(), "ALIPAY", "支付宝APP支付后台自动回调",
-                        alipayOrderNo);
-                    jourBO.callBackChangeJour(toJour.getCode(),
-                        EBoolean.NO.getCode(), "ALIPAY", "支付宝APP支付后台自动回调",
-                        alipayOrderNo);
-                    if (!EJourStatus.todoCallBack.getCode().equals(
-                        fromJour.getStatus())) {
-                        throw new BizException("xn000000", "流水不处于待回调状态，重复回调");
-=======
-                    if ("TRADE_SUCCESS".equals(tradeStatus)
-                            || "TRADE_FINISHED".equals(tradeStatus)) {
-                        isSuccess = true;
-                        jourBO.callBackFromChangeJour(fromJour, "ALIPAY",
-                            "支付宝APP支付后台自动回调", alipayOrderNo);
-                        jourBO.callBackChangeJour(toJour,
-                            EBoolean.YES.getCode(), "ALIPAY", "支付宝APP支付后台自动回调",
-                            alipayOrderNo);
-                        // 收款方账户加钱
-                        accountBO.transAmountNotJour(systemCode,
-                            toJour.getAccountNumber(), toJour.getTransAmount(),
-                            toJour.getCode());
-                    } else {
-                        // 支付失败
-                        jourBO.callBackChangeJour(fromJour,
-                            EBoolean.NO.getCode(), "ALIPAY", "支付宝APP支付后台自动回调",
-                            alipayOrderNo);
-                        jourBO.callBackChangeJour(toJour,
-                            EBoolean.NO.getCode(), "ALIPAY", "支付宝APP支付后台自动回调",
-                            alipayOrderNo);
-                        if (!EJourStatus.todoCallBack.getCode().equals(
-                            fromJour.getStatus())) {
-                            throw new BizException("xn000000",
-                                "流水不处于待回调状态，重复回调");
-                        }
->>>>>>> refs/remotes/origin/master
-                    }
-                } else {
-                    throw new BizException("xn000000", "数据正确性校验失败，默认为非法回调");
-                }
-
-                return new CallbackResult(isSuccess, fromJour.getBizType(),
-                    fromJour.getCode(), fromJour.getPayGroup(),
-                    fromJour.getTransAmount(), systemCode, companyCode,
-                    bizBackUrl);
-            } else {
-                throw new BizException("xn000000", "验签失败，默认为非法回调");
-            }
-
-        } catch (AlipayApiException e) {
-            throw new BizException("xn000000", "支付结果通知验签异常");
-        }
-
+    public void doCallbackAPP(String result) {
+        // 解析回调结果
+        logger.info("**** APP支付回调结果： ****：" + result);
+        CallbackResult callbackResult = alipayBO.doCallbackAPP(result);
+        // 回调业务biz，通知支付结果
+        logger.info("**** 回调业务biz参数： ****：" + callbackResult);
+        alipayBO.doBizCallback(callbackResult);
     }
 
-    /**
-     * @param urlparam 带分隔的url参数
-     * @return
-     */
-    private Map<String, String> split(String urlparam) {
-        Map<String, String> map = new HashMap<String, String>();
-        String[] param = urlparam.split("&");
-        for (String keyvalue : param) {
-            String[] pair = keyvalue.split("=");
-            if (pair.length == 2) {
-                map.put(pair[0], WebUtils.decode(pair[1]));
-            }
-        }
-        return map;
-    }
-
-    @Override
-    public void doBizCallback(CallbackResult callbackResult) {
-        try {
-            Properties formProperties = new Properties();
-            formProperties.put("isSuccess", callbackResult.isSuccess());
-            formProperties.put("systemCode", callbackResult.getSystemCode());
-            formProperties.put("companyCode", callbackResult.getCompanyCode());
-            formProperties.put("payGroup", callbackResult.getPayGroup());
-            formProperties.put("payCode", callbackResult.getJourCode());
-            formProperties.put("bizType", callbackResult.getBizType());
-            formProperties.put("transAmount", callbackResult.getTransAmount());
-            PostSimulater.requestPostForm(callbackResult.getUrl(),
-                formProperties);
-        } catch (Exception e) {
-            throw new BizException("xn000000", "回调业务biz异常");
-        }
-    }
 }

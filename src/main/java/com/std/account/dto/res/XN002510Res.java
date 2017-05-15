@@ -16,17 +16,17 @@ package com.std.account.dto.res;
 public class XN002510Res {
 
     // 橙账本流水编号
-    private String jourCode;
+    private String payCode;
 
     // 签名后的订单信息
     private String signOrder;
 
-    public String getJourCode() {
-        return jourCode;
+    public String getPayCode() {
+        return payCode;
     }
 
-    public void setJourCode(String jourCode) {
-        this.jourCode = jourCode;
+    public void setPayCode(String payCode) {
+        this.payCode = payCode;
     }
 
     public String getSignOrder() {
