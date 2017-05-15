@@ -1,6 +1,9 @@
 package com.std.account.dto.req;
 
 public class XN802521Req {
+    // 用户编号
+    private String userId;
+
     // 真实姓名
     private String realName;
 
@@ -12,6 +15,9 @@ public class XN802521Req {
 
     // 渠道类型
     private String channelType;
+
+    // 参考订单号
+    private String refNo;
 
     // 业务类型
     private String bizType;
@@ -142,5 +148,21 @@ public class XN802521Req {
 
     public void setAccountType(String accountType) {
         this.accountType = accountType;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getRefNo() {
+        return refNo;
+    }
+
+    public void setRefNo(String refNo) {
+        this.refNo = refNo;
     }
 }

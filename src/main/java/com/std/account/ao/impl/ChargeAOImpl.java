@@ -41,6 +41,9 @@ public class ChargeAOImpl implements IChargeAO {
     public String applyOrder(String accountNumber, Long amount,
             String payCardInfo, String payCardNo, String applyUser,
             String applyNote) {
+        if (amount <= 0) {
+            throw new BizException("xn000000", "充值金额需大于零");
+        }
         Account account = accountBO.getAccount(accountNumber);
         // 生成充值订单
         String code = chargeBO.applyOrderOffline(account, amount, payCardInfo,
@@ -49,6 +52,7 @@ public class ChargeAOImpl implements IChargeAO {
     }
 
     @Override
+    @Transactional
     public void payOrder(String code, String payUser, String payResult,
             String payNote, String payCode, String systemCode) {
         Charge data = chargeBO.getCharge(code, systemCode);

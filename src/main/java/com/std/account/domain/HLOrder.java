@@ -53,6 +53,51 @@ public class HLOrder extends ABaseDO {
     // 系统编号
     private String systemCode;
 
+    // **************************
+    // 申请时间起
+    private Date applyDatetimeStart;
+
+    // 申请时间止
+    private Date applyDatetimeEnd;
+
+    // 审批时间起
+    private Date approveDatetimeStart;
+
+    // 审批时间止
+    private Date approveDatetimeEnd;
+
+    public Date getApplyDatetimeStart() {
+        return applyDatetimeStart;
+    }
+
+    public void setApplyDatetimeStart(Date applyDatetimeStart) {
+        this.applyDatetimeStart = applyDatetimeStart;
+    }
+
+    public Date getApplyDatetimeEnd() {
+        return applyDatetimeEnd;
+    }
+
+    public void setApplyDatetimeEnd(Date applyDatetimeEnd) {
+        this.applyDatetimeEnd = applyDatetimeEnd;
+    }
+
+    public Date getApproveDatetimeStart() {
+        return approveDatetimeStart;
+    }
+
+    public void setApproveDatetimeStart(Date approveDatetimeStart) {
+        this.approveDatetimeStart = approveDatetimeStart;
+    }
+
+    public Date getApproveDatetimeEnd() {
+        return approveDatetimeEnd;
+    }
+
+    public void setApproveDatetimeEnd(Date approveDatetimeEnd) {
+        this.approveDatetimeEnd = approveDatetimeEnd;
+    }
+
     public String getCode() {
         return code;
     }

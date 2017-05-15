@@ -23,7 +23,7 @@ import com.std.account.exception.BizException;
 public class HLOrderBOImpl extends PaginableBOImpl<HLOrder> implements
         IHLOrderBO {
     @Autowired
-    private IHLOrderDAO hLOrderDAO;
+    private IHLOrderDAO hlOrderDAO;
 
     @Override
     public String applyOrder(Account account, Jour jour, Long applyAmount,
@@ -52,7 +52,7 @@ public class HLOrderBOImpl extends PaginableBOImpl<HLOrder> implements
 
         data.setSystemCode(account.getSystemCode());
 
-        hLOrderDAO.insert(data);
+        hlOrderDAO.insert(data);
         return code;
     }
 
@@ -63,7 +63,7 @@ public class HLOrderBOImpl extends PaginableBOImpl<HLOrder> implements
         order.setApproveUser(approveUser);
         order.setApproveNote(approveNote);
         order.setApproveDatetime(new Date());
-        hLOrderDAO.approveOrder(order);
+        hlOrderDAO.approveOrder(order);
     }
 
     @Override
@@ -73,13 +73,13 @@ public class HLOrderBOImpl extends PaginableBOImpl<HLOrder> implements
             HLOrder condition = new HLOrder();
             condition.setCode(code);
             condition.setSystemCode(systemCode);
-            order = hLOrderDAO.select(condition);
+            order = hlOrderDAO.select(condition);
         }
         return order;
     }
 
     @Override
     public List<HLOrder> queryHLOrderList(HLOrder condition) {
-        return hLOrderDAO.selectList(condition);
+        return hlOrderDAO.selectList(condition);
     }
 }

@@ -24,7 +24,7 @@ public class XN802750 extends AProcessor {
     private XN802750Req req = null;
 
     @Override
-    public Object doBusiness() throws BizException {
+    public synchronized Object doBusiness() throws BizException {
         Long amount = StringValidater.toLong(req.getAmount());
         String code = withdrawAO.applyOrder(req.getAccountNumber(), amount,
             req.getPayCardInfo(), req.getPayCardNo(), req.getApplyUser(),

@@ -27,7 +27,7 @@ public class XN802701 extends AProcessor {
     * @see com.xnjr.base.api.IProcessor#doBusiness()
     */
     @Override
-    public Object doBusiness() throws BizException {
+    public synchronized Object doBusiness() throws BizException {
         for (String code : req.getCodeList()) {
             chargeAO.payOrder(code, req.getPayUser(), req.getPayResult(),
                 req.getPayNote(), req.getPayCode(), req.getSystemCode());

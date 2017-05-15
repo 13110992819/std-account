@@ -174,7 +174,8 @@
 	<update id="approve_order" parameterType="withdraw">
 		UPDATE tstd_withdraw
 		SET
-		approve_user = #{approveUser}
+		status = #{status}
+		,approve_user = #{approveUser}
 		,approve_note = #{approveNote}
 		,approve_datetime = #{approveDatetime}
 		WHERE code = #{code}
@@ -183,7 +184,8 @@
 	<update id="pay_order" parameterType="withdraw">
 		UPDATE tstd_withdraw
 		SET
-		pay_user = #{payUser}
+		status = #{status}
+		,pay_user = #{payUser}
 		,pay_note = #{payNote}
 		,pay_group = #{payGroup}
 		,pay_code = #{payCode}

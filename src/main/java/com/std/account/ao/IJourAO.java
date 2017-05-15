@@ -63,7 +63,6 @@ public interface IJourAO {
      * @create: 2016年12月25日 下午3:58:53 xieyj
      * @history:
      */
-
     public void checkJour(String code, Long checkAmount, String checkUser,
             String checkNote, String systemCode);
 

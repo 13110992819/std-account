@@ -1,11 +1,3 @@
-/**
- * @Title XN802516.java 
- * @Package com.std.account.api.impl 
- * @Description 
- * @author xieyj  
- * @date 2016年12月25日 下午3:49:18 
- * @version V1.0   
- */
 package com.std.account.api.impl;
 
 import com.std.account.ao.IHLOrderAO;
@@ -25,14 +17,14 @@ import com.std.account.spring.SpringContextHolder;
  * @history:
  */
 public class XN802801 extends AProcessor {
-    private IHLOrderAO hLOrderAO = SpringContextHolder
+    private IHLOrderAO hlOrderAO = SpringContextHolder
         .getBean(IHLOrderAO.class);
 
     private XN802801Req req = null;
 
     @Override
     public synchronized Object doBusiness() throws BizException {
-        hLOrderAO.approveOrder(req.getCode(), req.getAdjustResult(),
+        hlOrderAO.approveOrder(req.getCode(), req.getAdjustResult(),
             req.getAdjustUser(), req.getAdjustNote(), req.getSystemCode());
         return new BooleanRes(true);
     }

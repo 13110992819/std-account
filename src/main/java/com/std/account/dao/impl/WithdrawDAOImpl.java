@@ -48,12 +48,12 @@ public class WithdrawDAOImpl extends AMybatisTemplate implements IWithdrawDAO {
 
     @Override
     public void approveOrder(Withdraw data) {
-        super.update(NAMESPACE.concat("approve_withdraw"), data);
+        super.update(NAMESPACE.concat("approve_order"), data);
     }
 
     @Override
     public void payOrder(Withdraw data) {
-        super.update(NAMESPACE.concat("pay_withdraw"), data);
+        super.update(NAMESPACE.concat("pay_order"), data);
     }
 
 }

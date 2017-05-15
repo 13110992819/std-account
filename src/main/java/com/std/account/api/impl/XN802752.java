@@ -40,7 +40,7 @@ public class XN802752 extends AProcessor {
             throw new BizException("订单列表不能为空");
         }
         StringValidater.validateBlank(req.getPayUser(), req.getPayResult(),
-            req.getPayNote(), req.getPayCode(), req.getSystemCode());
+            req.getPayNote(), req.getSystemCode());
     }
 
 }

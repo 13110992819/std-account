@@ -1,5 +1,11 @@
 package com.std.account.dto.req;
 
+/**
+ * 取现分页查询
+ * @author: xieyj 
+ * @since: 2017年5月12日 上午10:04:01 
+ * @history:
+ */
 public class XN802757Req {
     // 针对账号
     private String accountNumber;

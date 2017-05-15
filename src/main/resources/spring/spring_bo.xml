@@ -38,12 +38,14 @@
 	</bean>	
 	
 	<bean id="chargeBO" class="com.std.account.bo.impl.ChargeBOImpl">
-		<property name="paginableDAO" ref="chargeBODAOImpl"/>
+		<property name="paginableDAO" ref="chargeDAOImpl"/>
 	</bean>	
-	
 	<bean id="withdrawBO" class="com.std.account.bo.impl.WithdrawBOImpl">
 		<property name="paginableDAO" ref="withdrawDAOImpl"/>
 	</bean>	
+	<bean id="hlOrderBO" class="com.std.account.bo.impl.HLOrderBOImpl">
+		<property name="paginableDAO" ref="hlOrderDAOImpl" />
+	</bean>
 	
 	<bean id="sysConfigBO" class="com.std.account.bo.impl.SYSConfigBOImpl">
 		<property name="paginableDAO" ref="sysConfigDAOImpl"/>

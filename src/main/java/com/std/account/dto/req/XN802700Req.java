@@ -1,5 +1,11 @@
 package com.std.account.dto.req;
 
+/**
+ * 线下充值申请
+ * @author: xieyj 
+ * @since: 2017年5月12日 上午9:58:02 
+ * @history:
+ */
 public class XN802700Req {
 
     // 针对账号（必填）

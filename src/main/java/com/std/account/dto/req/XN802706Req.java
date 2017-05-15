@@ -1,5 +1,11 @@
 package com.std.account.dto.req;
 
+/**
+ * 查询充值订单详情
+ * @author: xieyj 
+ * @since: 2017年5月12日 上午10:00:44 
+ * @history:
+ */
 public class XN802706Req {
     private String code;
 

@@ -19,14 +19,14 @@ import com.std.account.common.UserUtil;
 import com.std.account.domain.Account;
 import com.std.account.domain.ExchangeCurrency;
 import com.std.account.domain.User;
-import com.std.account.enums.EJourBizType;
+import com.std.account.enums.EBizType;
 import com.std.account.enums.EBoolean;
 import com.std.account.enums.EChannelType;
 import com.std.account.enums.ECurrency;
 import com.std.account.enums.EExchangeCurrencyStatus;
+import com.std.account.enums.EJourBizType;
 import com.std.account.enums.EPayType;
 import com.std.account.enums.ESystemCode;
-import com.std.account.enums.EUserKind;
 import com.std.account.exception.BizException;
 import com.std.account.util.AmountUtil;
 import com.std.account.util.CalculationUtil;
@@ -122,7 +122,6 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
             String currency, String payType) {
         EBizType bizType = null;
         if (ECurrency.CG_CGB.getCode().equals(currency)) {
-<<<<<<< HEAD
             bizType = EJourBizType.AJ_CGBSM.getCode();
             fromBizNote = "菜狗币购买";
             toBizNote = "菜狗币售卖";

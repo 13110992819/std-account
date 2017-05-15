@@ -12,6 +12,8 @@
 		<typeAlias alias="exchangeCurrency" type="com.std.account.domain.ExchangeCurrency" />
 		<typeAlias alias="charge" type="com.std.account.domain.Charge" />
 		<typeAlias alias="withdraw" type="com.std.account.domain.Withdraw" />
+		<typeAlias alias="hlOrder" type="com.std.account.domain.HLOrder" />
+		
 		<typeAlias alias="sysConfig" type="com.std.account.domain.SYSConfig" />
 	</typeAliases>
 </configuration>

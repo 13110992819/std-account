@@ -2,6 +2,12 @@ package com.std.account.dto.req;
 
 import java.util.List;
 
+/**
+ * 线下取现审批
+ * @author: xieyj 
+ * @since: 2017年5月12日 上午10:02:19 
+ * @history:
+ */
 public class XN802751Req {
     // 系统编号(必填)
     private String systemCode;
