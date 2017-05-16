@@ -171,7 +171,6 @@
 		status = #{status}
 		,pay_user = #{payUser}
 		,pay_note = #{payNote}
-		,pay_code = #{payCode}
 		,pay_datetime=#{payDatetime}
 		WHERE code = #{code}
 	</update>
