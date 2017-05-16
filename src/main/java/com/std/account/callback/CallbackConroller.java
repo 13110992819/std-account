@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.std.account.ao.IAlipayAO;
 import com.std.account.ao.IWeChatAO;
-import com.std.account.domain.CallbackResult;
 
 /** 
  * @author: haiqingzheng 
@@ -45,10 +44,8 @@ public class CallbackConroller {
             InputStream inStream = request.getInputStream();
             String result = getReqResult(out, inStream);
             logger.info("**** APP支付回调结果 ****：" + result);
-            // 解析回调结果
-            CallbackResult callbackResult = weChatAO.doCallbackAPP(result);
-            // 回调业务biz，通知支付结果
-            weChatAO.doBizCallback(callbackResult);
+            // 解析回调结果并通知业务biz
+            weChatAO.doCallbackAPP(result);
             // 通知微信服务器(我已收到请求，不用再继续回调我了)
             String noticeStr = setXML("SUCCESS", "");
             out.print(new ByteArrayInputStream(noticeStr.getBytes(Charset
@@ -68,37 +65,14 @@ public class CallbackConroller {
             InputStream inStream = request.getInputStream();
             String result = getReqResult(out, inStream);
             logger.info("**** 公众号支付回调结果 ****：" + result);
-            // 解析回调结果
-            CallbackResult callbackResult = weChatAO.doCallbackH5(result);
-            // 回调业务biz，通知支付结果
-            weChatAO.doBizCallback(callbackResult);
+            // 解析回调结果并通知业务biz
+            weChatAO.doCallbackH5(result);
             // 通知微信服务器(我已收到请求，不用再继续回调我了)
             String noticeStr = setXML("SUCCESS", "");
             out.print(new ByteArrayInputStream(noticeStr.getBytes(Charset
                 .forName("UTF-8"))));
         } catch (Exception e) {
             logger.info("公众号支付回调异常,原因：" + e.getMessage());
-        }
-    }
-
-    // 微信H5充值回调
-    @RequestMapping("/wechat/H5/callbackQz")
-    public synchronized void doCallbackWechatH5Qz(HttpServletRequest request,
-            HttpServletResponse response) {
-        try {
-            // 获取回调参数
-            PrintWriter out = response.getWriter();
-            InputStream inStream = request.getInputStream();
-            String result = getReqResult(out, inStream);
-            logger.info("**** 公众号充值回调结果 ****：" + result);
-            // 解析回调结果
-            weChatAO.doCallbackH5Qz(result);
-            // 通知微信服务器(我已收到请求，不用再继续回调我了)
-            String noticeStr = setXML("SUCCESS", "");
-            out.print(new ByteArrayInputStream(noticeStr.getBytes(Charset
-                .forName("UTF-8"))));
-        } catch (Exception e) {
-            logger.info("公众号充值回调异常,原因：" + e.getMessage());
         }
     }
 
@@ -113,10 +87,8 @@ public class CallbackConroller {
             String result = getReqResult(out, inStream);
             logger.info("**** 扫码支付回调结果 ****：" + result);
 
-            // 解析回调结果
-            CallbackResult callbackResult = weChatAO.doCallbackNative(result);
-            // 回调业务biz，通知支付结果
-            weChatAO.doBizCallback(callbackResult);
+            // 解析回调结果并通知业务biz
+            weChatAO.doCallbackNative(result);
 
             // 通知微信服务器(我已收到请求，不用再继续回调我了)
             String noticeStr = setXML("SUCCESS", "");

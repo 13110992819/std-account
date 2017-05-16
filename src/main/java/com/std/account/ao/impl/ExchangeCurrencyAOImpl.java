@@ -80,9 +80,9 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
      */
     private void rmbYePay(User fromUser, String toUser, Long amount,
             String currency, String payType) {
-        EBizType bizType = null;
+        EJourBizType bizType = null;
         if (ECurrency.CG_CGB.getCode().equals(currency)) {
-            bizType = EBizType.AJ_CGBGM;
+            bizType = EJourBizType.AJ_CGBGM;
         } else {
             throw new BizException("xn000000", "暂未支持当前币种微信扫描支付");
         }
@@ -119,7 +119,7 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
      */
     private Object weixinQrCodePay(User fromUser, String toUserId, Long amount,
             String currency, String payType) {
-        EBizType bizType = null;
+        EJourBizType bizType = null;
         if (ECurrency.CG_CGB.getCode().equals(currency)) {
             bizType = EJourBizType.AJ_CGBSM.getCode();
             fromBizNote = "菜狗币购买";
@@ -127,7 +127,7 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
             rmbAmount = AmountUtil.mulJinFen(amount, 1 / exchangeCurrencyBO
                 .getExchangeRate(ECurrency.CNY.getCode(), currency));
 =======
-            bizType = EBizType.AJ_CGBGM;
+            bizType = EJourBizType.AJ_CGBGM;
 >>>>>>> refs/remotes/origin/master
         } else {
             throw new BizException("xn000000", "暂未支持当前币种微信扫描支付");
@@ -157,9 +157,9 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
      */
     private Object weixinH5Pay(User fromUser, String toUser, Long amount,
             String currency, String payType) {
-        EBizType bizType = null;
+        EJourBizType bizType = null;
         if (ECurrency.CG_CGB.getCode().equals(currency)) {
-            bizType = EBizType.AJ_CGBGM;
+            bizType = EJourBizType.AJ_CGBGM;
         } else {
             throw new BizException("xn000000", "暂未支持当前币种微信扫描支付");
         }

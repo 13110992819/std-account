@@ -19,30 +19,26 @@ import com.std.account.dto.res.XN002501Res;
  */
 public interface IWeChatAO {
 
-    public XN002500Res getPrepayIdApp(String fromUserId, String toUserId,
-            String bizType, String fromBizNote, String toBizNote,
-            Long transAmount, String payGroup, String backUrl);
+    public XN002500Res getPrepayIdApp(String applyUser, String toUser,
+            String payGroup, String refNo, String bizType, String bizNote,
+            Long transAmount, String backUrl);
 
-    public XN002501Res getPrepayIdH5(String fromUserId, String fromOpenId,
-            String toUserId, String bizType, String fromBizNote,
-            String toBizNote, Long transAmount, String payGroup, String backUrl);
+    public XN002501Res getPrepayIdH5(String applyUser, String openId,
+            String toUser, String payGroup, String refNo, String bizType,
+            String bizNote, Long transAmount, String backUrl);
 
-    public String getPrepayIdNative(String fromUserId, String toUserId,
-            String bizType, String fromBizNote, String toBizNote,
-            Long transAmount, String payGroup, String backUrl);
+    public String getPrepayIdNative(String applyUser, String toUser,
+            String payGroup, String refNo, String bizType, String bizNote,
+            Long transAmount, String backUrl);
 
-    public CallbackResult doCallbackAPP(String result);
+    public void doCallbackAPP(String result);
 
-    public CallbackResult doCallbackH5(String result);
+    public void doCallbackH5(String result);
 
-    public void doCallbackH5Qz(String result);
-
-    public CallbackResult doCallbackNative(String result);
+    public void doCallbackNative(String result);
 
     public String getAccessToken(String appId, String appSecret);
 
     public void doBizCallback(CallbackResult callbackResult);
-
-    public Object doWechatH5(String userId, Long amount);
 
 }
