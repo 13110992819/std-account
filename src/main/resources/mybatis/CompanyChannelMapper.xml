@@ -144,7 +144,7 @@
 		,status = #{status}
 		
 		,channel_company = #{channelCompany}
-		,private_key = #{privatekey}
+		,private_key1 = #{privateKey1}
 		,page_url = #{pageUrl}
 		,error_url = #{errorUrl}
 		,back_url = #{backUrl}
