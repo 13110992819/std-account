@@ -2,6 +2,7 @@ package com.std.account.ao.impl;
 
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,17 @@ public class BankcardAOImpl implements IBankcardAO {
     @Override
     public String addBankcard(Bankcard data) {
         // 判断卡号是否重复
-        checkBankcardOnly(data.getUserId(), data.getBankcardNumber());
+        List<Bankcard> list = bankcardBO
+            .queryBankcardList(data.getSystemCode());
+        // 新增时
+        if (CollectionUtils.isNotEmpty(list)) {
+            throw new BizException("xn0000", "您已绑定银行卡,无需绑定多张");
+        }
+        for (Bankcard bankcard : list) {
+            if (data.getBankcardNumber().equals(bankcard.getBankcardNumber())) {
+                throw new BizException("xn0000", "银行卡号已存在");
+            }
+        }
         return bankcardBO.saveBankcard(data);
     }
 
@@ -34,20 +45,15 @@ public class BankcardAOImpl implements IBankcardAO {
         Bankcard bankcard = bankcardBO.getBankcard(data.getCode());
         // 有更改就去判断是否唯一
         if (!bankcard.getBankcardNumber().equals(data.getBankcardNumber())) {
-            checkBankcardOnly(data.getUserId(), data.getBankcardNumber());
-        }
-        return bankcardBO.refreshBankcard(data);
-    }
-
-    public void checkBankcardOnly(String userId, String bankcardNumber) {
-        Bankcard condition = new Bankcard();
-        condition.setUserId(userId);
-        List<Bankcard> list = bankcardBO.queryBankcardList(condition);
-        for (Bankcard bankcard : list) {
-            if (bankcardNumber.equals(bankcard.getBankcardNumber())) {
-                throw new BizException("xn0000", "银行卡号已存在");
+            List<Bankcard> list = bankcardBO.queryBankcardList(bankcard
+                .getSystemCode());
+            for (Bankcard card : list) {
+                if (data.getBankcardNumber().equals(card.getBankcardNumber())) {
+                    throw new BizException("xn0000", "银行卡号已存在");
+                }
             }
         }
+        return bankcardBO.refreshBankcard(data);
     }
 
     @Override
