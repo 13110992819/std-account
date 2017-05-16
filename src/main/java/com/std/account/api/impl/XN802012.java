@@ -6,6 +6,7 @@ import com.std.account.common.JsonUtil;
 import com.std.account.core.StringValidater;
 import com.std.account.domain.Bankcard;
 import com.std.account.dto.req.XN802012Req;
+import com.std.account.dto.res.BooleanRes;
 import com.std.account.exception.BizException;
 import com.std.account.exception.ParaException;
 import com.std.account.spring.SpringContextHolder;
@@ -33,7 +34,8 @@ public class XN802012 extends AProcessor {
         data.setBindMobile(req.getBindMobile());
         data.setStatus(req.getStatus());
         data.setRemark(req.getRemark());
-        return bankCardAO.editBankcard(data);
+        bankCardAO.editBankcard(data);
+        return new BooleanRes(true);
     }
 
     @Override
