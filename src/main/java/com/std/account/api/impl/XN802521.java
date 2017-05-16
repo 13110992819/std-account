@@ -14,7 +14,7 @@ import com.std.account.exception.ParaException;
 import com.std.account.spring.SpringContextHolder;
 
 /**
- * 列表查询流水
+ * 列表查询流水(oss)
  * @author: xieyj 
  * @since: 2016年12月26日 下午12:29:08 
  * @history:
