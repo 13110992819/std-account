@@ -26,6 +26,9 @@ public class Jour extends ABaseDO {
     // 流水分组组号（橙账本代表）---核心字段2
     private String refNo;
 
+    // 支付渠道（线下/招商代付/支付宝/内部转账）
+    private String channelType;
+
     // 支付渠道单号（支付渠道代表）---核心字段3
     private String channelOrder;
 
@@ -82,9 +85,6 @@ public class Jour extends ABaseDO {
 
     // 调账时间
     private Date adjustDatetime;
-
-    // 支付渠道（线下/招商代付/支付宝/内部转账）
-    private String channelType;
 
     // 系统编号
     private String systemCode;

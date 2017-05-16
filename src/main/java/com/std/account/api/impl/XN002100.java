@@ -26,18 +26,20 @@ public class XN002100 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         Long transAmount = StringValidater.toLong(req.getTransAmount());
-        accountAO.transAmountCZB(req.getFromUserId(), req.getToUserId(),
-            req.getCurrency(), transAmount, req.getBizType(),
-            req.getFromBizNote(), req.getToBizNote());
+        accountAO.transAmountCZB(req.getFromUserId(), req.getFromCurrency(),
+            req.getToUserId(), req.getToCurrency(), transAmount,
+            req.getBizType(), req.getFromBizNote(), req.getToBizNote(),
+            req.getRefNo());
         return new BooleanRes(true);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN002100Req.class);
-        StringValidater.validateBlank(req.getFromUserId(), req.getToUserId(),
-            req.getCurrency(), req.getBizType(), req.getFromBizNote(),
-            req.getToBizNote());
+        StringValidater.validateBlank(req.getFromUserId(),
+            req.getFromCurrency(), req.getToUserId(), req.getToCurrency(),
+            req.getBizType(), req.getFromBizNote(), req.getToBizNote(),
+            req.getRefNo());
         StringValidater.validateAmount(req.getTransAmount());
     }
 }

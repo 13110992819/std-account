@@ -45,9 +45,11 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
 
     @Override
     public String distributeAccount(String userId, String realName,
-            EAccountType accountType, String currency, String systemCode) {
+            EAccountType accountType, String currency, String systemCode,
+            String companyCode) {
         String accountNumber = null;
         if (StringUtils.isNotBlank(systemCode)
+                && StringUtils.isNotBlank(companyCode)
                 && StringUtils.isNotBlank(userId)) {
             accountNumber = OrderNoGenerater.generate(EGeneratePrefix.Account
                 .getCode());
@@ -55,17 +57,21 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
             data.setAccountNumber(accountNumber);
             data.setUserId(userId);
             data.setRealName(realName);
+
             data.setType(accountType.getCode());
             data.setCurrency(currency);
-            data.setSystemCode(systemCode);
             data.setStatus(EAccountStatus.NORMAL.getCode());
             data.setAmount(0L);
             data.setFrozenAmount(0L);
+
             data.setMd5(AccountUtil.md5(data.getAmount()));
             data.setAddAmount(0L);
             data.setInAmount(0L);
             data.setOutAmount(0L);
             data.setCreateDatetime(new Date());
+
+            data.setSystemCode(systemCode);
+            data.setCompanyCode(companyCode);
             accountDAO.insert(data);
         }
         return accountNumber;
@@ -85,16 +91,22 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
         // 记录流水
         String lastOrder = jourBO.addJour(dbAccount, channelType, channelOrder,
             payGroup, refNo, bizType, bizNote, transAmount);
+
         // 更改余额
         Account data = new Account();
         data.setAccountNumber(accountNumber);
         data.setAmount(nowAmount);
         data.setMd5(AccountUtil.md5(dbAccount.getMd5(), dbAccount.getAmount(),
             nowAmount));
-        // 修改累计增加金额
+        // 统计累计增加金额
         data.setAddAmount(dbAccount.getAddAmount());
         if (transAmount > 0) {
             data.setAddAmount(dbAccount.getAddAmount() + transAmount);
+        }
+        // 统计累计充值金额
+        data.setInAmount(dbAccount.getInAmount());
+        if (EJourBizType.AJ_CZ.getCode().equals(bizType.getCode())) {
+            data.setInAmount(dbAccount.getInAmount() + transAmount);
         }
         data.setLastOrder(lastOrder);
         accountDAO.updateAmount(data);
@@ -115,11 +127,13 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
         data.setAmount(nowAmount);
         data.setMd5(AccountUtil.md5(dbAccount.getMd5(), dbAccount.getAmount(),
             nowAmount));
-        // 修改累计增加金额
+
+        // 更新统计金额
         data.setAddAmount(dbAccount.getAddAmount());
         if (transAmount > 0) {
             data.setAddAmount(dbAccount.getAddAmount() + transAmount);
         }
+        data.setInAmount(data.getInAmount());
         data.setLastOrder(lastOrder);
         accountDAO.updateAmount(data);
     }
@@ -136,9 +150,15 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
         data.setAmount(nowAmount);
         data.setMd5(AccountUtil.md5(dbAccount.getMd5(), dbAccount.getAmount(),
             nowAmount));
+        // 更新统计金额
+        data.setAddAmount(dbAccount.getAddAmount());
+        Long amount = order.getAmount();
+        if (amount > 0) {
+            data.setAddAmount(dbAccount.getAddAmount() + amount);
+        }
+        data.setInAmount(data.getInAmount());
         data.setLastOrder(lastOrder);
         accountDAO.updateAmount(data);
-
     }
 
     @Override
@@ -153,7 +173,8 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
         }
         // 记录流水
         String lastOrder = jourBO.addJour(dbAccount, EChannelType.Offline,
-            withdrawCode, EJourBizType.AJ_QX, "线下取现冻结金额", -freezeAmount);
+            withdrawCode, null, null, EJourBizType.AJ_QX, "线下取现冻结金额",
+            -freezeAmount);
         Long nowFrozenAmount = dbAccount.getFrozenAmount() + freezeAmount;
         Account data = new Account();
         data.setAccountNumber(dbAccount.getAccountNumber());
@@ -178,7 +199,8 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
 
         // 记录流水
         String lastOrder = jourBO.addJour(dbAccount, EChannelType.Offline,
-            withdrawCode, EJourBizType.AJ_QX, "线下取现解冻金额", freezeAmount);
+            withdrawCode, null, null, EJourBizType.AJ_QX, "线下取现解冻金额",
+            freezeAmount);
         Account data = new Account();
         data.setAccountNumber(dbAccount.getAccountNumber());
         data.setAmount(dbAccount.getAmount() + freezeAmount);
@@ -198,14 +220,16 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
         if (nowFrozenAmount < 0) {
             throw new BizException("xn000000", "本次扣减会使账户冻结金额小于0");
         }
-        dbAccount.setAccountNumber(dbAccount.getAccountNumber());
-        dbAccount.setFrozenAmount(nowFrozenAmount);
-        accountDAO.cutFrozenAmount(dbAccount);
+        Account data = new Account();
+        data.setAccountNumber(dbAccount.getAccountNumber());
+        data.setFrozenAmount(nowFrozenAmount);
+        // 统计累计取现金额
+        data.setOutAmount(dbAccount.getOutAmount() + freezeAmount);
+        accountDAO.cutFrozenAmount(data);
     }
 
     @Override
-    public void refreshStatus(String systemCode, String accountNumber,
-            EAccountStatus status) {
+    public void refreshStatus(String accountNumber, EAccountStatus status) {
         if (StringUtils.isNotBlank(accountNumber)) {
             Account data = new Account();
             data.setAccountNumber(accountNumber);
@@ -245,7 +269,7 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
             condition.setCurrency(currency);
             data = accountDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn702502", "用户[" + userId + ";"
+                throw new BizException("xn802000", "用户[" + userId + ";"
                         + currency + "]无此类型账户");
             }
         }
@@ -267,36 +291,31 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
      * @see com.std.account.bo.IAccountBO#getSysAccount(java.lang.String, java.lang.String)
      */
     @Override
-    public Account getSysAccount(String sysUser, String currency) {
+    public Account getSysAccountNumber(String systemCode, String companyCode,
+            ECurrency currency) {
         Account condition = new Account();
-        condition.setSysUser(sysUser);
-        condition.setCurrency(currency);
+        // 平台账户只有一类,类型+币种+公司+系统=唯一系统账户
+        condition.setType(EAccountType.Plat.getCode());
+        condition.setSystemCode(systemCode);
+        condition.setCompanyCode(companyCode);
+        condition.setCurrency(currency.getCode());
         return accountDAO.select(condition);
     }
 
     @Override
     public void transAmountCZB(String fromUserId, String fromCurrency,
             String toUserId, String toCurrency, Long transAmount,
-            EJourBizType bizType, String fromBizNote, String toBizNote) {
+            EJourBizType bizType, String fromBizNote, String toBizNote,
+            String refNo) {
         Account fromAccount = this.getAccountByUser(fromUserId, fromCurrency);
         Account toAccount = this.getAccountByUser(toUserId, toCurrency);
         transAmountCZB(fromAccount, toAccount, transAmount, bizType,
-            fromBizNote, toBizNote);
-    }
-
-    @Override
-    public void transAmountCZB(String fromAccountNumber,
-            String toAccountNumber, Long transAmount, EJourBizType bizType,
-            String fromBizNote, String toBizNote) {
-        Account fromAccount = this.getAccount(fromAccountNumber);
-        Account toAccount = this.getAccount(toAccountNumber);
-        transAmountCZB(fromAccount, toAccount, transAmount, bizType,
-            fromBizNote, toBizNote);
+            fromBizNote, toBizNote, refNo);
     }
 
     private void transAmountCZB(Account fromAccount, Account toAccount,
             Long transAmount, EJourBizType bizType, String fromBizNote,
-            String toBizNote) {
+            String toBizNote, String refNo) {
         String fromAccountNumber = fromAccount.getAccountNumber();
         String toAccountNumber = toAccount.getAccountNumber();
         if (fromAccountNumber.equals(toAccountNumber)) {
@@ -304,26 +323,9 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
         }
         Double rate = exchangeCurrencyBO.getExchangeRate(
             fromAccount.getCurrency(), toAccount.getCurrency());
-        this.changeAmount(fromAccountNumber, EChannelType.NBZ, toAccountNumber,
-            -transAmount, bizType, fromBizNote);
-        this.changeAmount(toAccountNumber, EChannelType.NBZ, fromAccountNumber,
-            AmountUtil.mul(transAmount, rate), bizType, toBizNote);
-
-    }
-
-    @Override
-    public String getSysAccountNumber(String systemCode, ECurrency currency) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /** 
-     * @see com.std.account.bo.IAccountBO#refreshOutAmount(java.lang.String, java.lang.Long)
-     */
-    @Override
-    public void refreshOutAmount(Account account, Long transAmount) {
-        Long outAmount = account.getOutAmount() + transAmount;
-        account.setOutAmount(outAmount);
-        accountDAO.updateOutAmount(account);
+        this.changeAmount(fromAccountNumber, EChannelType.NBZ, null, null,
+            refNo, bizType, fromBizNote, -transAmount);
+        this.changeAmount(toAccountNumber, EChannelType.NBZ, null, null, refNo,
+            bizType, toBizNote, AmountUtil.mul(transAmount, rate));
     }
 }

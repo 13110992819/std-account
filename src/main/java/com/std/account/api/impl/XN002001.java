@@ -27,8 +27,7 @@ public class XN002001 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        accountAO.editAccountName(req.getUserId(), req.getRealName(),
-            req.getSystemCode());
+        accountAO.editAccountName(req.getUserId(), req.getRealName());
         return new BooleanRes(true);
     }
 
@@ -38,7 +37,6 @@ public class XN002001 extends AProcessor {
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN002001Req.class);
-        StringValidater.validateBlank(req.getUserId(), req.getRealName(),
-            req.getSystemCode());
+        StringValidater.validateBlank(req.getUserId(), req.getRealName());
     }
 }

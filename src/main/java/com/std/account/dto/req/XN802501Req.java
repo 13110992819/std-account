@@ -5,16 +5,16 @@ package com.std.account.dto.req;
  * @since: 2016年12月23日 下午7:48:53 
  * @history:
  */
-public class XN802501Req extends APageReq {
+public class XN802501Req extends AListReq {
     /** 
      * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
      */
-    private static final long serialVersionUID = 288709607414715351L;
+    private static final long serialVersionUID = 1L;
 
     // 户名
     private String realName;
 
-    // 类别（B端账号，C端账号，平台账号）
+    // 类别（B端账号，C端账号，P平台账号）
     private String type;
 
     // 状态（正常/程序冻结/人工冻结）
@@ -28,6 +28,9 @@ public class XN802501Req extends APageReq {
 
     // 系统编号(必填)
     private String systemCode;
+
+    // 公司编号(必填)
+    private String companyCode;
 
     public String getRealName() {
         return realName;
@@ -75,5 +78,13 @@ public class XN802501Req extends APageReq {
 
     public void setSystemCode(String systemCode) {
         this.systemCode = systemCode;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 }

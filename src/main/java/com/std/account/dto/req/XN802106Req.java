@@ -5,7 +5,7 @@ package com.std.account.dto.req;
  * @since: 2016年9月17日 下午4:09:23 
  * @history:
  */
-public class XN802106Req extends ASearchReq {
+public class XN802106Req extends AListReq {
     /** 
      * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
      */

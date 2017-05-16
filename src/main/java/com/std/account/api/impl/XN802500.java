@@ -31,21 +31,22 @@ public class XN802500 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         Account condition = new Account();
-        condition.setRealNameQuery(req.getRealName());
+        condition.setRealName(req.getRealName());
         condition.setType(req.getType());
         condition.setStatus(req.getStatus());
         condition.setCurrency(req.getCurrency());
         condition.setLastOrder(req.getLastOrder());
+        condition.setCreateDatetimeStart(DateUtil.getFrontDate(
+            req.getDateStart(), false));
+        condition.setCreateDatetimeEnd(DateUtil.getFrontDate(req.getDateEnd(),
+            true));
         condition.setSystemCode(req.getSystemCode());
+        condition.setCompanyCode(req.getCompanyCode());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
             orderColumn = IAccountAO.DEFAULT_ORDER_COLUMN;
         }
         condition.setOrder(orderColumn, req.getOrderDir());
-        condition.setCreateDatetimeStart(DateUtil.strToDate(req.getDateStart(),
-            DateUtil.DATA_TIME_PATTERN_1));
-        condition.setCreateDatetimeEnd(DateUtil.strToDate(req.getDateEnd(),
-            DateUtil.DATA_TIME_PATTERN_1));
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
         return accountAO.queryAccountPage(start, limit, condition);
@@ -58,6 +59,7 @@ public class XN802500 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN802500Req.class);
         StringValidater.validateNumber(req.getStart(), req.getLimit());
-        StringValidater.validateBlank(req.getSystemCode());
+        StringValidater
+            .validateBlank(req.getSystemCode(), req.getCompanyCode());
     }
 }

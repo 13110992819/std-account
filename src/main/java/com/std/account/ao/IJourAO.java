@@ -23,36 +23,6 @@ import com.std.account.domain.Jour;
 public interface IJourAO {
     String DEFAULT_ORDER_COLUMN = "code";
 
-    // 未调用
-    public Object doRechargeOnline(String userId, String payType, Long amount);
-
-    // 未调用
-    public void doChangeAmountList(List<String> accountNumberList,
-            String bankcardNumber, Long transAmount, String bizType,
-            String bizNote, String systemCode);
-
-    // 未调用
-    public void doOfflineWith(String accountNumber, String bankcardNumber,
-            Long transAmount, String systemCode, String tradePwd);
-
-    /**
-     * 回调支付
-     * @param code
-     * @param rollbackResult
-     * @param rollbackUser
-     * @param rollbackNote
-     * @param systemCode 
-     * @create: 2016年12月24日 上午8:21:37 xieyj
-     * @history:
-     */
-    public void doCallBackOffChange(String code, String rollbackResult,
-            String rollbackUser, String rollbackNote, String systemCode);
-
-    // 未调用
-    public void doCallBackChangeList(List<String> codeList,
-            String rollbackResult, String rollbackUser, String rollbackNote,
-            String systemCode);
-
     /**
      * 人工调账
      * @param code

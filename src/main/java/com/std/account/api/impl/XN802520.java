@@ -14,7 +14,7 @@ import com.std.account.exception.ParaException;
 import com.std.account.spring.SpringContextHolder;
 
 /**
- * 流水分页查询
+ * 流水分页查询(oss)
  * @author: xieyj 
  * @since: 2016年12月24日 上午7:59:19 
  * @history:
@@ -27,25 +27,29 @@ public class XN802520 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         Jour condition = new Jour();
+        condition.setPayGroup(req.getPayGroup());
+        condition.setRefNo(req.getRefNo());
+        condition.setChannelType(req.getChannelType());
+        condition.setChannelOrder(req.getChannelOrder());
+
         condition.setAccountNumber(req.getAccountNumber());
+        condition.setCurrency(req.getCurrency());
         condition.setUserId(req.getUserId());
         condition.setRealName(req.getRealName());
         condition.setAccountType(req.getAccountType());
-        condition.setCurrency(req.getCurrency());
 
-        condition.setChannelType(req.getChannelType());
-        condition.setRefNo(req.getRefNo());
         condition.setBizType(req.getBizType());
         condition.setStatus(req.getStatus());
         condition.setCreateDatetimeStart(DateUtil.getFrontDate(
-            req.getCreateDatetimeStart(), false));
-
-        condition.setCreateDatetimeEnd(DateUtil.getFrontDate(
-            req.getCreateDatetimeEnd(), true));
+            req.getDateStart(), false));
+        condition.setCreateDatetimeEnd(DateUtil.getFrontDate(req.getDateEnd(),
+            true));
         condition.setWorkDate(req.getWorkDate());
+
         condition.setCheckUser(req.getCheckUser());
         condition.setAdjustUser(req.getAdjustUser());
         condition.setSystemCode(req.getSystemCode());
+        condition.setCompanyCode(req.getCompanyCode());
 
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
@@ -61,6 +65,7 @@ public class XN802520 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN802520Req.class);
         StringValidater.validateNumber(req.getStart(), req.getLimit());
-        StringValidater.validateBlank(req.getSystemCode());
+        StringValidater
+            .validateBlank(req.getSystemCode(), req.getCompanyCode());
     }
 }

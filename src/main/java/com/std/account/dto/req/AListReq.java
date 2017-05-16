@@ -7,7 +7,7 @@ import java.io.Serializable;
  * @since: 2016年11月11日 下午1:53:25 
  * @history:
  */
-public abstract class ASearchReq implements Serializable {
+public abstract class AListReq implements Serializable {
     /** 
      * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
      */

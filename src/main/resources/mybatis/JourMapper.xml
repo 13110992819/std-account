@@ -4,47 +4,49 @@
 <mapper namespace="com.std.account.dao.IJourDAO">
 	<resultMap id="jour_DB_Result" type="jour">
 		<result column="code" property="code" />
+		<result column="pay_group" property="payGroup" />
+		<result column="ref_no" property="refNo" />
+		<result column="channel_type" property="channelType" />
+		<result column="channel_order" property="channelOrder" />
 		<result column="account_number" property="accountNumber" />
+		
+		<result column="trans_amount" property="transAmount" />
 		<result column="user_id" property="userId" />
 		<result column="real_name" property="realName" />
-		<result column="channel_type" property="channelType" />
-		
-        <result column="ref_no" property="refNo" />
         <result column="biz_type" property="bizType" />
 		<result column="biz_note" property="bizNote" />
-		<result column="trans_amount" property="transAmount" />
 		
 		<result column="pre_amount" property="preAmount" />
 		<result column="post_amount" property="postAmount" />
 		<result column="status" property="status" />
+		<result column="remark" property="remark" />
 		<result column="create_datetime" property="createDatetime" />
-		<result column="work_date" property="workDate" />
 		
+		<result column="work_date" property="workDate" />
 		<result column="check_user" property="checkUser" />
+		<result column="check_note" property="checkNote" />
 		<result column="check_datetime" property="checkDatetime" />
 		<result column="adjust_user" property="adjustUser" />
-		<result column="adjust_datetime" property="adjustDatetime" />
-		<result column="remark" property="remark" />
 		
+		<result column="adjust_note" property="adjustNote" />
+		<result column="adjust_datetime" property="adjustDatetime" />
 		<result column="system_code" property="systemCode" />
+		<result column="company_code" property="companyCode" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
-			<if test="userId != null and userId != '' ">
-				AND t.user_id = #{userId}
+			<if test="payGroup != null and payGroup != '' ">
+				AND t.pay_group = #{payGroup}
 			</if>
-			<if test="realName != null and realName != '' ">
-			    AND t.real_name like "%"#{realName}"%"
-			</if>
-			<if test="accountNumber != null and accountNumber != '' ">
-				AND t.account_number = #{accountNumber}
+			<if test="refNo != null and refNo != '' ">
+				AND t.ref_no = #{refNo}
 			</if>
 			<choose>
 			     <when test='channelType == "out"'>
-				 	AND t.channel_type not in(0,9,10)
+				 	AND t.channel_type not in(0)
 				 </when>
 				 <otherwise>
 					 <if test="channelType != null and channelType != '' ">
@@ -52,8 +54,17 @@
 					 </if>
 				 </otherwise>
 			</choose>
-			<if test="refNo != null and refNo != '' ">
-				AND t.ref_no = #{refNo}
+			<if test="channelOrder != null and channelOrder != '' ">
+				AND t.channel_order = #{channelOrder}
+			</if>
+			<if test="accountNumber != null and accountNumber != '' ">
+				AND t.account_number = #{accountNumber}
+			</if>
+			<if test="userId != null and userId != '' ">
+				AND t.user_id = #{userId}
+			</if>
+			<if test="realName != null and realName != '' ">
+			    AND t.real_name like "%"#{realName}"%"
 			</if>
 			<choose>
 			     <when test='accountType == "NOT_P"'>
@@ -86,38 +97,50 @@
 			<if test="createDatetimeEnd != null and createDatetimeEnd != '' ">
 				<![CDATA[AND t.create_datetime <= #{createDatetimeEnd}]]>
 			</if>
+			<if test="workDate != null and workDate != '' ">
+				AND t.work_date = #{workDate}
+			</if>
 			<if test="systemCode != null and systemCode != '' ">
 				AND t.system_code = #{systemCode}
+			</if>
+			<if test="companyCode != null and companyCode != '' ">
+				AND t.company_code = #{companyCode}
 			</if>
 		</trim>
 	</sql>
 	<select id="select_jour" parameterType="jour" resultMap="jour_DB_Result">
 		SELECT
 		t.code
+		,t.payGroup
+		,t.ref_no
+		,t.channel_type
+		,t.channel_order
+		
 		,t.account_number
+		,t.trans_amount
 		,t.user_id
 		,t.real_name
-		,ta.currency
-		,t.channel_type
-		
-		,t.ref_no
 		,t.biz_type
-		,t.biz_note
-		,t.trans_amount
-		,t.pre_amount
 		
+		,t.biz_note
+		,ta.currency
+		,t.pre_amount
 		,t.post_amount
 		,t.status
+		
+		,t.remark
 		,t.create_datetime
 		,t.work_date
 		,t.check_user
+		,t.check_note
 		
 		,t.check_datetime
 		,t.adjust_user
+		,t.adjust_note
 		,t.adjust_datetime
-		,t.remark
 		
 		,t.system_code
+		,t.company_code
 		FROM
 		tstd_jour t inner join tstd_account ta on t.account_number = ta.account_number
 		<include refid="where_condition" />
@@ -138,69 +161,61 @@
 		INSERT INTO
 		tstd_jour(
 		code
+		,pay_group
+		,ref_no
+		,channel_type
+		,channel_order
+		
 		,account_number
+		,trans_amount
 		,user_id
 		,real_name
-		,channel_type
-		
-		,ref_no
 		,biz_type
-		,biz_note
-		,trans_amount
-		,pre_amount
 		
+		,biz_note
+		,pre_amount
 		,post_amount
 		,status
-		,create_datetime
-		,work_date
 		,remark
 		
+		,create_datetime
+		,work_date
 		,system_code
+		,company_code
 		)
 		VALUES(
 		#{code}
+		,#{payGroup}
+		,#{refNo}
+		,#{channelType}
+		,#{channelOrder}
+		
 		,#{accountNumber}
+		,#{transAmount}
 		,#{userId}
 		,#{realName}
-		,#{channelType}
-		
-		,#{refNo}
 		,#{bizType}
-		,#{bizNote}
-		,#{transAmount}
-		,#{preAmount}
 		
+		,#{bizNote}
+		,#{preAmount}
 		,#{postAmount}
 		,#{status}
-		,#{createDatetime}
-		,#{workDate}
 		,#{remark}
 		
+		,#{createDatetime}
+		,#{workDate}
 		,#{systemCode}
+		,#{companyCode}
 		)
 	</insert>
-	
-	<update id="update_jour_callback" parameterType="jour">
-		UPDATE tstd_jour
-		SET
-		status= #{status}
-		,channel_order = #{channelOrder}
-		,pre_amount = #{preAmount}
-		,post_amount = #{postAmount}
-		,rollback_user=#{rollbackUser}
-		,rollback_datetime=#{rollbackDatetime}
-		,remark=#{remark}
-		WHERE
-		code = #{code}	
-	</update>
 	
 	<update id="update_check_jour" parameterType="jour">
 		UPDATE tstd_jour
 		SET
 		status= #{status}
 		,check_user=#{checkUser}
+		,check_note=#{checkNote}
 		,check_datetime=#{checkDatetime}
-		,remark=#{remark}
 		WHERE
 		code = #{code}	
 	</update>
@@ -209,22 +224,9 @@
 		UPDATE tstd_jour
 		SET
 		status= #{status}
-		,pre_amount = #{preAmount}
-		,post_amount = #{postAmount}
 		,adjust_user=#{adjustUser}
+		,adjust_note=#{adjustNote}
 		,adjust_datetime=#{adjustDatetime}
-		,remark=#{remark}
-		WHERE
-		code = #{code}	
-	</update>
-	
-	<update id="update_adjust_status" parameterType="jour">
-		UPDATE tstd_jour
-		SET
-		status= #{status}
-		,adjust_user=#{adjustUser}
-		,adjust_datetime=#{adjustDatetime}
-		,remark=#{remark}
 		WHERE
 		code = #{code}	
 	</update>

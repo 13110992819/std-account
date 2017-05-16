@@ -31,6 +31,17 @@ public class XN002000Req {
     // 系统编号(必填)
     private String systemCode;
 
+    // 公司编号(必填)
+    private String companyCode;
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
+
     public String getUserId() {
         return userId;
     }

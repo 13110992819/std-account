@@ -15,7 +15,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.std.account.bo.IAccountBO;
 import com.std.account.bo.IJourBO;
 import com.std.account.bo.base.PaginableBOImpl;
 import com.std.account.common.DateUtil;
@@ -40,9 +39,6 @@ import com.std.account.exception.BizException;
 public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
     @Autowired
     private IJourDAO jourDAO;
-
-    @Autowired
-    private IAccountBO accountBO;
 
     @Override
     public String addJour(Account dbAccount, EChannelType channelType,
@@ -130,7 +126,7 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
         data.setCheckUser(checkUser);
         data.setCheckNote(checkNote + ":调整金额" + checkAmount / 1000);
         data.setCheckDatetime(new Date());
-        jourDAO.updateCheck(data);
+        jourDAO.checkJour(data);
     }
 
     @Override
@@ -175,5 +171,4 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
     public List<Jour> queryJourList(Jour condition) {
         return jourDAO.selectList(condition);
     }
-
 }

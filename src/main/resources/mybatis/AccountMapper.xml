@@ -8,16 +8,20 @@
 		<result column="real_name" property="realName" />
 		<result column="type" property="type" />
 		<result column="status" property="status" />
+		
 		<result column="currency" property="currency" />	
 		<result column="amount" property="amount" />
 		<result column="frozen_amount" property="frozenAmount" />
 		<result column="md5" property="md5" />	
 		<result column="add_amount" property="addAmount" />
+		
 		<result column="in_amount" property="inAmount" />
 		<result column="out_amount" property="outAmount" />
 		<result column="create_datetime" property="createDatetime" />	
 		<result column="last_order" property="lastOrder" />	
 		<result column="system_code" property="systemCode" />
+		
+		<result column="company_code" property="companyCode" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">	
@@ -27,22 +31,15 @@
 			<if test="userId != null and userId != '' ">
 				AND t.user_id = #{userId}
 			</if>
-			<!-- 模糊查询调账 -->
-			<if test="sysUser != null and sysUser != '' ">
-				AND t.user_id like "%"#{sysUser}"%"
-			</if>
 			<if test="realName != null and realName != '' ">
-				AND t.real_name = #{realName}
-			</if>
-			<if test="realNameQuery != null and realNameQuery != '' ">
-			    AND t.real_name like "%"#{realNameQuery}"%"
+				AND t.real_name like "%"#{realNameQuery}"%"
 			</if>
 			<choose>
 			     <when test='type == "NOT_P"'>
 				 	AND t.type not in('P')
 				 </when>
 				 <otherwise>
-					 <if test="type != null and type != '' ">
+					<if test="type != null and type != '' ">
 						AND t.type = #{type}
 					</if>
 				 </otherwise>
@@ -64,6 +61,9 @@
 			</if>
 			<if test="systemCode != null and systemCode != '' ">
 				AND t.system_code = #{systemCode}
+			</if>
+			<if test="companyCode != null and companyCode != '' ">
+				AND t.company_code = #{companyCode}
 			</if>
 		</trim>
 	</sql>
@@ -88,6 +88,7 @@
 		
 		,t.last_order
 		,t.system_code
+		,t.company_code
 		FROM
 		tstd_account t
 		<include refid="where_condition"/>
@@ -121,6 +122,7 @@
 		,out_amount
 		,create_datetime
 		,system_code
+		,company_code
 		)
 		VALUES(
 		#{accountNumber}
@@ -139,29 +141,21 @@
 		,#{outAmount}
 		,#{createDatetime}
 		,#{systemCode}
+		,#{companyCode}
 		)
 	</insert>
-	
-	<update id="update_realName" parameterType="account">
-		UPDATE tstd_account
-		SET
-		real_name= #{realName}
-		WHERE
-		account_number = #{accountNumber}
-	</update>
 	
 	<update id="update_account_amount" parameterType="account">
 		UPDATE tstd_account
 		SET
 		amount= #{amount}
-		,add_amount= #{addAmount}
 		,md5 = #{md5}
+		,add_amount= #{addAmount}
+		,in_amount = #{inAmount}
 		,last_order = #{lastOrder}
 		WHERE
 		account_number = #{accountNumber}
 	</update>
-	
-	
 	
 	<update id="update_account_realName" parameterType="account">
 		UPDATE tstd_account
@@ -205,23 +199,8 @@
 		UPDATE tstd_account
 		SET
 		frozen_amount = #{frozenAmount}
+		,out_amount = #{outAmount}
 		WHERE
 		account_number = #{accountNumber}
     </update>
-
-    <update id="update_in_amount" parameterType="jour">
-		UPDATE tstd_account
-		SET
-		in_amount = #{inAmount}
-		WHERE
-		account_number = #{accountNumber}	
-	</update>
-	
-	<update id="update_out_amount" parameterType="jour">
-		UPDATE tstd_account
-		SET
-		out_amount = #{outAmount}
-		WHERE
-		account_number = #{accountNumber}	
-	</update>
 </mapper>

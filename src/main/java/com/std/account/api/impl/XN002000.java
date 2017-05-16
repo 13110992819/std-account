@@ -30,7 +30,8 @@ public class XN002000 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         accountAO.distributeAccount(req.getUserId(), req.getRealName(),
-            req.getType(), req.getCurrencyList(), req.getSystemCode());
+            req.getType(), req.getCurrencyList(), req.getSystemCode(),
+            req.getCompanyCode());
         return new BooleanRes(true);
     }
 

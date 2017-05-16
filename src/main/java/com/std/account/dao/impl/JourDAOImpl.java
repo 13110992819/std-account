@@ -69,27 +69,11 @@ public class JourDAOImpl extends AMybatisTemplate implements IJourDAO {
     }
 
     /** 
-     * @see com.std.account.dao.IJourDAO#updateCallback(com.std.account.domain.Jour)
+     * @see com.xnjr.account.dao.IJourDAO.account.dao.IAJourDAO#checkJour(com.Jour.account.domain.AccountJour)
      */
     @Override
-    public int updateCallback(Jour data) {
-        return super.update(NAMESPACE.concat("update_jour_callback"), data);
-    }
-
-    /** 
-     * @see com.xnjr.account.dao.IJourDAO.account.dao.IAJourDAO#updateCheck(com.Jour.account.domain.AccountJour)
-     */
-    @Override
-    public int updateCheck(Jour data) {
+    public int checkJour(Jour data) {
         return super.update(NAMESPACE.concat("update_check_jour"), data);
-    }
-
-    /** 
-     * @see com.std.account.dao.IJourDAO#updateAdjust(com.std.account.domain.Jour)
-     */
-    @Override
-    public int updateAdjust(Jour data) {
-        return super.update(NAMESPACE.concat("update_adjust_jour"), data);
     }
 
     /** 
@@ -97,6 +81,6 @@ public class JourDAOImpl extends AMybatisTemplate implements IJourDAO {
      */
     @Override
     public int adjustJour(Jour data) {
-        return super.update(NAMESPACE.concat("update_adjust_status"), data);
+        return super.update(NAMESPACE.concat("update_adjust_jour"), data);
     }
 }

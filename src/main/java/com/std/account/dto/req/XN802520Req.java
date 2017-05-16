@@ -6,6 +6,24 @@ public class XN802520Req extends APageReq {
      */
     private static final long serialVersionUID = 1L;
 
+    // 订单分组组号（信息代表）---核心字段1
+    private String payGroup;
+
+    // 流水分组组号（橙账本代表）---核心字段2
+    private String refNo;
+
+    // 支付渠道（线下/招商代付/支付宝/内部转账）
+    private String channelType;
+
+    // 支付渠道单号（支付渠道代表）---核心字段3
+    private String channelOrder;
+
+    // 流水所属账号---核心字段4
+    private String accountNumber;
+
+    // 币种
+    private String currency;
+
     // 用户编号
     private String userId;
 
@@ -15,20 +33,17 @@ public class XN802520Req extends APageReq {
     // 账户类型
     private String accountType;
 
-    // 账号
-    private String accountNumber;
-
-    // 渠道类型
-    private String channelType;
-
-    // 参考订单号
-    private String refNo;
-
     // 业务类型
     private String bizType;
 
-    // 状态（生成待回调，无需对账，已回调待对账，对账通过，对账不通过待调账，已调账）
+    // 状态
     private String status;
+
+    // 开始时间起
+    private String createDatetimeStart;
+
+    // 开始时间止
+    private String createDatetimeEnd;
 
     // 拟对账时间
     private String workDate;
@@ -42,53 +57,47 @@ public class XN802520Req extends APageReq {
     // 系统编号
     private String systemCode;
 
-    // **************db properties ***************
-    private String currency;
+    // 公司编号
+    private String companyCode;
 
-    // 开始时间起
-    private String createDatetimeStart;
-
-    // 开始时间止
-    private String createDatetimeEnd;
-
-    public String getCreateDatetimeStart() {
-        return createDatetimeStart;
+    public String getCompanyCode() {
+        return companyCode;
     }
 
-    public void setCreateDatetimeStart(String createDatetimeStart) {
-        this.createDatetimeStart = createDatetimeStart;
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 
-    public String getCreateDatetimeEnd() {
-        return createDatetimeEnd;
+    public String getPayGroup() {
+        return payGroup;
     }
 
-    public void setCreateDatetimeEnd(String createDatetimeEnd) {
-        this.createDatetimeEnd = createDatetimeEnd;
+    public void setPayGroup(String payGroup) {
+        this.payGroup = payGroup;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getRefNo() {
+        return refNo;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setRefNo(String refNo) {
+        this.refNo = refNo;
     }
 
-    public String getCurrency() {
-        return currency;
+    public String getChannelType() {
+        return channelType;
     }
 
-    public void setCurrency(String currency) {
-        this.currency = currency;
+    public void setChannelType(String channelType) {
+        this.channelType = channelType;
     }
 
-    public String getRealName() {
-        return realName;
+    public String getChannelOrder() {
+        return channelOrder;
     }
 
-    public void setRealName(String realName) {
-        this.realName = realName;
+    public void setChannelOrder(String channelOrder) {
+        this.channelOrder = channelOrder;
     }
 
     public String getAccountNumber() {
@@ -99,12 +108,36 @@ public class XN802520Req extends APageReq {
         this.accountNumber = accountNumber;
     }
 
-    public String getChannelType() {
-        return channelType;
+    public String getCurrency() {
+        return currency;
     }
 
-    public void setChannelType(String channelType) {
-        this.channelType = channelType;
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
+    public String getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
     }
 
     public String getBizType() {
@@ -121,6 +154,22 @@ public class XN802520Req extends APageReq {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getCreateDatetimeStart() {
+        return createDatetimeStart;
+    }
+
+    public void setCreateDatetimeStart(String createDatetimeStart) {
+        this.createDatetimeStart = createDatetimeStart;
+    }
+
+    public String getCreateDatetimeEnd() {
+        return createDatetimeEnd;
+    }
+
+    public void setCreateDatetimeEnd(String createDatetimeEnd) {
+        this.createDatetimeEnd = createDatetimeEnd;
     }
 
     public String getWorkDate() {
@@ -153,21 +202,5 @@ public class XN802520Req extends APageReq {
 
     public void setSystemCode(String systemCode) {
         this.systemCode = systemCode;
-    }
-
-    public String getAccountType() {
-        return accountType;
-    }
-
-    public void setAccountType(String accountType) {
-        this.accountType = accountType;
-    }
-
-    public String getRefNo() {
-        return refNo;
-    }
-
-    public void setRefNo(String refNo) {
-        this.refNo = refNo;
     }
 }
