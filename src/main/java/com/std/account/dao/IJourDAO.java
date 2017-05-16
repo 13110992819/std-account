@@ -12,34 +12,16 @@ public interface IJourDAO extends IBaseDAO<Jour> {
     String NAMESPACE = IJourDAO.class.getName().concat(".");
 
     /**
-     * 金额发生变动
-     * @param data
-     * @return 
-     * @create: 2016年11月10日 下午6:05:41 xieyj
-     * @history:
-     */
-    public int updateCallback(Jour data);
-
-    /**
      * 对账结果录入
      * @param data
      * @return 
      * @create: 2016年11月10日 下午6:05:41 xieyj
      * @history:
      */
-    public int updateCheck(Jour data);
+    public int checkJour(Jour data);
 
     /**
-     * 调账结果录入
-     * @param data
-     * @return 
-     * @create: 2016年11月10日 下午6:05:47 xieyj
-     * @history:
-     */
-    public int updateAdjust(Jour data);
-
-    /**
-     * 原调账记录状态更新
+     * 调账后状态更新
      * @param data
      * @return 
      * @create: 2016年12月26日 下午9:29:23 xieyj

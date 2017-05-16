@@ -18,18 +18,7 @@ import com.std.account.enums.EJourBizType;
  */
 public interface IAccountBO extends IPaginableBO<Account> {
 
-    /**
-     * 分配账户
-     * @param userId
-     * @param realName
-     * @param accountType
-     * @param currency
-     * @param systemCode
-     * @param companyCode
-     * @return 
-     * @create: 2017年5月16日 上午11:05:16 xieyj
-     * @history:
-     */
+    // 分配账户
     public String distributeAccount(String userId, String realName,
             EAccountType accountType, String currency, String systemCode,
             String companyCode);
@@ -46,15 +35,6 @@ public interface IAccountBO extends IPaginableBO<Account> {
     // 红冲蓝补导致的资金变动（落地流水不需要对账）
     public void changeAmountForHL(HLOrder order);
 
-    /**
-     * 更新户名
-     * @param userId
-     * @param realName 
-     * @create: 2017年1月4日 上午11:34:18 xieyj
-     * @history:
-     */
-    public void refreshAccountName(String userId, String realName);
-
     // 冻结金额（余额变动）
     public void frozenAmount(Account dbAccount, Long freezeAmount,
             String withdrawCode);
@@ -66,75 +46,28 @@ public interface IAccountBO extends IPaginableBO<Account> {
     // 扣减冻结金额
     public void cutFrozenAmount(Account dbAccount, Long amount);
 
-    /**
-     * 更新取现累计金额
-     * @param account
-     * @param transAmount 
-     * @create: 2017年5月5日 下午5:50:06 xieyj
-     * @history:
-     */
-    public void refreshOutAmount(Account account, Long transAmount);
-
-    /**
-     * 更新账户状态
-     * @param systemCode
-     * @param accountNumber
-     * @param status 
-     * @create: 2016年12月23日 下午5:27:04 xieyj
-     * @history:
-     */
-    public void refreshStatus(String accountNumber, EAccountStatus status);
-
-    /**
-     * 获取账户
-     * @param accountNumber
-     * @return 
-     * @create: 2016年12月23日 下午5:27:22 xieyj
-     * @history:
-     */
-    public Account getAccount(String accountNumber);
-
-    /**
-     * 通过用户编号和币种获取币种
-     * @param userId
-     * @param currency
-     * @return 
-     * @create: 2016年12月28日 下午1:55:21 xieyj
-     * @history:
-     */
-    public Account getAccountByUser(String userId, String currency);
-
-    /**
-     * 获取系统账户
-     * @param sysUser
-     * @param currency
-     * @return 
-     * @create: 2017年4月5日 下午9:19:34 xieyj
-     * @history:
-     */
-    public Account getSysAccount(String sysUser, String currency);
-
-    /**
-     * 获取账户列表
-     * @param data
-     * @return 
-     * @create: 2016年11月11日 上午10:52:08 xieyj
-     * @history:
-     */
-    public List<Account> queryAccountList(Account data);
-
     // 内部转账
     public void transAmountCZB(String fromUserId, String fromCurrency,
             String toUserId, String toCurrency, Long transAmount,
             EJourBizType bizType, String fromBizNote, String toBizNote,
             String refNo);
 
-    // // 内部转账：// 同样/不同账户间资金划转
-    // public void transAmountCZB(String fromAccountNumber,
-    // String toAccountNumber, Long transAmount, EJourBizType bizType,
-    // String fromBizNote, String toBizNote);
+    // 更新户名
+    public void refreshAccountName(String userId, String realName);
 
-    // 根据系统编号和币种获取对应的系统账户编号
-    public String getSysAccountNumber(String systemCode, ECurrency currency);
+    // 更新账户状态
+    public void refreshStatus(String accountNumber, EAccountStatus status);
 
+    // 获取账户
+    public Account getAccount(String accountNumber);
+
+    // 通过用户编号和币种获取币种
+    public Account getAccountByUser(String userId, String currency);
+
+    // 根据系统编号,公司编号和币种获取对应的系统账户(账户类型确定为系统账户)
+    public Account getSysAccountNumber(String systemCode, String companyCode,
+            ECurrency currency);
+
+    // 获取账户列表
+    public List<Account> queryAccountList(Account data);
 }

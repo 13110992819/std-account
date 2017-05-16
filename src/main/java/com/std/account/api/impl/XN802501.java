@@ -1,5 +1,7 @@
 package com.std.account.api.impl;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.std.account.ao.IAccountAO;
 import com.std.account.api.AProcessor;
 import com.std.account.common.DateUtil;
@@ -30,16 +32,24 @@ public class XN802501 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         Account condition = new Account();
-        condition.setRealNameQuery(req.getRealName());
+        condition.setRealName(req.getRealName());
         condition.setType(req.getType());
         condition.setStatus(req.getStatus());
         condition.setCurrency(req.getCurrency());
+
         condition.setLastOrder(req.getLastOrder());
+        condition.setCreateDatetimeStart(DateUtil.getFrontDate(
+            req.getDateStart(), false));
+        condition.setCreateDatetimeEnd(DateUtil.getFrontDate(req.getDateEnd(),
+            true));
         condition.setSystemCode(req.getSystemCode());
-        condition.setCreateDatetimeStart(DateUtil.strToDate(req.getDateStart(),
-            DateUtil.DATA_TIME_PATTERN_1));
-        condition.setCreateDatetimeEnd(DateUtil.strToDate(req.getDateEnd(),
-            DateUtil.DATA_TIME_PATTERN_1));
+        condition.setCompanyCode(req.getCompanyCode());
+
+        String orderColumn = req.getOrderColumn();
+        if (StringUtils.isBlank(orderColumn)) {
+            orderColumn = IAccountAO.DEFAULT_ORDER_COLUMN;
+        }
+        condition.setOrder(orderColumn, req.getOrderDir());
         return accountAO.queryAccountList(condition);
     }
 
@@ -49,6 +59,7 @@ public class XN802501 extends AProcessor {
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN802501Req.class);
-        StringValidater.validateBlank(req.getSystemCode());
+        StringValidater
+            .validateBlank(req.getSystemCode(), req.getCompanyCode());
     }
 }

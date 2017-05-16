@@ -70,17 +70,6 @@ public class Account extends ABaseDO {
     // 创建终止时间
     private Date createDatetimeEnd;
 
-    // 系统账户模糊查询字段
-    private String sysUser;
-
-    public String getSysUser() {
-        return sysUser;
-    }
-
-    public void setSysUser(String sysUser) {
-        this.sysUser = sysUser;
-    }
-
     public Date getCreateDatetimeStart() {
         return createDatetimeStart;
     }

@@ -68,19 +68,14 @@ public class AccountAOImpl implements IAccountAO {
     }
 
     @Override
-    public Account getAccount(String accountNumber) {
-        return accountBO.getAccount(accountNumber);
-    }
-
-    @Override
     public Paginable<Account> queryAccountPage(int start, int limit,
             Account condition) {
         return accountBO.getPaginable(start, limit, condition);
     }
 
     @Override
-    public List<Account> queryAccountList(Account condition) {
-        return accountBO.queryAccountList(condition);
+    public Account getAccount(String accountNumber) {
+        return accountBO.getAccount(accountNumber);
     }
 
     @Override
@@ -88,6 +83,11 @@ public class AccountAOImpl implements IAccountAO {
         Account condition = new Account();
         condition.setUserId(userId);
         condition.setCurrency(currency);
+        return accountBO.queryAccountList(condition);
+    }
+
+    @Override
+    public List<Account> queryAccountList(Account condition) {
         return accountBO.queryAccountList(condition);
     }
 }

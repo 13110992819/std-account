@@ -24,6 +24,15 @@ public class WithdrawAOImpl implements IWithdrawAO {
     @Autowired
     private IWithdrawBO withdrawBO;
 
+    // @Autowired
+    // private IUserBO userBO;// 交易密码
+    //
+    // @Autowired
+    // private IBankcardBO bankcardBO; // 取现银行卡户名
+    //
+    // @Autowired
+    // private ISYSConfigBO sysConfigBO; //取现配置
+
     @Override
     @Transactional
     public String applyOrder(String accountNumber, Long amount,
@@ -123,5 +132,34 @@ public class WithdrawAOImpl implements IWithdrawAO {
     public Withdraw getWithdraw(String code, String systemCode) {
         return withdrawBO.getWithdraw(code, systemCode);
     }
+
+    // /**
+    // * 取现申请检查，验证参数，返回手续费
+    // * @param transAmount
+    // * @param qxbs
+    // * @param qxfl
+    // * @param systemCode
+    // * @return
+    // * @create: 2017年5月2日 下午4:15:01 xieyj
+    // * @history:
+    // */
+    // private Long doCheckWithArgs(Long transAmount, String qxbs, String qxfl,
+    // String systemCode) {
+    // Map<String, String> argsMap = sysConfigBO.getConfigsMap(systemCode);
+    // String qxBsValue = argsMap.get(qxbs);
+    // if (StringUtils.isNotBlank(qxBsValue)) {
+    // // 取现金额倍数
+    // Long qxBs = AmountUtil.mul(1000L, Double.valueOf(qxBsValue));
+    // if (qxBs > 0 && -transAmount % qxBs > 0) {
+    // throw new BizException("xn000000", "请取" + qxBsValue + "的倍数");
+    // }
+    // }
+    // String feeRateValue = argsMap.get(qxfl);
+    // Double feeRate = 0D;
+    // if (StringUtils.isNotBlank(feeRateValue)) {
+    // feeRate = Double.valueOf(feeRateValue);
+    // }
+    // return AmountUtil.mul(-transAmount, feeRate);
+    // }
 
 }

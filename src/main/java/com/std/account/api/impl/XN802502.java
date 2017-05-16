@@ -27,7 +27,6 @@ public class XN802502 extends AProcessor {
     */
     @Override
     public Object doBusiness() throws BizException {
-
         return accountAO.getAccount(req.getAccountNumber());
     }
 
@@ -39,5 +38,4 @@ public class XN802502 extends AProcessor {
         req = JsonUtil.json2Bean(inputparams, XN802502Req.class);
         StringValidater.validateBlank(req.getAccountNumber());
     }
-
 }

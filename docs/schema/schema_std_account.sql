@@ -24,25 +24,34 @@ CREATE TABLE `tstd_account` (
 DROP TABLE IF EXISTS `tstd_jour`;
 CREATE TABLE `tstd_jour` (
   `code` varchar(32) NOT NULL COMMENT '编号',
+  `pay_group` varchar(32) DEFAULT NULL COMMENT '订单分组组号',
+  `ref_no` varchar(32) DEFAULT NULL COMMENT '参考订单号',
+  `channel_type` varchar(32) DEFAULT NULL COMMENT '支付渠道类型',
+  `channel_order` varchar(32) DEFAULT NULL COMMENT '支付渠道单号',
   `account_number` varchar(32) DEFAULT NULL COMMENT '账号',
+  
+  `trans_amount` bigint(32) DEFAULT NULL COMMENT '变动金额',
   `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
   `real_name` varchar(64) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '真实姓名',
-  `channel_type` varchar(4) DEFAULT NULL COMMENT '渠道类型',
-  `ref_no` varchar(32) DEFAULT NULL COMMENT '参考订单号',
   `biz_type` varchar(32) DEFAULT NULL COMMENT '业务类型',
   `biz_note` varchar(255) DEFAULT NULL COMMENT '业务类型',
-  `trans_amount` bigint(32) DEFAULT NULL COMMENT '变动金额',
+  
   `pre_amount` bigint(32) DEFAULT NULL COMMENT '变动前金额',
   `post_amount` bigint(32) DEFAULT NULL COMMENT '变动后金额',
   `status` varchar(4) DEFAULT NULL COMMENT '状态',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
+  
   `work_date` varchar(8) DEFAULT NULL COMMENT '拟对账时间',
   `check_user` varchar(32) DEFAULT NULL COMMENT '对账人',
+  `check_note` varchar(255) DEFAULT NULL COMMENT '对账说明',
   `check_datetime` datetime DEFAULT NULL COMMENT '对账时间',
   `adjust_user` varchar(32) DEFAULT NULL COMMENT '调账人',
+  
+  `adjust_note` varchar(255) DEFAULT NULL COMMENT '调账说明',
   `adjust_datetime` datetime DEFAULT NULL COMMENT '调账时间',
-  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   `system_code` varchar(32) NOT NULL COMMENT '系统编号',
+  `company_code` varchar(32) NOT NULL COMMENT '公司编号',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

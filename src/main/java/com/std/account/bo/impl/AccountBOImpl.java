@@ -91,16 +91,22 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
         // 记录流水
         String lastOrder = jourBO.addJour(dbAccount, channelType, channelOrder,
             payGroup, refNo, bizType, bizNote, transAmount);
+
         // 更改余额
         Account data = new Account();
         data.setAccountNumber(accountNumber);
         data.setAmount(nowAmount);
         data.setMd5(AccountUtil.md5(dbAccount.getMd5(), dbAccount.getAmount(),
             nowAmount));
-        // 修改累计增加金额
+        // 统计累计增加金额
         data.setAddAmount(dbAccount.getAddAmount());
         if (transAmount > 0) {
             data.setAddAmount(dbAccount.getAddAmount() + transAmount);
+        }
+        // 统计累计充值金额
+        data.setInAmount(dbAccount.getInAmount());
+        if (EJourBizType.AJ_CZ.getCode().equals(bizType.getCode())) {
+            data.setInAmount(dbAccount.getInAmount() + transAmount);
         }
         data.setLastOrder(lastOrder);
         accountDAO.updateAmount(data);
@@ -121,11 +127,13 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
         data.setAmount(nowAmount);
         data.setMd5(AccountUtil.md5(dbAccount.getMd5(), dbAccount.getAmount(),
             nowAmount));
-        // 修改累计增加金额
+
+        // 更新统计金额
         data.setAddAmount(dbAccount.getAddAmount());
         if (transAmount > 0) {
             data.setAddAmount(dbAccount.getAddAmount() + transAmount);
         }
+        data.setInAmount(data.getInAmount());
         data.setLastOrder(lastOrder);
         accountDAO.updateAmount(data);
     }
@@ -142,6 +150,13 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
         data.setAmount(nowAmount);
         data.setMd5(AccountUtil.md5(dbAccount.getMd5(), dbAccount.getAmount(),
             nowAmount));
+        // 更新统计金额
+        data.setAddAmount(dbAccount.getAddAmount());
+        Long amount = order.getAmount();
+        if (amount > 0) {
+            data.setAddAmount(dbAccount.getAddAmount() + amount);
+        }
+        data.setInAmount(data.getInAmount());
         data.setLastOrder(lastOrder);
         accountDAO.updateAmount(data);
     }
@@ -205,9 +220,12 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
         if (nowFrozenAmount < 0) {
             throw new BizException("xn000000", "本次扣减会使账户冻结金额小于0");
         }
-        dbAccount.setAccountNumber(dbAccount.getAccountNumber());
-        dbAccount.setFrozenAmount(nowFrozenAmount);
-        accountDAO.cutFrozenAmount(dbAccount);
+        Account data = new Account();
+        data.setAccountNumber(dbAccount.getAccountNumber());
+        data.setFrozenAmount(nowFrozenAmount);
+        // 统计累计取现金额
+        data.setOutAmount(dbAccount.getOutAmount() + freezeAmount);
+        accountDAO.cutFrozenAmount(data);
     }
 
     @Override
@@ -273,10 +291,14 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
      * @see com.std.account.bo.IAccountBO#getSysAccount(java.lang.String, java.lang.String)
      */
     @Override
-    public Account getSysAccount(String sysUser, String currency) {
+    public Account getSysAccountNumber(String systemCode, String companyCode,
+            ECurrency currency) {
         Account condition = new Account();
-        condition.setSysUser(sysUser);
-        condition.setCurrency(currency);
+        // 平台账户只有一类,类型+币种+公司+系统=唯一系统账户
+        condition.setType(EAccountType.Plat.getCode());
+        condition.setSystemCode(systemCode);
+        condition.setCompanyCode(companyCode);
+        condition.setCurrency(currency.getCode());
         return accountDAO.select(condition);
     }
 
@@ -305,21 +327,5 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
             refNo, bizType, fromBizNote, -transAmount);
         this.changeAmount(toAccountNumber, EChannelType.NBZ, null, null, refNo,
             bizType, toBizNote, AmountUtil.mul(transAmount, rate));
-    }
-
-    @Override
-    public String getSysAccountNumber(String systemCode, ECurrency currency) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /** 
-     * @see com.std.account.bo.IAccountBO#refreshOutAmount(java.lang.String, java.lang.Long)
-     */
-    @Override
-    public void refreshOutAmount(Account account, Long transAmount) {
-        Long outAmount = account.getOutAmount() + transAmount;
-        account.setOutAmount(outAmount);
-        accountDAO.updateOutAmount(account);
     }
 }
