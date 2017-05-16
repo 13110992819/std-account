@@ -81,6 +81,28 @@ public class Charge extends ABaseDO {
     // 支付时间止
     private Date payDatetimeEnd;
 
+    // 币种
+    private String currency;
+
+    // 用户信息
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
     public String getCode() {
         return code;
     }

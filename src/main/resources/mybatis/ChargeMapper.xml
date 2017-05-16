@@ -44,6 +44,9 @@
 			<if test="accountName != null and accountName != '' ">
 				AND t.account_name like "%"#{accountName}"%"
 			</if>
+			<if test="currency != null and currency != '' ">
+				AND ta.currency = #{currency}
+			</if>
 			<if test="bizType != null and bizType != '' ">
 				AND t.biz_type = #{bizType}
 			</if>
@@ -84,30 +87,31 @@
 	</sql>
 	<select id="select_charge" parameterType="charge" resultMap="charge_DB_Result">
 		SELECT
-		code
-		,pay_group
-		,ref_no
-		,account_number
-		,amount
+		t.code
+		,t.pay_group
+		,t.ref_no
+		,t.account_number
+		,t.amount
 		
-		,account_name
-		,biz_type
-		,biz_note
-		,pay_card_info
-		,pay_card_no
+		,t.account_name
+		,ta.currency
+		,t.biz_type
+		,t.biz_note
+		,t.pay_card_info
+		,t.pay_card_no
 		
-		,status
-		,apply_user
-		,apply_datetime
-		,pay_user
-		,pay_note
+		,t.status
+		,t.apply_user
+		,t.apply_datetime
+		,t.pay_user
+		,t.pay_note
 		
-		,pay_datetime
-		,channel_type
-		,system_code
-		,company_code
+		,t.pay_datetime
+		,t.channel_type
+		,t.system_code
+		,t.company_code
 		FROM
-		tstd_charge t 
+		tstd_charge t inner join tstd_account ta on t.account_number = ta.account_number
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -117,7 +121,7 @@
 	</select>
 
 	<select id="select_charge_count" parameterType="charge" resultType="java.lang.Long">
-		SELECT count(1) FROM tstd_charge t 
+		SELECT count(1) FROM tstd_charge t inner join tstd_account ta on t.account_number = ta.account_number
 		<include refid="where_condition" />
 	</select>
 	

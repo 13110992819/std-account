@@ -14,7 +14,7 @@ public interface IChargeAO {
             String applyNote);
 
     public void payOrder(String code, String payUser, String payResult,
-            String payNote, String payCode, String systemCode);
+            String payNote, String systemCode);
 
     public Paginable<Charge> queryChargePage(int start, int limit,
             Charge condition);

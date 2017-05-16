@@ -7,6 +7,12 @@ public class User {
     // openId
     private String openId;
 
+    // 登录名
+    private String loginName;
+
+    // kind
+    private String kind;
+
     // 手机号
     private String mobile;
 
@@ -15,6 +21,22 @@ public class User {
 
     // 系统编号
     private String systemCode;
+
+    public String getLoginName() {
+        return loginName;
+    }
+
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
+    }
+
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
+    }
 
     public String getUserId() {
         return userId;

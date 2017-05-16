@@ -25,9 +25,6 @@ public class XN802701Req {
     // 支付渠道的说明(必填)
     private String payNote;
 
-    // 支付渠道的订单编号（支付渠道代表）(选填)
-    private String payCode;
-
     public String getSystemCode() {
         return systemCode;
     }
@@ -67,13 +64,4 @@ public class XN802701Req {
     public void setPayNote(String payNote) {
         this.payNote = payNote;
     }
-
-    public String getPayCode() {
-        return payCode;
-    }
-
-    public void setPayCode(String payCode) {
-        this.payCode = payCode;
-    }
-
 }

@@ -91,7 +91,7 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
 
     @Override
     public void payOrder(Charge data, boolean booleanFlag, String payUser,
-            String payNote, String payCode) {
+            String payNote) {
         if (booleanFlag) {
             data.setStatus(EChargeStatus.Pay_YES.getCode());
         } else {

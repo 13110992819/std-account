@@ -1,6 +1,5 @@
 package com.std.account.dto.req;
 
-
 /**
  * 充值订单分页查询
  * @author: xieyj 
@@ -14,14 +13,26 @@ public class XN802705Req extends APageReq {
      */
     private static final long serialVersionUID = -8656333710276407945L;
 
+    // 支付组号（信息流代表）
+    private String payGroup;
+
+    // 流水分组组号（橙账本代表）---核心字段2
+    private String refNo;
+
     // 针对账号
     private String accountNumber;
 
     // 针对户名（手机号或其他）
     private String accountName;
 
-    // 支付渠道
-    private String channelType;
+    // 币种
+    private String currency;
+
+    // 业务类型编号（因为什么业务类型而充值）
+    private String bizType;
+
+    // 支付渠道账号（如银行卡号）
+    private String payCardNo;
 
     // 状态（待审核/审核不通过/审核通过）
     private String status;
@@ -44,14 +55,30 @@ public class XN802705Req extends APageReq {
     // 支付时间止
     private String payDateEnd;
 
-    // 支付组号（信息流代表）
-    private String payGroup;
-
-    // 支付渠道的订单编号（支付渠道代表）
-    private String payCode;
+    // 支付渠道
+    private String channelType;
 
     // 系统编号
     private String systemCode;
+
+    // 公司编号
+    private String companyCode;
+
+    public String getPayGroup() {
+        return payGroup;
+    }
+
+    public void setPayGroup(String payGroup) {
+        this.payGroup = payGroup;
+    }
+
+    public String getRefNo() {
+        return refNo;
+    }
+
+    public void setRefNo(String refNo) {
+        this.refNo = refNo;
+    }
 
     public String getAccountNumber() {
         return accountNumber;
@@ -69,12 +96,20 @@ public class XN802705Req extends APageReq {
         this.accountName = accountName;
     }
 
-    public String getChannelType() {
-        return channelType;
+    public String getBizType() {
+        return bizType;
     }
 
-    public void setChannelType(String channelType) {
-        this.channelType = channelType;
+    public void setBizType(String bizType) {
+        this.bizType = bizType;
+    }
+
+    public String getPayCardNo() {
+        return payCardNo;
+    }
+
+    public void setPayCardNo(String payCardNo) {
+        this.payCardNo = payCardNo;
     }
 
     public String getStatus() {
@@ -93,14 +128,6 @@ public class XN802705Req extends APageReq {
         this.applyUser = applyUser;
     }
 
-    public String getPayUser() {
-        return payUser;
-    }
-
-    public void setPayUser(String payUser) {
-        this.payUser = payUser;
-    }
-
     public String getApplyDateStart() {
         return applyDateStart;
     }
@@ -115,6 +142,14 @@ public class XN802705Req extends APageReq {
 
     public void setApplyDateEnd(String applyDateEnd) {
         this.applyDateEnd = applyDateEnd;
+    }
+
+    public String getPayUser() {
+        return payUser;
+    }
+
+    public void setPayUser(String payUser) {
+        this.payUser = payUser;
     }
 
     public String getPayDateStart() {
@@ -133,20 +168,12 @@ public class XN802705Req extends APageReq {
         this.payDateEnd = payDateEnd;
     }
 
-    public String getPayGroup() {
-        return payGroup;
+    public String getChannelType() {
+        return channelType;
     }
 
-    public void setPayGroup(String payGroup) {
-        this.payGroup = payGroup;
-    }
-
-    public String getPayCode() {
-        return payCode;
-    }
-
-    public void setPayCode(String payCode) {
-        this.payCode = payCode;
+    public void setChannelType(String channelType) {
+        this.channelType = channelType;
     }
 
     public String getSystemCode() {
@@ -155,5 +182,21 @@ public class XN802705Req extends APageReq {
 
     public void setSystemCode(String systemCode) {
         this.systemCode = systemCode;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 }

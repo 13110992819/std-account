@@ -30,7 +30,7 @@ public class XN802701 extends AProcessor {
     public synchronized Object doBusiness() throws BizException {
         for (String code : req.getCodeList()) {
             chargeAO.payOrder(code, req.getPayUser(), req.getPayResult(),
-                req.getPayNote(), req.getPayCode(), req.getSystemCode());
+                req.getPayNote(), req.getSystemCode());
         }
         return new BooleanRes(true);
     }

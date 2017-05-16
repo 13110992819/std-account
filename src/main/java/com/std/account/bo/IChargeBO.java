@@ -19,7 +19,7 @@ public interface IChargeBO extends IPaginableBO<Charge> {
             String payCardNo, String applyUser, String applyNote);
 
     void payOrder(Charge data, boolean booleanFlag, String payUser,
-            String payNote, String payCode);
+            String payNote);
 
     List<Charge> queryChargeList(Charge condition);
 
