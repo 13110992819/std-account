@@ -35,7 +35,6 @@ import com.std.account.domain.CompanyChannel;
 import com.std.account.domain.Jour;
 import com.std.account.domain.User;
 import com.std.account.enums.EAccountType;
-import com.std.account.enums.EBizType;
 import com.std.account.enums.EBoolean;
 import com.std.account.enums.EChannelType;
 import com.std.account.enums.ECurrency;

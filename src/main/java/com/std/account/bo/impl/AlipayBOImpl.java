@@ -48,18 +48,16 @@ public class AlipayBOImpl implements IAlipayBO {
 
     @Override
     public CallbackResult doCallbackAPP(String result) {
-        String systemCode = "CD-CZH000001";
-        String companyCode = "CD-CZH000001";
-        // 明显错误：
-        // 目前只有正汇钱包使用支付宝，暂时写死
-        // todo：如何判断公司编号和系统编号???。使用passback_params或者buyer_id(需先延签)
+        // 将异步通知中收到的待验证所有参数都存放到map中
+        Map<String, String> paramsMap = split(result);
+        // 获取支付宝配置参数
+        String passback = paramsMap.get("passback_params");
+        String[] codes = passback.split("\\|\\|");
+        String systemCode = codes[0];
+        String companyCode = codes[1];
         CompanyChannel companyChannel = companyChannelBO.getCompanyChannel(
             companyCode, systemCode, EChannelType.Alipay.getCode());
         try {
-            // 参数进行url_decode
-            // String params = URLDecoder.decode(result, CHARSET);
-            // 将异步通知中收到的待验证所有参数都存放到map中
-            Map<String, String> paramsMap = split(result);
             // 过滤+排序
             Map<String, String> filterMap = AlipayCore.paraFilter(paramsMap);
             String content = AlipayCore.createLinkString(filterMap);
@@ -121,14 +119,12 @@ public class AlipayBOImpl implements IAlipayBO {
                 } else {
                     throw new BizException("xn000000", "数据正确性校验失败，非法回调");
                 }
-
                 return new CallbackResult(isSuccess, order.getBizType(),
                     order.getCode(), order.getPayGroup(), order.getAmount(),
                     systemCode, companyCode, bizBackUrl);
             } else {
                 throw new BizException("xn000000", "验签失败，默认为非法回调");
             }
-
         } catch (AlipayApiException e) {
             throw new BizException("xn000000", "支付结果通知验签异常");
         }

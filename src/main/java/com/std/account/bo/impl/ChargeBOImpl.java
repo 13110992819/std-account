@@ -83,6 +83,7 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
         data.setApplyDatetime(new Date());
         data.setChannelType(channelType.getCode());
         data.setSystemCode(account.getSystemCode());
+
         data.setCompanyCode(account.getCompanyCode());
         chargeDAO.insert(data);
         return code;

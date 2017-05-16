@@ -4,30 +4,39 @@
 <mapper namespace="com.std.account.dao.IChargeDAO">
 	<resultMap id="charge_DB_Result" type="charge">
 		<result column="code" property="code" />
+		<result column="pay_group" property="payGroup" />
+		<result column="ref_no" property="refNo" />
 		<result column="account_number" property="accountNumber" />
-		<result column="account_name" property="accountName" />
 		<result column="amount" property="amount" />
-		<result column="channel_type" property="channelType" />
 		
+		<result column="account_name" property="accountName" />
+		<result column="biz_type" property="bizType" />
+		<result column="biz_note" property="bizNote" />
 		<result column="pay_card_info" property="payCardInfo" />
 		<result column="pay_card_no" property="payCardNo" />
-		<result column="pay_group" property="payGroup" />
+		
 		<result column="status" property="status" />
 		<result column="apply_user" property="applyUser" />
-		
 		<result column="apply_note" property="applyNote" />
 		<result column="apply_datetime" property="applyDatetime" />
 		<result column="pay_user" property="payUser" />
-		<result column="pay_note" property="payNote" />
-		<result column="pay_code" property="payCode" />
 		
+		<result column="pay_note" property="payNote" />
 		<result column="pay_datetime" property="payDatetime" />
+		<result column="channel_type" property="channelType" />
 		<result column="system_code" property="systemCode" />
+		<result column="company_code" property="companyCode" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
+			</if>
+			<if test="payGroup != null and payGroup != '' ">
+				AND t.pay_group = #{payGroup}
+			</if>
+			<if test="refNo != null and refNo != '' ">
+				AND t.ref_no = #{refNo}
 			</if>
 			<if test="accountNumber != null and accountNumber != '' ">
 				AND t.account_number = #{accountNumber}
@@ -35,15 +44,11 @@
 			<if test="accountName != null and accountName != '' ">
 				AND t.account_name like "%"#{accountName}"%"
 			</if>
-			<if test="channelType != null and channelType != '' ">
-				AND t.channel_type = #{channelType}
+			<if test="bizType != null and bizType != '' ">
+				AND t.biz_type = #{bizType}
 			</if>
 			<if test="payCardNo != null and payCardNo != '' ">
 				AND t.pay_card_no = #{payCardNo}
-			</if>
-			
-			<if test="payGroup != null and payGroup != '' ">
-				AND t.pay_group = #{payGroup}
 			</if>
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
@@ -57,12 +62,8 @@
 			<if test="applyDatetimeEnd != null and applyDatetimeEnd != '' ">
 				<![CDATA[AND t.apply_datetime <= #{applyDatetimeEnd}]]>
 			</if>
-			
 			<if test="payUser != null and payUser != '' ">
 				AND t.pay_user = #{payUser}
-			</if>
-			<if test="payCode != null and payCode != '' ">
-				AND t.pay_code = #{payCode}
 			</if>
 			<if test="payDatetimeStart != null and payDatetimeStart != '' ">
 				<![CDATA[AND t.pay_datetime >= #{payDatetimeStart}]]>
@@ -73,30 +74,38 @@
 			<if test="systemCode != null and systemCode != '' ">
 				AND t.system_code = #{systemCode}
 			</if>
+			<if test="channelType != null and channelType != '' ">
+				AND t.channel_type = #{channelType}
+			</if>
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.company_code = #{companyCode}
+			</if>
 		</trim>
 	</sql>
 	<select id="select_charge" parameterType="charge" resultMap="charge_DB_Result">
 		SELECT
 		code
+		,pay_group
+		,ref_no
 		,account_number
-		,account_name
 		,amount
-		,channel_type
 		
+		,account_name
+		,biz_type
+		,biz_note
 		,pay_card_info
 		,pay_card_no
-		,pay_group
+		
 		,status
 		,apply_user
-		
-		,apply_note
 		,apply_datetime
 		,pay_user
 		,pay_note
-		,pay_code
 		
 		,pay_datetime
+		,channel_type
 		,system_code
+		,company_code
 		FROM
 		tstd_charge t 
 		<include refid="where_condition" />
@@ -115,37 +124,45 @@
 	<insert id="insert_charge" parameterType="charge" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO tstd_charge(
 		code
+		,pay_group
+		,ref_no
 		,account_number
-		,account_name
 		,amount
-		,channel_type
 		
+		,account_name
+		,biz_type
+		,biz_note
 		,pay_card_info
 		,pay_card_no
-		,pay_group
+		
 		,status
 		,apply_user
-		
-		,apply_note
 		,apply_datetime
+		,channel_type
 		,system_code
+
+		,company_code
 		)
 		VALUES(
 		#{code}
+		,#{payGroup}
+		,#{refNo}
 		,#{accountNumber}
-		,#{accountName}
 		,#{amount}
-		,#{channelType}
 		
+		,#{accountName}
+		,#{bizType}
+		,#{bizNote}
 		,#{payCardInfo}
 		,#{payCardNo}
-		,#{payGroup}
+		
 		,#{status}
 		,#{applyUser}
-		
-		,#{applyNote}
 		,#{applyDatetime}
+		,#{channelType}
 		,#{systemCode}
+		
+		,#{companyCode}
 		)
 	</insert>
 

@@ -19,7 +19,6 @@ import com.std.account.common.UserUtil;
 import com.std.account.domain.Account;
 import com.std.account.domain.ExchangeCurrency;
 import com.std.account.domain.User;
-import com.std.account.enums.EBizType;
 import com.std.account.enums.EBoolean;
 import com.std.account.enums.EChannelType;
 import com.std.account.enums.ECurrency;

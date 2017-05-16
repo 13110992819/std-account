@@ -11,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.std.account.ao.IExchangeCurrencyAO;
-import com.std.account.enums.EBizType;
 
 /**
  * 币种兑换回调控制层
