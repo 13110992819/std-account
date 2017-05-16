@@ -71,13 +71,13 @@
 			<if test="payDatetimeEnd != null and payDatetimeEnd != '' ">
 				<![CDATA[AND t.pay_datetime <= #{payDatetimeEnd}]]>
 			</if>
-			<if test="systemCode != null and systemCode != '' ">
-				AND t.system_code = #{systemCode}
-			</if>
 			<if test="channelType != null and channelType != '' ">
 				AND t.channel_type = #{channelType}
 			</if>
 			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
+			</if>
+			<if test="companyCode != null and companyCode != '' ">
 				AND t.company_code = #{companyCode}
 			</if>
 		</trim>

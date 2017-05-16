@@ -9,9 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.std.account.ao.IChargeAO;
 import com.std.account.bo.IAccountBO;
 import com.std.account.bo.IChargeBO;
-import com.std.account.bo.ICompanyChannelBO;
-import com.std.account.bo.IUserBO;
-import com.std.account.bo.IWechatBO;
 import com.std.account.bo.base.Paginable;
 import com.std.account.domain.Account;
 import com.std.account.domain.Charge;
@@ -24,19 +21,10 @@ import com.std.account.exception.BizException;
 @Service
 public class ChargeAOImpl implements IChargeAO {
     @Autowired
-    private IUserBO userBO;
-
-    @Autowired
     private IAccountBO accountBO;
 
     @Autowired
     private IChargeBO chargeBO;
-
-    @Autowired
-    private IWechatBO wechatBO;
-
-    @Autowired
-    private ICompanyChannelBO companyChannelBO;
 
     @Override
     public String applyOrder(String accountNumber, Long amount,
@@ -76,7 +64,8 @@ public class ChargeAOImpl implements IChargeAO {
             String payCode) {
         chargeBO.payOrder(data, true, payUser, payNote, payCode);
         accountBO.changeAmount(data.getAccountNumber(), EChannelType.Offline,
-            data.getCode(), data.getAmount(), EJourBizType.AJ_CZ, "线下充值");
+            data.getCode(), null, null, EJourBizType.AJ_CZ, "线下充值",
+            data.getAmount());
     }
 
     @Override
