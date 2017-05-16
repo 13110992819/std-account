@@ -18,6 +18,7 @@
 		<result column="create_datetime" property="createDatetime" />	
 		<result column="last_order" property="lastOrder" />	
 		<result column="system_code" property="systemCode" />
+		<result column="company_code" property="companyCode" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">	
@@ -32,17 +33,14 @@
 				AND t.user_id like "%"#{sysUser}"%"
 			</if>
 			<if test="realName != null and realName != '' ">
-				AND t.real_name = #{realName}
-			</if>
-			<if test="realNameQuery != null and realNameQuery != '' ">
-			    AND t.real_name like "%"#{realNameQuery}"%"
+				AND t.real_name like "%"#{realNameQuery}"%"
 			</if>
 			<choose>
 			     <when test='type == "NOT_P"'>
 				 	AND t.type not in('P')
 				 </when>
 				 <otherwise>
-					 <if test="type != null and type != '' ">
+					<if test="type != null and type != '' ">
 						AND t.type = #{type}
 					</if>
 				 </otherwise>
@@ -64,6 +62,9 @@
 			</if>
 			<if test="systemCode != null and systemCode != '' ">
 				AND t.system_code = #{systemCode}
+			</if>
+			<if test="companyCode != null and companyCode != '' ">
+				AND t.company_code = #{companyCode}
 			</if>
 		</trim>
 	</sql>
@@ -88,6 +89,7 @@
 		
 		,t.last_order
 		,t.system_code
+		,t.company_code
 		FROM
 		tstd_account t
 		<include refid="where_condition"/>
@@ -121,6 +123,7 @@
 		,out_amount
 		,create_datetime
 		,system_code
+		,company_code
 		)
 		VALUES(
 		#{accountNumber}
@@ -139,6 +142,7 @@
 		,#{outAmount}
 		,#{createDatetime}
 		,#{systemCode}
+		,#{companyCode}
 		)
 	</insert>
 	

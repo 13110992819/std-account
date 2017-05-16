@@ -25,12 +25,14 @@ public interface IAccountBO extends IPaginableBO<Account> {
      * @param accountType
      * @param currency
      * @param systemCode
+     * @param companyCode
      * @return 
-     * @create: 2016年12月23日 下午12:35:22 xieyj
+     * @create: 2017年5月16日 上午11:05:16 xieyj
      * @history:
      */
     public String distributeAccount(String userId, String realName,
-            EAccountType accountType, String currency, String systemCode);
+            EAccountType accountType, String currency, String systemCode,
+            String companyCode);
 
     // 变更账户余额：流水落地
     public void changeAmount(String accountNumber, EChannelType channelType,
@@ -81,8 +83,7 @@ public interface IAccountBO extends IPaginableBO<Account> {
      * @create: 2016年12月23日 下午5:27:04 xieyj
      * @history:
      */
-    public void refreshStatus(String systemCode, String accountNumber,
-            EAccountStatus status);
+    public void refreshStatus(String accountNumber, EAccountStatus status);
 
     /**
      * 获取账户
@@ -125,12 +126,13 @@ public interface IAccountBO extends IPaginableBO<Account> {
     // 内部转账
     public void transAmountCZB(String fromUserId, String fromCurrency,
             String toUserId, String toCurrency, Long transAmount,
-            EJourBizType bizType, String fromBizNote, String toBizNote);
+            EJourBizType bizType, String fromBizNote, String toBizNote,
+            String refNo);
 
-    // 内部转账：// 同样/不同账户间资金划转
-    public void transAmountCZB(String fromAccountNumber,
-            String toAccountNumber, Long transAmount, EJourBizType bizType,
-            String fromBizNote, String toBizNote);
+    // // 内部转账：// 同样/不同账户间资金划转
+    // public void transAmountCZB(String fromAccountNumber,
+    // String toAccountNumber, Long transAmount, EJourBizType bizType,
+    // String fromBizNote, String toBizNote);
 
     // 根据系统编号和币种获取对应的系统账户编号
     public String getSysAccountNumber(String systemCode, ECurrency currency);

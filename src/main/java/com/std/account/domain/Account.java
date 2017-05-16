@@ -70,9 +70,6 @@ public class Account extends ABaseDO {
     // 创建终止时间
     private Date createDatetimeEnd;
 
-    // 户名模糊查询
-    private String realNameQuery;
-
     // 系统账户模糊查询字段
     private String sysUser;
 
@@ -82,14 +79,6 @@ public class Account extends ABaseDO {
 
     public void setSysUser(String sysUser) {
         this.sysUser = sysUser;
-    }
-
-    public String getRealNameQuery() {
-        return realNameQuery;
-    }
-
-    public void setRealNameQuery(String realNameQuery) {
-        this.realNameQuery = realNameQuery;
     }
 
     public Date getCreateDatetimeStart() {

@@ -1,3 +1,51 @@
+DROP TABLE IF EXISTS `tstd_account`;
+CREATE TABLE `tstd_account` (
+  `account_number` varchar(32) NOT NULL DEFAULT '' COMMENT '账号',
+  `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
+  `real_name` varchar(64) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '真实姓名',
+  `type` varchar(4) DEFAULT NULL COMMENT '类别（B端账号，C端账号，平台账号）',
+  `status` varchar(2) DEFAULT NULL COMMENT '状态（正常/程序冻结/人工冻结）',
+  `currency` varchar(8) DEFAULT NULL COMMENT '币种',
+  
+  `amount` bigint(32) DEFAULT NULL COMMENT '余额',
+  `frozen_amount` bigint(32) DEFAULT NULL COMMENT '冻结金额',
+  `md5` varchar(32) DEFAULT NULL COMMENT 'MD5',
+  `add_amount` bigint(32) DEFAULT '0' COMMENT '累计增加金额',
+  `in_amount` bigint(32) DEFAULT '0' COMMENT '入金',
+  
+  `out_amount` bigint(32) DEFAULT '0' COMMENT '出金',
+  `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
+  `last_order` varchar(32) DEFAULT NULL COMMENT '最近一次变动对应的流水编号',
+  `system_code` varchar(32) NOT NULL COMMENT '系统编号',
+  `company_code` varchar(32) NOT NULL COMMENT '公司编号',
+  PRIMARY KEY (`account_number`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `tstd_jour`;
+CREATE TABLE `tstd_jour` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `account_number` varchar(32) DEFAULT NULL COMMENT '账号',
+  `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
+  `real_name` varchar(64) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '真实姓名',
+  `channel_type` varchar(4) DEFAULT NULL COMMENT '渠道类型',
+  `ref_no` varchar(32) DEFAULT NULL COMMENT '参考订单号',
+  `biz_type` varchar(32) DEFAULT NULL COMMENT '业务类型',
+  `biz_note` varchar(255) DEFAULT NULL COMMENT '业务类型',
+  `trans_amount` bigint(32) DEFAULT NULL COMMENT '变动金额',
+  `pre_amount` bigint(32) DEFAULT NULL COMMENT '变动前金额',
+  `post_amount` bigint(32) DEFAULT NULL COMMENT '变动后金额',
+  `status` varchar(4) DEFAULT NULL COMMENT '状态',
+  `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
+  `work_date` varchar(8) DEFAULT NULL COMMENT '拟对账时间',
+  `check_user` varchar(32) DEFAULT NULL COMMENT '对账人',
+  `check_datetime` datetime DEFAULT NULL COMMENT '对账时间',
+  `adjust_user` varchar(32) DEFAULT NULL COMMENT '调账人',
+  `adjust_datetime` datetime DEFAULT NULL COMMENT '调账时间',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  `system_code` varchar(32) NOT NULL COMMENT '系统编号',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 DROP TABLE IF EXISTS `tstd_charge`;
 CREATE TABLE `tstd_charge` (
   `code` varchar(32) NOT NULL COMMENT '针对编号',
@@ -69,53 +117,6 @@ CREATE TABLE `tstd_hlorder` (
   `approve_user` varchar(32) DEFAULT NULL COMMENT '审批人（li为程序）',
   `approve_note` varchar(255) DEFAULT NULL COMMENT '审批说明',
   `approve_datetime` datetime DEFAULT NULL COMMENT '审批时间',
-  `system_code` varchar(32) NOT NULL COMMENT '系统编号',
-  PRIMARY KEY (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-DROP TABLE IF EXISTS `tstd_account`;
-CREATE TABLE `tstd_account` (
-  `account_number` varchar(32) NOT NULL DEFAULT '' COMMENT '账号',
-  `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
-  `real_name` varchar(64) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '真实姓名',
-  `type` varchar(4) DEFAULT NULL COMMENT '类别（B端账号，C端账号，平台账号）',
-  `status` varchar(2) DEFAULT NULL COMMENT '状态（正常/程序冻结/人工冻结）',
-  `currency` varchar(8) DEFAULT NULL COMMENT '币种',
-  
-  `amount` bigint(32) DEFAULT NULL COMMENT '余额',
-  `frozen_amount` bigint(32) DEFAULT NULL COMMENT '冻结金额',
-  `md5` varchar(32) DEFAULT NULL COMMENT 'MD5',
-  `add_amount` bigint(32) DEFAULT '0' COMMENT '累计增加金额',
-  `in_amount` bigint(32) DEFAULT '0' COMMENT '入金',
-  
-  `out_amount` bigint(32) DEFAULT '0' COMMENT '出金',
-  `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
-  `last_order` varchar(32) DEFAULT NULL COMMENT '最近一次变动对应的流水编号',
-  `system_code` varchar(32) NOT NULL COMMENT '系统编号',
-  PRIMARY KEY (`account_number`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-DROP TABLE IF EXISTS `tstd_jour`;
-CREATE TABLE `tstd_jour` (
-  `code` varchar(32) NOT NULL COMMENT '编号',
-  `account_number` varchar(32) DEFAULT NULL COMMENT '账号',
-  `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
-  `real_name` varchar(64) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '真实姓名',
-  `channel_type` varchar(4) DEFAULT NULL COMMENT '渠道类型',
-  `ref_no` varchar(32) DEFAULT NULL COMMENT '参考订单号',
-  `biz_type` varchar(32) DEFAULT NULL COMMENT '业务类型',
-  `biz_note` varchar(255) DEFAULT NULL COMMENT '业务类型',
-  `trans_amount` bigint(32) DEFAULT NULL COMMENT '变动金额',
-  `pre_amount` bigint(32) DEFAULT NULL COMMENT '变动前金额',
-  `post_amount` bigint(32) DEFAULT NULL COMMENT '变动后金额',
-  `status` varchar(4) DEFAULT NULL COMMENT '状态',
-  `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
-  `work_date` varchar(8) DEFAULT NULL COMMENT '拟对账时间',
-  `check_user` varchar(32) DEFAULT NULL COMMENT '对账人',
-  `check_datetime` datetime DEFAULT NULL COMMENT '对账时间',
-  `adjust_user` varchar(32) DEFAULT NULL COMMENT '调账人',
-  `adjust_datetime` datetime DEFAULT NULL COMMENT '调账时间',
-  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   `system_code` varchar(32) NOT NULL COMMENT '系统编号',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

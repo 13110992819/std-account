@@ -45,9 +45,11 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
 
     @Override
     public String distributeAccount(String userId, String realName,
-            EAccountType accountType, String currency, String systemCode) {
+            EAccountType accountType, String currency, String systemCode,
+            String companyCode) {
         String accountNumber = null;
         if (StringUtils.isNotBlank(systemCode)
+                && StringUtils.isNotBlank(companyCode)
                 && StringUtils.isNotBlank(userId)) {
             accountNumber = OrderNoGenerater.generate(EGeneratePrefix.Account
                 .getCode());
@@ -55,17 +57,21 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
             data.setAccountNumber(accountNumber);
             data.setUserId(userId);
             data.setRealName(realName);
+
             data.setType(accountType.getCode());
             data.setCurrency(currency);
-            data.setSystemCode(systemCode);
             data.setStatus(EAccountStatus.NORMAL.getCode());
             data.setAmount(0L);
             data.setFrozenAmount(0L);
+
             data.setMd5(AccountUtil.md5(data.getAmount()));
             data.setAddAmount(0L);
             data.setInAmount(0L);
             data.setOutAmount(0L);
             data.setCreateDatetime(new Date());
+
+            data.setSystemCode(systemCode);
+            data.setCompanyCode(companyCode);
             accountDAO.insert(data);
         }
         return accountNumber;
@@ -138,7 +144,6 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
             nowAmount));
         data.setLastOrder(lastOrder);
         accountDAO.updateAmount(data);
-
     }
 
     @Override
@@ -153,7 +158,8 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
         }
         // 记录流水
         String lastOrder = jourBO.addJour(dbAccount, EChannelType.Offline,
-            withdrawCode, EJourBizType.AJ_QX, "线下取现冻结金额", -freezeAmount);
+            withdrawCode, null, null, EJourBizType.AJ_QX, "线下取现冻结金额",
+            -freezeAmount);
         Long nowFrozenAmount = dbAccount.getFrozenAmount() + freezeAmount;
         Account data = new Account();
         data.setAccountNumber(dbAccount.getAccountNumber());
@@ -178,7 +184,8 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
 
         // 记录流水
         String lastOrder = jourBO.addJour(dbAccount, EChannelType.Offline,
-            withdrawCode, EJourBizType.AJ_QX, "线下取现解冻金额", freezeAmount);
+            withdrawCode, null, null, EJourBizType.AJ_QX, "线下取现解冻金额",
+            freezeAmount);
         Account data = new Account();
         data.setAccountNumber(dbAccount.getAccountNumber());
         data.setAmount(dbAccount.getAmount() + freezeAmount);
@@ -204,8 +211,7 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
     }
 
     @Override
-    public void refreshStatus(String systemCode, String accountNumber,
-            EAccountStatus status) {
+    public void refreshStatus(String accountNumber, EAccountStatus status) {
         if (StringUtils.isNotBlank(accountNumber)) {
             Account data = new Account();
             data.setAccountNumber(accountNumber);
@@ -245,7 +251,7 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
             condition.setCurrency(currency);
             data = accountDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn702502", "用户[" + userId + ";"
+                throw new BizException("xn802000", "用户[" + userId + ";"
                         + currency + "]无此类型账户");
             }
         }
@@ -277,26 +283,17 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
     @Override
     public void transAmountCZB(String fromUserId, String fromCurrency,
             String toUserId, String toCurrency, Long transAmount,
-            EJourBizType bizType, String fromBizNote, String toBizNote) {
+            EJourBizType bizType, String fromBizNote, String toBizNote,
+            String refNo) {
         Account fromAccount = this.getAccountByUser(fromUserId, fromCurrency);
         Account toAccount = this.getAccountByUser(toUserId, toCurrency);
         transAmountCZB(fromAccount, toAccount, transAmount, bizType,
-            fromBizNote, toBizNote);
-    }
-
-    @Override
-    public void transAmountCZB(String fromAccountNumber,
-            String toAccountNumber, Long transAmount, EJourBizType bizType,
-            String fromBizNote, String toBizNote) {
-        Account fromAccount = this.getAccount(fromAccountNumber);
-        Account toAccount = this.getAccount(toAccountNumber);
-        transAmountCZB(fromAccount, toAccount, transAmount, bizType,
-            fromBizNote, toBizNote);
+            fromBizNote, toBizNote, refNo);
     }
 
     private void transAmountCZB(Account fromAccount, Account toAccount,
             Long transAmount, EJourBizType bizType, String fromBizNote,
-            String toBizNote) {
+            String toBizNote, String refNo) {
         String fromAccountNumber = fromAccount.getAccountNumber();
         String toAccountNumber = toAccount.getAccountNumber();
         if (fromAccountNumber.equals(toAccountNumber)) {
@@ -304,11 +301,10 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
         }
         Double rate = exchangeCurrencyBO.getExchangeRate(
             fromAccount.getCurrency(), toAccount.getCurrency());
-        this.changeAmount(fromAccountNumber, EChannelType.NBZ, toAccountNumber,
-            -transAmount, bizType, fromBizNote);
-        this.changeAmount(toAccountNumber, EChannelType.NBZ, fromAccountNumber,
-            AmountUtil.mul(transAmount, rate), bizType, toBizNote);
-
+        this.changeAmount(fromAccountNumber, EChannelType.NBZ, null, null,
+            refNo, bizType, fromBizNote, -transAmount);
+        this.changeAmount(toAccountNumber, EChannelType.NBZ, null, null, refNo,
+            bizType, toBizNote, AmountUtil.mul(transAmount, rate));
     }
 
     @Override
