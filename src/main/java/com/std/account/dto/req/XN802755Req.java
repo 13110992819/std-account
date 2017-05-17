@@ -38,10 +38,13 @@ public class XN802755Req extends APageReq {
     private String payGroup;
 
     // 支付渠道的订单编号（支付渠道代表）
-    private String payCode;
+    private String channelOrder;
 
     // 系统编号
     private String systemCode;
+
+    // 公司编号
+    private String companyCode;
 
     public String getAccountNumber() {
         return accountNumber;
@@ -107,12 +110,12 @@ public class XN802755Req extends APageReq {
         this.payGroup = payGroup;
     }
 
-    public String getPayCode() {
-        return payCode;
+    public String getChannelOrder() {
+        return channelOrder;
     }
 
-    public void setPayCode(String payCode) {
-        this.payCode = payCode;
+    public void setChannelOrder(String channelOrder) {
+        this.channelOrder = channelOrder;
     }
 
     public String getSystemCode() {
@@ -123,4 +126,11 @@ public class XN802755Req extends APageReq {
         this.systemCode = systemCode;
     }
 
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
 }

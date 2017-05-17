@@ -58,24 +58,24 @@ CREATE TABLE `tstd_jour` (
 DROP TABLE IF EXISTS `tstd_charge`;
 CREATE TABLE `tstd_charge` (
   `code` varchar(32) NOT NULL COMMENT '针对编号',
+  `pay_group` varchar(32) DEFAULT NULL COMMENT '支付组号',
+  `ref_no` varchar(32) DEFAULT NULL COMMENT '流水分组组号',
   `account_number` varchar(32) DEFAULT NULL COMMENT '针对账号',
-  `account_name` varchar(32) DEFAULT NULL COMMENT '针对户名',
   `amount` bigint(20) DEFAULT NULL COMMENT '充值金额',
-  `channel_type` varchar(32) DEFAULT NULL COMMENT '支付渠道',
+  `account_name` varchar(32) DEFAULT NULL COMMENT '针对户名',
+  `biz_type` varchar(32) DEFAULT NULL,
+  `biz_note` varchar(255) DEFAULT NULL,
   `pay_card_info` varchar(255) DEFAULT NULL COMMENT '支付渠道账号信息',
   `pay_card_no` varchar(32) DEFAULT NULL COMMENT '支付渠道账号',
-  
-  `pay_group` varchar(32) DEFAULT NULL COMMENT '支付组号',
   `status` varchar(4) NOT NULL COMMENT '状态',
   `apply_user` varchar(32) DEFAULT NULL COMMENT '申请人',
-  `apply_note` varchar(255) DEFAULT NULL COMMENT '申请说明',
-  `apply_datetime`  datetime DEFAULT NULL COMMENT '申请时间',
-  
+  `apply_datetime` datetime DEFAULT NULL COMMENT '申请时间',
   `pay_user` varchar(32) DEFAULT NULL COMMENT '支付回录人',
   `pay_note` varchar(255) DEFAULT NULL COMMENT '支付渠道说明',
-  `pay_code` varchar(32) DEFAULT NULL COMMENT '支付渠道订单编号',
   `pay_datetime` datetime DEFAULT NULL COMMENT '支付时间',
+  `channel_type` varchar(32) DEFAULT NULL COMMENT '支付渠道',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
+  `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
   PRIMARY KEY (`code`) COMMENT '充值订单'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -88,11 +88,12 @@ CREATE TABLE `tstd_withdraw` (
   `fee` bigint(20) DEFAULT NULL COMMENT '手续费',
 
   `channel_type` varchar(32) DEFAULT NULL COMMENT '支付渠道',
+  `channel_order` varchar(32) DEFAULT NULL COMMENT '支付渠道编号',
   `pay_card_info` varchar(255) DEFAULT NULL COMMENT '支付渠道账号信息',
   `pay_card_no` varchar(32) DEFAULT NULL COMMENT '支付渠道账号',
   `status` varchar(4) NOT NULL COMMENT '状态',
-  `apply_user` varchar(32) DEFAULT NULL COMMENT '申请人',
   
+  `apply_user` varchar(32) DEFAULT NULL COMMENT '申请人',
   `apply_note` varchar(255) DEFAULT NULL COMMENT '申请说明',
   `apply_datetime`  datetime DEFAULT NULL COMMENT '申请时间',
   `approve_user` varchar(32) DEFAULT NULL COMMENT '审批人',
@@ -105,6 +106,7 @@ CREATE TABLE `tstd_withdraw` (
   `pay_code` varchar(32) DEFAULT NULL COMMENT '支付渠道订单编号',
   `pay_datetime` datetime DEFAULT NULL COMMENT '支付回录时间',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
+  `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
   PRIMARY KEY (`code`) COMMENT '取现订单'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

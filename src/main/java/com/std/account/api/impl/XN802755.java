@@ -30,7 +30,8 @@ public class XN802755 extends AProcessor {
         condition.setApproveUser(req.getApproveUser());
         condition.setPayUser(req.getPayUser());
         condition.setPayGroup(req.getPayGroup());
-        condition.setPayCode(req.getPayCode());
+        condition.setChannelOrder(req.getChannelOrder());
+        condition.setCompanyCode(req.getCompanyCode());
         condition.setSystemCode(req.getSystemCode());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
@@ -46,7 +47,8 @@ public class XN802755 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN802755Req.class);
         StringValidater.validateNumber(req.getStart(), req.getLimit());
-        StringValidater.validateBlank(req.getSystemCode());
+        StringValidater
+            .validateBlank(req.getSystemCode(), req.getCompanyCode());
 
     }
 

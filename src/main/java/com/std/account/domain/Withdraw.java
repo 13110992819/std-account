@@ -66,13 +66,16 @@ public class Withdraw extends ABaseDO {
     private String payGroup;
 
     // 支付渠道的订单编号（支付渠道代表）
-    private String payCode;
+    private String channelOrder;
 
     // 支付回录时间
     private Date payDatetime;
 
     // 系统编号
     private String systemCode;
+
+    // 公司编号
+    private String companyCode;
 
     // *******************************
     // 申请时间起
@@ -285,14 +288,6 @@ public class Withdraw extends ABaseDO {
         this.payGroup = payGroup;
     }
 
-    public String getPayCode() {
-        return payCode;
-    }
-
-    public void setPayCode(String payCode) {
-        this.payCode = payCode;
-    }
-
     public Date getPayDatetime() {
         return payDatetime;
     }
@@ -309,4 +304,19 @@ public class Withdraw extends ABaseDO {
         this.systemCode = systemCode;
     }
 
+    public String getChannelOrder() {
+        return channelOrder;
+    }
+
+    public void setChannelOrder(String channelOrder) {
+        this.channelOrder = channelOrder;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
 }

@@ -32,10 +32,13 @@ public class XN802757Req {
     private String payGroup;
 
     // 支付渠道的订单编号（支付渠道代表）
-    private String payCode;
+    private String channelOrder;
 
     // 系统编号
     private String systemCode;
+
+    // 公司编号
+    private String companyCode;
 
     public String getAccountNumber() {
         return accountNumber;
@@ -101,12 +104,12 @@ public class XN802757Req {
         this.payGroup = payGroup;
     }
 
-    public String getPayCode() {
-        return payCode;
+    public String getChannelOrder() {
+        return channelOrder;
     }
 
-    public void setPayCode(String payCode) {
-        this.payCode = payCode;
+    public void setChannelOrder(String channelOrder) {
+        this.channelOrder = channelOrder;
     }
 
     public String getSystemCode() {
@@ -115,5 +118,13 @@ public class XN802757Req {
 
     public void setSystemCode(String systemCode) {
         this.systemCode = systemCode;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 }

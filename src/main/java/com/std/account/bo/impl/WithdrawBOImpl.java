@@ -7,11 +7,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.std.account.bo.IBankcardBO;
 import com.std.account.bo.IWithdrawBO;
 import com.std.account.bo.base.PaginableBOImpl;
 import com.std.account.core.OrderNoGenerater;
 import com.std.account.dao.IWithdrawDAO;
 import com.std.account.domain.Account;
+import com.std.account.domain.Bankcard;
 import com.std.account.domain.Withdraw;
 import com.std.account.enums.EChannelType;
 import com.std.account.enums.EGeneratePrefix;
@@ -21,6 +23,9 @@ import com.std.account.exception.BizException;
 @Component
 public class WithdrawBOImpl extends PaginableBOImpl<Withdraw> implements
         IWithdrawBO {
+    @Autowired
+    private IBankcardBO bankcardBO; // 取现银行卡户名
+
     @Autowired
     private IWithdrawDAO withdrawDAO;
 
@@ -36,7 +41,14 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw> implements
         Withdraw data = new Withdraw();
         data.setCode(code);
         data.setAccountNumber(account.getAccountNumber());
-        data.setAccountName(account.getRealName());
+
+        // 取现户名，应该和银行卡户名一致
+        Bankcard bankcard = bankcardBO.getBankcardInfo(code);
+        if (null == bankcard) {
+            data.setAccountName(account.getRealName());
+        } else {
+            data.setAccountName(bankcard.getRealName());
+        }
         data.setAmount(amount);
         data.setFee(fee);
 
@@ -49,6 +61,7 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw> implements
         data.setApplyNote(applyNote);
         data.setApplyDatetime(new Date());
         data.setSystemCode(account.getSystemCode());
+        data.setCompanyCode(account.getCompanyCode());
         withdrawDAO.insert(data);
         return code;
     }
@@ -66,12 +79,12 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw> implements
 
     @Override
     public void payOrder(Withdraw data, EWithdrawStatus status, String payUser,
-            String payNote, String payCode) {
+            String payNote, String channelOrder) {
         data.setStatus(status.getCode());
         data.setPayUser(payUser);
         data.setPayNote(payNote);
         data.setPayGroup(null);
-        data.setPayCode(payCode);
+        data.setChannelOrder(channelOrder);
         data.setPayDatetime(new Date());
         withdrawDAO.payOrder(data);
     }
@@ -92,5 +105,4 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw> implements
         }
         return order;
     }
-
 }

@@ -11,7 +11,7 @@ import com.std.account.exception.ParaException;
 import com.std.account.spring.SpringContextHolder;
 
 /**
- * 线下取现申请
+ * 线下取现申请(需交易密码)
  * @author: myb858 
  * @since: 2017年4月24日 下午8:00:31 
  * @history:
@@ -26,9 +26,9 @@ public class XN802750 extends AProcessor {
     @Override
     public synchronized Object doBusiness() throws BizException {
         Long amount = StringValidater.toLong(req.getAmount());
-        String code = withdrawAO.applyOrder(req.getAccountNumber(), amount,
-            req.getPayCardInfo(), req.getPayCardNo(), req.getApplyUser(),
-            req.getApplyNote());
+        String code = withdrawAO.applyOrderTradePwd(req.getAccountNumber(),
+            amount, req.getPayCardInfo(), req.getPayCardNo(),
+            req.getApplyUser(), req.getApplyNote(), req.getTradePwd());
         return new PKCodeRes(code);
     }
 
@@ -36,7 +36,8 @@ public class XN802750 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN802750Req.class);
         StringValidater.validateBlank(req.getAccountNumber(),
-            req.getPayCardInfo(), req.getPayCardNo(), req.getApplyUser());
+            req.getPayCardInfo(), req.getPayCardNo(), req.getApplyUser(),
+            req.getTradePwd());
         StringValidater.validateAmount(req.getAmount());
     }
 }

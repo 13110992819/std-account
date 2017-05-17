@@ -3,9 +3,9 @@ package com.std.account.dto.req;
 import java.util.List;
 
 /**
- * 支付回录
+ * 线下取现审批
  * @author: xieyj 
- * @since: 2017年5月12日 上午10:02:36 
+ * @since: 2017年5月12日 上午10:02:19 
  * @history:
  */
 public class XN802752Req {
@@ -15,17 +15,14 @@ public class XN802752Req {
     // 取现订单编号(必填)
     private List<String> codeList;
 
-    // 支付回录人(必填)
-    private String payUser;
+    // 审核人(必填)
+    private String approveUser;
 
-    // 审核结果1 是 0 否(必填)
-    private String payResult;
+    // 审核结果(必填)
+    private String approveResult;
 
-    // 支付回录说明(必填)
-    private String payNote;
-
-    // 支付渠道订单编号（支付渠道代表）(必填)
-    private String payCode;
+    // 审核说明(必填)
+    private String approveNote;
 
     public String getSystemCode() {
         return systemCode;
@@ -43,36 +40,28 @@ public class XN802752Req {
         this.codeList = codeList;
     }
 
-    public String getPayUser() {
-        return payUser;
+    public String getApproveUser() {
+        return approveUser;
     }
 
-    public void setPayUser(String payUser) {
-        this.payUser = payUser;
+    public void setApproveUser(String approveUser) {
+        this.approveUser = approveUser;
     }
 
-    public String getPayResult() {
-        return payResult;
+    public String getApproveResult() {
+        return approveResult;
     }
 
-    public void setPayResult(String payResult) {
-        this.payResult = payResult;
+    public void setApproveResult(String approveResult) {
+        this.approveResult = approveResult;
     }
 
-    public String getPayNote() {
-        return payNote;
+    public String getApproveNote() {
+        return approveNote;
     }
 
-    public void setPayNote(String payNote) {
-        this.payNote = payNote;
-    }
-
-    public String getPayCode() {
-        return payCode;
-    }
-
-    public void setPayCode(String payCode) {
-        this.payCode = payCode;
+    public void setApproveNote(String approveNote) {
+        this.approveNote = approveNote;
     }
 
 }

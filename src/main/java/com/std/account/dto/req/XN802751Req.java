@@ -1,67 +1,77 @@
 package com.std.account.dto.req;
 
-import java.util.List;
-
 /**
- * 线下取现审批
+ * 线下取现申请
  * @author: xieyj 
- * @since: 2017年5月12日 上午10:02:19 
+ * @since: 2016年12月25日 下午3:25:44 
  * @history:
  */
 public class XN802751Req {
-    // 系统编号(必填)
-    private String systemCode;
 
-    // 取现订单编号(必填)
-    private List<String> codeList;
+    // 针对账号（必填）
+    private String accountNumber;
 
-    // 审核人(必填)
-    private String approveUser;
+    // 取现金额（必填）
+    private String amount;
 
-    // 审核结果(必填)
-    private String approveResult;
+    // 支付渠道账号信息（如开户支行）（必填）
+    private String payCardInfo;
 
-    // 审核说明(必填)
-    private String approveNote;
+    // 支付渠道账号（如银行卡号）（必填）
+    private String payCardNo;
 
-    public String getSystemCode() {
-        return systemCode;
+    // 申请人（必填）
+    private String applyUser;
+
+    // 申请说明（选填）
+    private String applyNote;
+
+    public String getAccountNumber() {
+        return accountNumber;
     }
 
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
     }
 
-    public List<String> getCodeList() {
-        return codeList;
+    public String getAmount() {
+        return amount;
     }
 
-    public void setCodeList(List<String> codeList) {
-        this.codeList = codeList;
+    public void setAmount(String amount) {
+        this.amount = amount;
     }
 
-    public String getApproveUser() {
-        return approveUser;
+    public String getPayCardInfo() {
+        return payCardInfo;
     }
 
-    public void setApproveUser(String approveUser) {
-        this.approveUser = approveUser;
+    public void setPayCardInfo(String payCardInfo) {
+        this.payCardInfo = payCardInfo;
     }
 
-    public String getApproveResult() {
-        return approveResult;
+    public String getPayCardNo() {
+        return payCardNo;
     }
 
-    public void setApproveResult(String approveResult) {
-        this.approveResult = approveResult;
+    public void setPayCardNo(String payCardNo) {
+        this.payCardNo = payCardNo;
     }
 
-    public String getApproveNote() {
-        return approveNote;
+    public String getApplyUser() {
+        return applyUser;
     }
 
-    public void setApproveNote(String approveNote) {
-        this.approveNote = approveNote;
+    public void setApplyUser(String applyUser) {
+        this.applyUser = applyUser;
+    }
+
+    public String getApplyNote() {
+        return applyNote;
+    }
+
+    public void setApplyNote(String applyNote) {
+        this.applyNote = applyNote;
     }
 
 }

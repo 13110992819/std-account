@@ -92,6 +92,17 @@ public class BankcardBOImpl extends PaginableBOImpl<Bankcard> implements
         return data;
     }
 
+    @Override
+    public Bankcard getBankcardInfo(String code) {
+        Bankcard data = null;
+        if (StringUtils.isNotBlank(code)) {
+            Bankcard condition = new Bankcard();
+            condition.setCode(code);
+            data = bankcardDAO.select(condition);
+        }
+        return data;
+    }
+
     /** 
      * @see com.std.account.bo.IBankcardBO#getBankcardByBankcardNumber(java.lang.String)
      */

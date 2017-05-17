@@ -10,6 +10,10 @@ import com.std.account.domain.Withdraw;
 public interface IWithdrawAO {
     String DEFAULT_ORDER_COLUMN = "code";
 
+    public String applyOrderTradePwd(String accountNumber, Long amount,
+            String payCardInfo, String payCardNo, String applyUser,
+            String applyNote, String tradePwd);
+
     public String applyOrder(String accountNumber, Long amount,
             String payCardInfo, String payCardNo, String applyUser,
             String applyNote);
@@ -18,7 +22,7 @@ public interface IWithdrawAO {
             String approveResult, String approveNote, String systemCode);
 
     public void payOrder(String code, String payUser, String payResult,
-            String payNote, String payCode, String systemCode);
+            String payNote, String channelOrder, String systemCode);
 
     public Paginable<Withdraw> queryWithdrawPage(int start, int limit,
             Withdraw condition);

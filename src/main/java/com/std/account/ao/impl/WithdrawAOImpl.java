@@ -1,20 +1,27 @@
 package com.std.account.ao.impl;
 
 import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.std.account.ao.IWithdrawAO;
 import com.std.account.bo.IAccountBO;
+import com.std.account.bo.ISYSConfigBO;
+import com.std.account.bo.IUserBO;
 import com.std.account.bo.IWithdrawBO;
 import com.std.account.bo.base.Paginable;
+import com.std.account.common.SysConstant;
 import com.std.account.domain.Account;
 import com.std.account.domain.Withdraw;
+import com.std.account.enums.EAccountType;
 import com.std.account.enums.EBoolean;
 import com.std.account.enums.EWithdrawStatus;
 import com.std.account.exception.BizException;
+import com.std.account.util.AmountUtil;
 
 @Service
 public class WithdrawAOImpl implements IWithdrawAO {
@@ -24,14 +31,36 @@ public class WithdrawAOImpl implements IWithdrawAO {
     @Autowired
     private IWithdrawBO withdrawBO;
 
-    // @Autowired
-    // private IUserBO userBO;// 交易密码
-    //
-    // @Autowired
-    // private IBankcardBO bankcardBO; // 取现银行卡户名
-    //
-    // @Autowired
-    // private ISYSConfigBO sysConfigBO; //取现配置
+    @Autowired
+    private IUserBO userBO;
+
+    @Autowired
+    private ISYSConfigBO sysConfigBO;
+
+    @Override
+    public String applyOrderTradePwd(String accountNumber, Long amount,
+            String payCardInfo, String payCardNo, String applyUser,
+            String applyNote, String tradePwd) {
+        Account dbAccount = accountBO.getAccount(accountNumber);
+        // 验证交易密码
+        userBO.checkTradePwd(dbAccount.getUserId(), tradePwd);
+        if (amount <= 0) {
+            throw new BizException("xn000000", "提现金额需大于零");
+        }
+        if (dbAccount.getAmount() < amount) {
+            throw new BizException("xn000000", "余额不足");
+        }
+        // 生成取现订单
+        Long fee = doGetFee(dbAccount.getType(), amount,
+            dbAccount.getSystemCode(), dbAccount.getCompanyCode());
+        // 取现总金额
+        amount = amount + fee;
+        String withdrawCode = withdrawBO.applyOrder(dbAccount, amount, fee,
+            payCardInfo, payCardNo, applyUser, applyNote);
+        // 冻结取现金额
+        accountBO.frozenAmount(dbAccount, amount, withdrawCode);
+        return withdrawCode;
+    }
 
     @Override
     @Transactional
@@ -46,7 +75,10 @@ public class WithdrawAOImpl implements IWithdrawAO {
             throw new BizException("xn000000", "余额不足");
         }
         // 生成取现订单
-        Long fee = 0L;// 手续费暂为0
+        Long fee = doGetFee(dbAccount.getType(), amount,
+            dbAccount.getSystemCode(), dbAccount.getCompanyCode());
+        // 取现总金额
+        amount = amount + fee;
         String withdrawCode = withdrawBO.applyOrder(dbAccount, amount, fee,
             payCardInfo, payCardNo, applyUser, applyNote);
         // 冻结取现金额
@@ -72,15 +104,15 @@ public class WithdrawAOImpl implements IWithdrawAO {
     @Override
     @Transactional
     public void payOrder(String code, String payUser, String payResult,
-            String payNote, String payCode, String systemCode) {
+            String payNote, String channelOrder, String systemCode) {
         Withdraw data = withdrawBO.getWithdraw(code, systemCode);
         if (!EWithdrawStatus.Approved_YES.getCode().equals(data.getStatus())) {
             throw new BizException("xn000000", "申请记录状态不是待支付状态，无法支付");
         }
         if (EBoolean.YES.getCode().equals(payResult)) {
-            payOrderYES(data, payUser, payNote, payCode);
+            payOrderYES(data, payUser, payNote, channelOrder);
         } else {
-            payOrderNO(data, payUser, payNote, payCode);
+            payOrderNO(data, payUser, payNote, channelOrder);
         }
     }
 
@@ -133,33 +165,44 @@ public class WithdrawAOImpl implements IWithdrawAO {
         return withdrawBO.getWithdraw(code, systemCode);
     }
 
-    // /**
-    // * 取现申请检查，验证参数，返回手续费
-    // * @param transAmount
-    // * @param qxbs
-    // * @param qxfl
-    // * @param systemCode
-    // * @return
-    // * @create: 2017年5月2日 下午4:15:01 xieyj
-    // * @history:
-    // */
-    // private Long doCheckWithArgs(Long transAmount, String qxbs, String qxfl,
-    // String systemCode) {
-    // Map<String, String> argsMap = sysConfigBO.getConfigsMap(systemCode);
-    // String qxBsValue = argsMap.get(qxbs);
-    // if (StringUtils.isNotBlank(qxBsValue)) {
-    // // 取现金额倍数
-    // Long qxBs = AmountUtil.mul(1000L, Double.valueOf(qxBsValue));
-    // if (qxBs > 0 && -transAmount % qxBs > 0) {
-    // throw new BizException("xn000000", "请取" + qxBsValue + "的倍数");
-    // }
-    // }
-    // String feeRateValue = argsMap.get(qxfl);
-    // Double feeRate = 0D;
-    // if (StringUtils.isNotBlank(feeRateValue)) {
-    // feeRate = Double.valueOf(feeRateValue);
-    // }
-    // return AmountUtil.mul(-transAmount, feeRate);
-    // }
-
+    /**
+     * 取现申请检查，验证参数，返回手续费
+     * @param accountType
+     * @param amount
+     * @param systemCode
+     * @param companyCode
+     * @return 
+     * @create: 2017年5月17日 上午7:53:01 xieyj
+     * @history:
+     */
+    private Long doGetFee(String accountType, Long amount, String systemCode,
+            String companyCode) {
+        Map<String, String> argsMap = sysConfigBO.getConfigsMap(systemCode,
+            companyCode);
+        String qxbs = null;
+        String qxfl = null;
+        if (EAccountType.Customer.getCode().equals(accountType)) {
+            qxbs = SysConstant.CUSERQXBS;
+            qxfl = SysConstant.CUSERQXFL;
+        } else if (EAccountType.Business.getCode().equals(accountType)) {
+            qxbs = SysConstant.BUSERQXBS;
+            qxfl = SysConstant.BUSERQXFL;
+        } else {// 暂定其他账户类型不收手续费
+            return 0L;
+        }
+        String qxBsValue = argsMap.get(qxbs);
+        if (StringUtils.isNotBlank(qxBsValue)) {
+            // 取现金额倍数
+            Long qxBs = AmountUtil.mul(1000L, Double.valueOf(qxBsValue));
+            if (qxBs > 0 && -amount % qxBs > 0) {
+                throw new BizException("xn000000", "请取" + qxBsValue + "的倍数");
+            }
+        }
+        String feeRateValue = argsMap.get(qxfl);
+        Double feeRate = 0D;
+        if (StringUtils.isNotBlank(feeRateValue)) {
+            feeRate = Double.valueOf(feeRateValue);
+        }
+        return AmountUtil.mul(-amount, feeRate);
+    }
 }

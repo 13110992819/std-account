@@ -28,16 +28,16 @@ public class XN802757 extends AProcessor {
         condition.setApproveUser(req.getApproveUser());
         condition.setPayUser(req.getPayUser());
         condition.setPayGroup(req.getPayGroup());
-        condition.setPayCode(req.getPayCode());
+        condition.setChannelOrder(req.getChannelOrder());
         condition.setSystemCode(req.getSystemCode());
+        condition.setCompanyCode(req.getCompanyCode());
         return withdrawAO.queryWithdrawList(condition);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN802757Req.class);
-        StringValidater.validateBlank(req.getSystemCode());
-
+        StringValidater
+            .validateBlank(req.getSystemCode(), req.getCompanyCode());
     }
-
 }

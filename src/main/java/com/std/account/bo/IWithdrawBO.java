@@ -17,7 +17,7 @@ public interface IWithdrawBO extends IPaginableBO<Withdraw> {
             String approveUser, String approveNote);
 
     void payOrder(Withdraw data, EWithdrawStatus status, String payUser,
-            String payNote, String payCode);
+            String payNote, String channelOrder);
 
     List<Withdraw> queryWithdrawList(Withdraw condition);
 

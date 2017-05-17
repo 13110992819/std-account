@@ -24,10 +24,11 @@
 		<result column="pay_user" property="payUser" />
 		<result column="pay_note" property="payNote" />
 		<result column="pay_group" property="payGroup" />
-		<result column="pay_code" property="payCode" />
+		<result column="channel_order" property="channelOrder" />
 		<result column="pay_datetime" property="payDatetime" />
 		
 		<result column="system_code" property="systemCode" />
+		<result column="company_code" property="companyCode" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -75,8 +76,8 @@
 			<if test="payGroup != null and payGroup != '' ">
 				AND t.pay_group = #{payGroup}
 			</if>
-			<if test="payCode != null and payCode != '' ">
-				AND t.pay_code = #{payCode}
+			<if test="channelOrder != null and channelOrder != '' ">
+				AND t.channel_order = #{channelOrder}
 			</if>
 			
 			<if test="payDatetimeStart != null and payDatetimeStart != '' ">
@@ -87,6 +88,9 @@
 			</if>
 			<if test="systemCode != null and systemCode != '' ">
 				AND t.system_code = #{systemCode}
+			</if>
+			<if test="companyCode != null and companyCode != '' ">
+				AND t.company_code = #{companyCode}
 			</if>
 		</trim>
 	</sql>
@@ -113,10 +117,11 @@
 		,t.pay_user
 		,t.pay_note
 		,t.pay_group
-		,t.pay_code
+		,t.channel_order
 		,t.pay_datetime
 		
 		,t.system_code
+		,t.company_code
 		FROM
 		tstd_withdraw t
 		<include refid="where_condition" />
@@ -151,6 +156,7 @@
 		,apply_note
 		,apply_datetime
 		,system_code
+		,company_code
 		)
 		VALUES(
 		#{code}
@@ -168,6 +174,7 @@
 		,#{applyNote}
 		,#{applyDatetime}
 		,#{systemCode}
+		,#{companyCode}
 		)
 	</insert>
 
@@ -188,7 +195,7 @@
 		,pay_user = #{payUser}
 		,pay_note = #{payNote}
 		,pay_group = #{payGroup}
-		,pay_code = #{payCode}
+		,channel_order = #{channelOrder}
 		,pay_datetime = #{payDatetime}
 		WHERE code = #{code}
 	</update>
