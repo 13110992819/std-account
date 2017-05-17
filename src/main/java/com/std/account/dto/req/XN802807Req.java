@@ -10,6 +10,9 @@ public class XN802807Req {
     // 流水号
     private String jourCode;
 
+    // 渠道类型
+    private String channelType;
+
     // 红冲还是蓝补
     private String direction;
 
@@ -131,6 +134,14 @@ public class XN802807Req {
 
     public void setSystemCode(String systemCode) {
         this.systemCode = systemCode;
+    }
+
+    public String getChannelType() {
+        return channelType;
+    }
+
+    public void setChannelType(String channelType) {
+        this.channelType = channelType;
     }
 
 }

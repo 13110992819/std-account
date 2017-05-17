@@ -29,8 +29,9 @@ public interface IJourAO {
      * @param checkAmount
      * @param checkUser
      * @param checkNote
-     * @param systemCode 
-     * @create: 2016年12月25日 下午3:58:53 xieyj
+     * @param systemCode
+     * @param companyCode 
+     * @create: 2017年5月17日 下午6:37:21 xieyj
      * @history:
      */
     public void checkJour(String code, Long checkAmount, String checkUser,

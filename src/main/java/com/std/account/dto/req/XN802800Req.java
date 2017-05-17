@@ -9,6 +9,9 @@ public class XN802800Req {
     // 系统编号(必填)
     private String systemCode;
 
+    // 公司编号(必填)
+    private String companyCode;
+
     // 单号(必填)
     private String code;
 
@@ -20,6 +23,14 @@ public class XN802800Req {
 
     // 对账人(必填)
     private String checkUser;
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
 
     public String getSystemCode() {
         return systemCode;

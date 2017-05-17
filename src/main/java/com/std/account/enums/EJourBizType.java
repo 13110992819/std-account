@@ -8,13 +8,22 @@ import com.std.account.exception.BizException;
 public enum EJourBizType {
     // 通用业务类型 每个系统的分布说明
     AJ_REG("01", "注册送积分"), AJ_SIGN("02", "每日签到"), AJ_CZ("11", "充值"), AJ_QX(
-            "-11", "取现"), AJ_HCLB("HL", "红冲蓝补"), EXCHANGE_CURRENCY("200",
-            "币种兑换"), Transfer_CURRENCY("201", "同币种的划转")
+            "-11", "取现"), AJ_HCLB("HL", "红冲蓝补"), Transfer_CURRENCY("201",
+            "同币种的划转"), EXCHANGE_CURRENCY("200", "币种兑换")
 
     // 各自系统特有的业务类型
-    , ZH_O2O("-ZH1", "正汇O2O支付"), AJ_CGBSM("210", "采购币售卖"), CG_HB2CGB("211",
-            "嗨币兑换菜狗币");
-
+    , AJ_CGBSM("210", "采购币售卖"), AJ_GW("-30", "购物"), AJ_GWTK("30", "购物退款"), AJ_QRSH(
+            "32", "确认收货，商户收钱"), AJ_GMZKQ("-40", "购买折扣券"), CG_HB2CGB("211",
+            "嗨币兑换菜狗币"), CG_O2O_CGB("90", "菜狗O2O菜狗币支付"), CG_O2O_CGBFD("91",
+            "菜狗O2O菜狗币返点人民币"), CG_O2O_RMB("92", "菜狗O2O人民币支付"), CG_O2O_CGJF("93",
+            "菜狗O2O积分支付"), CG_O2O_RMBFD("95", "菜狗O2O人民币支付返点菜狗币"), CG_XNCZ_P(
+            "94", "菜狗充值专区用款"), CG_XNCZ_M("-94", "菜狗充值专区退款"), ZH_O2O("-ZH1",
+            "正汇O2O支付"), ZH_STOCK("-ZH2", "正汇分红权分红"), CSW_PAY("100",
+            "城市网商品积分购买支付"), GD_MALL("GD_MALL", "积分商城消费"), GD_O2O("GD_O2O",
+            "O2O店铺积分消费"), AJ_GMHZB("-50", "购买汇赚宝"), AJ_GMHZBFC("51", "购买汇赚宝分成"), AJ_YYJL(
+            "52", "汇赚宝摇一摇奖励"), AJ_YYFC("53", "汇赚宝摇一摇分成"), AJ_YYFC_REF("54",
+            "推荐人摇一摇分成"), AJ_FSDHB("60", "发送得红包"), AJ_LQHB("61", "领取红包"), AJ_DUOBAO(
+            "-70", "参与小目标"), AJ_DUOBAO_PRIZE("71", "小目标中奖");
     public static EJourBizType getBizType(String code) {
         Map<String, EJourBizType> map = getBizTypeMap();
         EJourBizType result = map.get(code);

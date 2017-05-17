@@ -12,6 +12,12 @@ import com.std.account.exception.BizException;
 import com.std.account.exception.ParaException;
 import com.std.account.spring.SpringContextHolder;
 
+/**
+ * 分页查询取现订单
+ * @author: xieyj 
+ * @since: 2017年5月17日 下午5:17:47 
+ * @history:
+ */
 public class XN802755 extends AProcessor {
     private IWithdrawAO withdrawAO = SpringContextHolder
         .getBean(IWithdrawAO.class);

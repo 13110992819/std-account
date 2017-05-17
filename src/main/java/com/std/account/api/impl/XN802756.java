@@ -9,6 +9,12 @@ import com.std.account.exception.BizException;
 import com.std.account.exception.ParaException;
 import com.std.account.spring.SpringContextHolder;
 
+/**
+ * 取现详情
+ * @author: xieyj 
+ * @since: 2017年5月17日 下午6:35:28 
+ * @history:
+ */
 public class XN802756 extends AProcessor {
     private IWithdrawAO withdrawAO = SpringContextHolder
         .getBean(IWithdrawAO.class);

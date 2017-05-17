@@ -128,7 +128,8 @@ CREATE TABLE `tstd_hlorder` (
   `approve_user` varchar(32) DEFAULT NULL COMMENT '审批人（li为程序）',
   `approve_note` varchar(255) DEFAULT NULL COMMENT '审批说明',
   `approve_datetime` datetime DEFAULT NULL COMMENT '审批时间',
-  `system_code` varchar(32) NOT NULL COMMENT '系统编号',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
+  `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
