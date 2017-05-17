@@ -33,10 +33,10 @@ public class XN002501 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        return weChatAO.getPrepayIdH5(req.getFromUserId(), req.getFromOpenId(),
-            req.getToUserId(), req.getBizType(), req.getFromBizNote(),
-            req.getToBizNote(), StringValidater.toLong(req.getTransAmount()),
-            req.getPayGroup(), req.getBackUrl());
+        Long transAmount = StringValidater.toLong(req.getAmount());
+        return weChatAO.getPrepayIdH5(req.getApplyUser(), req.getOpenId(),
+            req.getToUser(), req.getPayGroup(), req.getRefNo(),
+            req.getBizType(), req.getBizNote(), transAmount, req.getBackUrl());
     }
 
     /** 
@@ -45,9 +45,10 @@ public class XN002501 extends AProcessor {
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN002501Req.class);
-        StringValidater.validateBlank(req.getFromUserId(), req.getFromOpenId(),
-            req.getToUserId(), req.getBizType(), req.getFromBizNote(),
-            req.getToBizNote(), req.getPayGroup());
+        StringValidater.validateAmount(req.getAmount());
+        StringValidater.validateBlank(req.getApplyUser(), req.getOpenId(),
+            req.getToUser(), req.getPayGroup(), req.getRefNo(),
+            req.getBizType(), req.getBizNote(), req.getBackUrl());
 
     }
 }

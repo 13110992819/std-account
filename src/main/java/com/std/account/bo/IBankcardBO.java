@@ -23,4 +23,5 @@ public interface IBankcardBO extends IPaginableBO<Bankcard> {
 
     public Bankcard getBankcardByBankcardNumber(String bankcardNumber);
 
+    public List<Bankcard> queryBankcardList(String systemCode);
 }

@@ -47,10 +47,9 @@ public class AccountAOImpl implements IAccountAO {
     @Override
     public void editAccountName(String userId, String realName) {
         // 验证用户名和系统编号
-        Account data = new Account();
-        data.setUserId(userId);
-        data.setRealName(realName);
-        List<Account> accountList = accountBO.queryAccountList(data);
+        Account condition = new Account();
+        condition.setUserId(userId);
+        List<Account> accountList = accountBO.queryAccountList(condition);
         if (CollectionUtils.isEmpty(accountList)) {
             new BizException("XN0000", "该用户无对应账号");
         }
@@ -59,8 +58,8 @@ public class AccountAOImpl implements IAccountAO {
 
     @Override
     @Transactional
-    public void transAmountCZB(String fromUserId, String toUserId,
-            String fromCurrency, String toCurrency, Long transAmount,
+    public void transAmountCZB(String fromUserId, String fromCurrency,
+            String toUserId, String toCurrency, Long transAmount,
             String bizType, String fromBizNote, String toBizNote, String refNo) {
         EJourBizType a = EJourBizType.getBizType(bizType);
         accountBO.transAmountCZB(fromUserId, fromCurrency, toUserId,

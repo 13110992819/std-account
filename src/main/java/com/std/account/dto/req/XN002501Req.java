@@ -16,63 +16,71 @@ package com.std.account.dto.req;
  */
 public class XN002501Req {
 
-    // 付款方用户编号（必填）
-    private String fromUserId;
+    // 发起人(必填)
+    private String applyUser;
 
-    // 付款方微信openId（必填）
-    private String fromOpenId;
+    // openId
+    private String openId;
 
-    // 收款方用户编号（必填）
-    private String toUserId;
-
-    // 业务类型（必填）
-    private String bizType;
-
-    // 付款方业务备注（必填）
-    private String fromBizNote;
-
-    // 收款方业务备注（必填）
-    private String toBizNote;
-
-    // 划转资金(必填)
-    private String transAmount;
+    // 收款人(必填)
+    private String toUser;
 
     // 支付组号(必填)
     private String payGroup;
 
+    // 订单号(必填)
+    private String refNo;
+
+    // 业务类型编号（必填）
+    private String bizType;
+
+    // 业务类型说明（必填）
+    private String bizNote;
+
+    // 支付资金(必填)
+    private String amount;
+
     // 回调地址(必填)
     private String backUrl;
 
-    public String getBackUrl() {
-        return backUrl;
+    public String getApplyUser() {
+        return applyUser;
     }
 
-    public void setBackUrl(String backUrl) {
-        this.backUrl = backUrl;
+    public void setApplyUser(String applyUser) {
+        this.applyUser = applyUser;
     }
 
-    public String getFromUserId() {
-        return fromUserId;
+    public String getOpenId() {
+        return openId;
     }
 
-    public void setFromUserId(String fromUserId) {
-        this.fromUserId = fromUserId;
+    public void setOpenId(String openId) {
+        this.openId = openId;
     }
 
-    public String getFromOpenId() {
-        return fromOpenId;
+    public String getToUser() {
+        return toUser;
     }
 
-    public void setFromOpenId(String fromOpenId) {
-        this.fromOpenId = fromOpenId;
+    public void setToUser(String toUser) {
+        this.toUser = toUser;
     }
 
-    public String getToUserId() {
-        return toUserId;
+    public String getPayGroup() {
+        return payGroup;
     }
 
-    public void setToUserId(String toUserId) {
-        this.toUserId = toUserId;
+    public void setPayGroup(String payGroup) {
+        this.payGroup = payGroup;
+    }
+
+    public String getRefNo() {
+        return refNo;
+    }
+
+    public void setRefNo(String refNo) {
+        this.refNo = refNo;
     }
 
     public String getBizType() {
@@ -83,36 +91,28 @@ public class XN002501Req {
         this.bizType = bizType;
     }
 
-    public String getFromBizNote() {
-        return fromBizNote;
+    public String getBizNote() {
+        return bizNote;
     }
 
-    public void setFromBizNote(String fromBizNote) {
-        this.fromBizNote = fromBizNote;
+    public void setBizNote(String bizNote) {
+        this.bizNote = bizNote;
     }
 
-    public String getToBizNote() {
-        return toBizNote;
+    public String getAmount() {
+        return amount;
     }
 
-    public void setToBizNote(String toBizNote) {
-        this.toBizNote = toBizNote;
+    public void setAmount(String amount) {
+        this.amount = amount;
     }
 
-    public String getTransAmount() {
-        return transAmount;
+    public String getBackUrl() {
+        return backUrl;
     }
 
-    public void setTransAmount(String transAmount) {
-        this.transAmount = transAmount;
-    }
-
-    public String getPayGroup() {
-        return payGroup;
-    }
-
-    public void setPayGroup(String payGroup) {
-        this.payGroup = payGroup;
+    public void setBackUrl(String backUrl) {
+        this.backUrl = backUrl;
     }
 
 }

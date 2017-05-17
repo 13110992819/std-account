@@ -32,7 +32,7 @@
 				AND t.user_id = #{userId}
 			</if>
 			<if test="realName != null and realName != '' ">
-				AND t.real_name like "%"#{realNameQuery}"%"
+				AND t.real_name like "%"#{realName}"%"
 			</if>
 			<choose>
 			     <when test='type == "NOT_P"'>
