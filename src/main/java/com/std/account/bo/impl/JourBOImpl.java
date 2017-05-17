@@ -111,6 +111,7 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
         data.setCreateDatetime(new Date());
         data.setWorkDate(null);
         data.setSystemCode(dbAccount.getSystemCode());
+        data.setCompanyCode(dbAccount.getCompanyCode());
         jourDAO.insert(data);
         return code;
 

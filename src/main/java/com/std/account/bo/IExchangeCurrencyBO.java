@@ -35,16 +35,17 @@ public interface IExchangeCurrencyBO extends IPaginableBO<ExchangeCurrency> {
     /*
      * 虚拟币划转兑换记录
      */
-    public String saveExchange(String fromUserId, String toUserId,
-            Long transAmount, String currency, String systemCode);
-
-    public String payExchange(String fromUserId, String toUserId,
-            Long rmbAmount, Long toAmount, String currency, String payType,
-            String systemCode);
-
-    public int paySuccess(String code, String status, String payCode,
-            Long payAmount);
+    public String saveExchange(String fromUserId, Long fromAmount,
+            String fromCurrency, String toUserId, Long toAmount,
+            String toCurrency, String companyCode, String systemCode);
 
     public void doCheckZH(String userId, String fromCurrency, String toCurrency);
+
+    // public String payExchange(String fromUserId, String toUserId,
+    // Long rmbAmount, Long toAmount, String currency, String payType,
+    // String systemCode);
+    //
+    // public int paySuccess(String code, String status, String payCode,
+    // Long payAmount);
 
 }

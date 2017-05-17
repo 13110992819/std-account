@@ -48,13 +48,8 @@ public class ExchangeCurrencyDAOImpl extends AMybatisTemplate implements
     }
 
     @Override
-    public int paySuccess(ExchangeCurrency data) {
-        return super.update(NAMESPACE.concat("update_paySuccess"), data);
-    }
-
-    @Override
     public int applyExchange(ExchangeCurrency data) {
-        return super.insert(NAMESPACE.concat("insert_payExchange"), data);
+        return super.insert(NAMESPACE.concat("insert_exchangeCurrency"), data);
     }
 
     @Override
@@ -63,12 +58,17 @@ public class ExchangeCurrencyDAOImpl extends AMybatisTemplate implements
     }
 
     @Override
-    public int payExchange(ExchangeCurrency data) {
-        return super.insert(NAMESPACE.concat("insert_payExchange"), data);
+    public int doExchange(ExchangeCurrency data) {
+        return super.insert(NAMESPACE.concat("insert_exchangeCurrency"), data);
     }
 
-    @Override
-    public int doExchange(ExchangeCurrency data) {
-        return super.insert(NAMESPACE.concat("insert_payExchange"), data);
-    }
+    // @Override
+    // public int paySuccess(ExchangeCurrency data) {
+    // return super.update(NAMESPACE.concat("update_paySuccess"), data);
+    // }
+    //
+    // @Override
+    // public int payExchange(ExchangeCurrency data) {
+    // return super.insert(NAMESPACE.concat("insert_payExchange"), data);
+    // }
 }

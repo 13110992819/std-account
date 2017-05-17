@@ -114,7 +114,7 @@
 		<include refid="where_condition" />
 	</select>
 
-	<insert id="insert_payExchange" parameterType="exchangeCurrency">
+	<insert id="insert_exchangeCurrency" parameterType="exchangeCurrency">
 		INSERT INTO
 		tstd_exchange_currency(
 		code
@@ -154,8 +154,16 @@
 		)
 	</insert>
 	
+	<update id="update_approveExchange" parameterType="exchangeCurrency">
+		UPDATE tstd_exchange_currency
+		SET
+		status = #{status}
+		,updater=#{updater}
+		,update_datetime=#{updateDatetime}
+		,remark=#{remark}
+		WHERE code = #{code}
+	</update>
 	
-
 	<update id="update_paySuccess" parameterType="exchangeCurrency">
 		UPDATE tstd_exchange_currency
 		SET
@@ -166,14 +174,4 @@
 		WHERE code = #{code}
 	</update>
 	
-	
-	<update id="update_approveExchange" parameterType="exchangeCurrency">
-		UPDATE tstd_exchange_currency
-		SET
-		status = #{status}
-		,updater=#{updater}
-		,update_datetime=#{updateDatetime}
-		,remark=#{remark}
-		WHERE code = #{code}
-	</update>
 </mapper>

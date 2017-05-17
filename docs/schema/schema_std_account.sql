@@ -50,8 +50,8 @@ CREATE TABLE `tstd_jour` (
   
   `adjust_note` varchar(255) DEFAULT NULL COMMENT '调账说明',
   `adjust_datetime` datetime DEFAULT NULL COMMENT '调账时间',
-  `system_code` varchar(32) NOT NULL COMMENT '系统编号',
-  `company_code` varchar(32) NOT NULL COMMENT '公司编号',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
+  `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

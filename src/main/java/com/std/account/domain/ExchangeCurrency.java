@@ -65,10 +65,10 @@ public class ExchangeCurrency extends ABaseDO {
     // 支付时间
     private Date payDatetime;
 
-    // 来方币种
+    // 公司编号
     private String companyCode;
 
-    // 公司编号
+    // 系统编号
     private String systemCode;
 
     // ******************************************

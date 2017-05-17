@@ -43,6 +43,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
     public String applyOrderTradePwd(String accountNumber, Long amount,
             String payCardInfo, String payCardNo, String applyUser,
             String applyNote, String tradePwd) {
+        // 只能申请一笔取现
         Account dbAccount = accountBO.getAccount(accountNumber);
         // 验证交易密码
         userBO.checkTradePwd(dbAccount.getUserId(), tradePwd);
