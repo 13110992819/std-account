@@ -26,7 +26,7 @@ public interface IWechatBO {
 
     public String getPrepayIdH5(CompanyChannel companyChannel, String openId,
             String bizNote, String code, Long transAmount, String ip,
-            String wxBackUrl, String bizBackUrl);
+            String bizBackUrl);
 
     public XN002501Res getPayInfoH5(CompanyChannel companyChannel,
             String payCode, String prepayId);
