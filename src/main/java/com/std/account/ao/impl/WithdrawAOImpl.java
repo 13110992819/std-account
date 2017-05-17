@@ -3,6 +3,7 @@ package com.std.account.ao.impl;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import com.std.account.bo.IWithdrawBO;
 import com.std.account.bo.base.Paginable;
 import com.std.account.common.SysConstant;
 import com.std.account.domain.Account;
+import com.std.account.domain.User;
 import com.std.account.domain.Withdraw;
 import com.std.account.enums.EAccountType;
 import com.std.account.enums.EBoolean;
@@ -152,17 +154,36 @@ public class WithdrawAOImpl implements IWithdrawAO {
     @Override
     public Paginable<Withdraw> queryWithdrawPage(int start, int limit,
             Withdraw condition) {
-        return withdrawBO.getPaginable(start, limit, condition);
+        Paginable<Withdraw> page = withdrawBO.getPaginable(start, limit,
+            condition);
+        if (CollectionUtils.isNotEmpty(page.getList())) {
+            List<Withdraw> list = page.getList();
+            for (Withdraw withdraw : list) {
+                User user = userBO.getRemoteUser(withdraw.getApplyUser());
+                withdraw.setUser(user);
+            }
+        }
+        return page;
     }
 
     @Override
     public List<Withdraw> queryWithdrawList(Withdraw condition) {
-        return withdrawBO.queryWithdrawList(condition);
+        List<Withdraw> list = withdrawBO.queryWithdrawList(condition);
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (Withdraw withdraw : list) {
+                User user = userBO.getRemoteUser(withdraw.getApplyUser());
+                withdraw.setUser(user);
+            }
+        }
+        return list;
     }
 
     @Override
     public Withdraw getWithdraw(String code, String systemCode) {
-        return withdrawBO.getWithdraw(code, systemCode);
+        Withdraw withdraw = withdrawBO.getWithdraw(code, systemCode);
+        User user = userBO.getRemoteUser(withdraw.getApplyUser());
+        withdraw.setUser(user);
+        return withdraw;
     }
 
     /**

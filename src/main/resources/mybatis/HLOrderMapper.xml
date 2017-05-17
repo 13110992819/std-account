@@ -19,6 +19,7 @@
 		<result column="approve_note" property="approveNote" />
 		<result column="approve_datetime" property="approveDatetime" />
 		<result column="system_code" property="systemCode" />
+		<result column="company_code" property="companyCode" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -34,6 +35,16 @@
 			<if test="direction != null and direction != '' ">
 				AND t.direction = #{direction}
 			</if>
+			<choose>
+			     <when test='channelType == "out"'>
+				 	AND tj.channel_type not in(0)
+				 </when>
+				 <otherwise>
+					 <if test="channelType != null and channelType != '' ">
+						AND tj.channel_type = #{channelType}
+					 </if>
+				 </otherwise>
+			</choose>
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>	
@@ -54,7 +65,13 @@
 			</if>
 			<if test="approveDatetimeEnd != null and approveDatetimeEnd != '' ">
 				<![CDATA[AND t.approve_datetime <= #{approveDatetimeEnd}]]>
-			</if>		
+			</if>	
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
+			</if>
+			<if test="companyCode != null and companyCode != '' ">
+				AND t.company_code = #{companyCode}
+			</if>	
 		</trim>
 	</sql>
 	<select id="select_hlOrder" parameterType="hlOrder" resultMap="hlOrder_DB_Result">
@@ -76,7 +93,7 @@
 		,t.approve_datetime
 		,t.system_code
 		FROM
-		tstd_hlorder t
+		tstd_hlorder t left join tstd_jour tj on t.jour_code = tj.code 
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -86,7 +103,8 @@
 	</select>
 
 	<select id="select_hlOrder_count" parameterType="hlOrder" resultType="java.lang.Long">
-		SELECT count(1) FROM tstd_hlorder t
+		SELECT count(1) FROM 
+		tstd_hlorder t left join tstd_jour tj on t.jour_code = tj.code 
 		<include refid="where_condition" />
 	</select>
 
@@ -106,6 +124,7 @@
 		,apply_datetime
 		
 		,system_code
+		,company_code
 		)
 		VALUES(
 		#{code}
@@ -121,6 +140,7 @@
 		,#{applyDatetime}
 		
 		,#{systemCode}
+		,#{companyCode}
 		)
 	</insert>
 

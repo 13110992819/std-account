@@ -53,6 +53,9 @@ public class HLOrder extends ABaseDO {
     // 系统编号
     private String systemCode;
 
+    // 公司编号
+    private String companyCode;
+
     // **************************
     // 申请时间起
     private Date applyDatetimeStart;
@@ -65,6 +68,25 @@ public class HLOrder extends ABaseDO {
 
     // 审批时间止
     private Date approveDatetimeEnd;
+
+    // 流水渠道类型
+    private String channelType;
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
+
+    public String getChannelType() {
+        return channelType;
+    }
+
+    public void setChannelType(String channelType) {
+        this.channelType = channelType;
+    }
 
     public Date getApplyDatetimeStart() {
         return applyDatetimeStart;

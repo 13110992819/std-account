@@ -15,6 +15,9 @@ public class XN802805Req extends APageReq {
     // 流水号
     private String jourCode;
 
+    // 渠道类型
+    private String channelType;
+
     // 红冲还是蓝补
     private String direction;
 
@@ -136,5 +139,13 @@ public class XN802805Req extends APageReq {
 
     public void setApproveDateEnd(String approveDateEnd) {
         this.approveDateEnd = approveDateEnd;
+    }
+
+    public String getChannelType() {
+        return channelType;
+    }
+
+    public void setChannelType(String channelType) {
+        this.channelType = channelType;
     }
 }

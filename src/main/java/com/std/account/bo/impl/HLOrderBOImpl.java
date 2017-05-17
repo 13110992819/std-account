@@ -51,7 +51,7 @@ public class HLOrderBOImpl extends PaginableBOImpl<HLOrder> implements
         data.setApplyDatetime(new Date());
 
         data.setSystemCode(account.getSystemCode());
-
+        data.setCompanyCode(account.getCompanyCode());
         hlOrderDAO.insert(data);
         return code;
     }
