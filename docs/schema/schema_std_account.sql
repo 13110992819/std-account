@@ -16,8 +16,8 @@ CREATE TABLE `tstd_account` (
   `out_amount` bigint(32) DEFAULT '0' COMMENT '出金',
   `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
   `last_order` varchar(32) DEFAULT NULL COMMENT '最近一次变动对应的流水编号',
-  `system_code` varchar(32) NOT NULL COMMENT '系统编号',
-  `company_code` varchar(32) NOT NULL COMMENT '公司编号',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
+  `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
   PRIMARY KEY (`account_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
