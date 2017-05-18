@@ -42,7 +42,7 @@ public class MD5Util {
     }
 
     public static void main(String[] args) {
-        System.out.print(md5("100"));
+        System.out.print(md5("0"));
     }
 
 }
