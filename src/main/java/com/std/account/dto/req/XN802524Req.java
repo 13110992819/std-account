@@ -6,11 +6,22 @@ public class XN802524Req extends APageReq {
      */
     private static final long serialVersionUID = 1L;
 
-    // 流水所属账号---核心字段4
+    // 流水所属账号(必填)
     private String accountNumber;
 
-    // 业务类型
+    // 业务类型(选填)
     private String bizType;
+
+    // 状态(选填)
+    private String status;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public String getBizType() {
         return bizType;

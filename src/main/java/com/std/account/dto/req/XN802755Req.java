@@ -46,6 +46,72 @@ public class XN802755Req extends APageReq {
     // 公司编号
     private String companyCode;
 
+    // 申请时间起
+    private String applyDateStart;
+
+    // 申请时间止
+    private String applyDateEnd;
+
+    // 审批时间起
+    private String approveDateStart;
+
+    // 审批时间止
+    private String approveDateEnd;
+
+    // 支付时间起
+    private String payDateStart;
+
+    // 支付时间止
+    private String payDateEnd;
+
+    public String getApplyDateStart() {
+        return applyDateStart;
+    }
+
+    public void setApplyDateStart(String applyDateStart) {
+        this.applyDateStart = applyDateStart;
+    }
+
+    public String getApplyDateEnd() {
+        return applyDateEnd;
+    }
+
+    public void setApplyDateEnd(String applyDateEnd) {
+        this.applyDateEnd = applyDateEnd;
+    }
+
+    public String getApproveDateStart() {
+        return approveDateStart;
+    }
+
+    public void setApproveDateStart(String approveDateStart) {
+        this.approveDateStart = approveDateStart;
+    }
+
+    public String getApproveDateEnd() {
+        return approveDateEnd;
+    }
+
+    public void setApproveDateEnd(String approveDateEnd) {
+        this.approveDateEnd = approveDateEnd;
+    }
+
+    public String getPayDateStart() {
+        return payDateStart;
+    }
+
+    public void setPayDateStart(String payDateStart) {
+        this.payDateStart = payDateStart;
+    }
+
+    public String getPayDateEnd() {
+        return payDateEnd;
+    }
+
+    public void setPayDateEnd(String payDateEnd) {
+        this.payDateEnd = payDateEnd;
+    }
+
     public String getAccountNumber() {
         return accountNumber;
     }

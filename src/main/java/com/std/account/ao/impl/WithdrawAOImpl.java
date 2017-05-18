@@ -43,13 +43,14 @@ public class WithdrawAOImpl implements IWithdrawAO {
     public String applyOrderTradePwd(String accountNumber, Long amount,
             String payCardInfo, String payCardNo, String applyUser,
             String applyNote, String tradePwd) {
-        // 只能申请一笔取现
-        Account dbAccount = accountBO.getAccount(accountNumber);
-        // 验证交易密码
-        userBO.checkTradePwd(dbAccount.getUserId(), tradePwd);
         if (amount <= 0) {
             throw new BizException("xn000000", "提现金额需大于零");
         }
+        // 只能申请一笔取现
+        withdrawBO.doCheckApplyTime(accountNumber);
+        Account dbAccount = accountBO.getAccount(accountNumber);
+        // 验证交易密码
+        userBO.checkTradePwd(dbAccount.getUserId(), tradePwd);
         if (dbAccount.getAmount() < amount) {
             throw new BizException("xn000000", "余额不足");
         }
@@ -73,6 +74,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
         if (amount <= 0) {
             throw new BizException("xn000000", "提现金额需大于零");
         }
+        // 只能申请一笔取现
+        withdrawBO.doCheckApplyTime(accountNumber);
         Account dbAccount = accountBO.getAccount(accountNumber);
         if (dbAccount.getAmount() < amount) {
             throw new BizException("xn000000", "余额不足");

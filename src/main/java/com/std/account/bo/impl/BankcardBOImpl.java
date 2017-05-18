@@ -121,8 +121,9 @@ public class BankcardBOImpl extends PaginableBOImpl<Bankcard> implements
     }
 
     @Override
-    public List<Bankcard> queryBankcardList(String systemCode) {
+    public List<Bankcard> queryBankcardList(String userId, String systemCode) {
         Bankcard condition = new Bankcard();
+        condition.setUserId(userId);
         condition.setSystemCode(systemCode);
         return bankcardDAO.selectList(condition);
     }

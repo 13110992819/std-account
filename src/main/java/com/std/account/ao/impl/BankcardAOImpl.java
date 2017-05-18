@@ -24,10 +24,10 @@ public class BankcardAOImpl implements IBankcardAO {
     private IBankcardBO bankcardBO;
 
     @Override
-    public String addBankcard(Bankcard data) {
+    public synchronized String addBankcard(Bankcard data) {
         // 判断卡号是否重复
-        List<Bankcard> list = bankcardBO
-            .queryBankcardList(data.getSystemCode());
+        List<Bankcard> list = bankcardBO.queryBankcardList(data.getUserId(),
+            data.getSystemCode());
         // 新增时
         if (CollectionUtils.isNotEmpty(list)) {
             throw new BizException("xn0000", "您已绑定银行卡,无需绑定多张");
@@ -45,8 +45,8 @@ public class BankcardAOImpl implements IBankcardAO {
         Bankcard bankcard = bankcardBO.getBankcard(data.getCode());
         // 有更改就去判断是否唯一
         if (!bankcard.getBankcardNumber().equals(data.getBankcardNumber())) {
-            List<Bankcard> list = bankcardBO.queryBankcardList(bankcard
-                .getSystemCode());
+            List<Bankcard> list = bankcardBO.queryBankcardList(
+                data.getUserId(), bankcard.getSystemCode());
             for (Bankcard card : list) {
                 if (data.getBankcardNumber().equals(card.getBankcardNumber())) {
                     throw new BizException("xn0000", "银行卡号已存在");
