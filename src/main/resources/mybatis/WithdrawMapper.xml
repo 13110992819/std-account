@@ -48,9 +48,16 @@
 				AND t.pay_card_no = #{payCardNo}
 			</if>
 			
-			<if test="status != null and status != '' ">
-				AND t.status = #{status}
-			</if>
+			<choose>
+			     <when test='status == "13"'>
+				 	AND t.status in(1,3)
+				 </when>
+				 <otherwise>
+					<if test="status != null and status != '' ">
+						AND t.status = #{status}
+					</if>
+				 </otherwise>
+			</choose>
 			<if test="applyUser != null and applyUser != '' ">
 				AND t.apply_user = #{applyUser}
 			</if>

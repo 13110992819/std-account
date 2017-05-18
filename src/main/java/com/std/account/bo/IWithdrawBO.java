@@ -9,7 +9,7 @@ import com.std.account.enums.EWithdrawStatus;
 
 public interface IWithdrawBO extends IPaginableBO<Withdraw> {
 
-    void doCheckApplyTime(String accountNumber);
+    void doCheckTimes(String accountNumber);
 
     String applyOrder(Account account, Long amount, Long fee,
             String payCardInfo, String payCardNo, String applyUser,
