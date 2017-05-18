@@ -180,7 +180,7 @@ public class WeChatAOImpl implements IWeChatAO {
             boolean isSucc = reqOrderquery(map,
                 EChannelType.WeChat_APP.getCode());
             // 支付成功，商户处理后同步返回给微信参数
-            if (!isSucc) {
+            if (isSucc) {
                 // 更新充值订单状态
                 chargeBO.callBackChange(order, true);
                 // 收款方账户加钱
@@ -230,7 +230,7 @@ public class WeChatAOImpl implements IWeChatAO {
             boolean isSucc = reqOrderquery(map,
                 EChannelType.WeChat_H5.getCode());
             // 支付成功，商户处理后同步返回给微信参数
-            if (!isSucc) {
+            if (isSucc) {
                 // 更新充值订单状态
                 chargeBO.callBackChange(order, true);
                 // 收款方账户加钱
@@ -280,7 +280,7 @@ public class WeChatAOImpl implements IWeChatAO {
             boolean isSucc = reqOrderquery(map,
                 EChannelType.WeChat_H5.getCode());
             // 支付成功，商户处理后同步返回给微信参数
-            if (!isSucc) {
+            if (isSucc) {
                 // 更新充值订单状态
                 chargeBO.callBackChange(order, true);
                 // 收款方账户加钱

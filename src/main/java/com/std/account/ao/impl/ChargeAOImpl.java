@@ -33,15 +33,16 @@ public class ChargeAOImpl implements IChargeAO {
     private IUserBO userBO;
 
     @Override
-    public String applyOrder(String accountNumber, Long amount,
-            String payCardInfo, String payCardNo, String applyUser,
-            String applyNote) {
+    public String applyOrder(String accountNumber, String jourBizType,
+            Long amount, String payCardInfo, String payCardNo,
+            String applyUser, String applyNote) {
         if (amount <= 0) {
             throw new BizException("xn000000", "充值金额需大于零");
         }
         Account account = accountBO.getAccount(accountNumber);
         // 生成充值订单
-        String code = chargeBO.applyOrderOffline(account, amount, payCardInfo,
+        String code = chargeBO.applyOrderOffline(account,
+            EJourBizType.getBizType(jourBizType), amount, payCardInfo,
             payCardNo, applyUser, applyNote);
         return code;
     }

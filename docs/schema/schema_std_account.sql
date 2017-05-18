@@ -55,7 +55,6 @@ CREATE TABLE `tstd_jour` (
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `tstd_charge`;
 CREATE TABLE `tstd_charge` (
   `code` varchar(32) NOT NULL COMMENT '针对编号',
   `pay_group` varchar(32) DEFAULT NULL COMMENT '支付组号',
@@ -63,7 +62,7 @@ CREATE TABLE `tstd_charge` (
   `account_number` varchar(32) DEFAULT NULL COMMENT '针对账号',
   `amount` bigint(20) DEFAULT NULL COMMENT '充值金额',
   
-  `account_name` varchar(32) DEFAULT NULL COMMENT '针对户名',
+  `account_name` varchar(32) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '针对户名',
   `biz_type` varchar(32) DEFAULT NULL,
   `biz_note` varchar(255) DEFAULT NULL,
   `pay_card_info` varchar(255) DEFAULT NULL COMMENT '支付渠道账号信息',
@@ -81,6 +80,7 @@ CREATE TABLE `tstd_charge` (
   `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
   PRIMARY KEY (`code`) COMMENT '充值订单'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 DROP TABLE IF EXISTS `tstd_withdraw`;
 CREATE TABLE `tstd_withdraw` (
