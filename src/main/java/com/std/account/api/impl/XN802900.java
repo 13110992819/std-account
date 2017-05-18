@@ -9,6 +9,7 @@
 package com.std.account.api.impl;
 
 import com.std.account.api.AProcessor;
+import com.std.account.dto.res.XN802900Res;
 import com.std.account.exception.BizException;
 import com.std.account.exception.ParaException;
 
@@ -25,8 +26,7 @@ public class XN802900 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        // TODO Auto-generated method stub
-        return null;
+        return new XN802900Res(10L);
     }
 
     /** 
