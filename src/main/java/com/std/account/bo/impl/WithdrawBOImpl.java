@@ -107,15 +107,15 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw> implements
     }
 
     /** 
-     * @see com.std.account.bo.IWithdrawBO#doCheckApplyTime(java.lang.String)
+     * @see com.std.account.bo.IWithdrawBO#doCheckTimes(java.lang.String)
      */
     @Override
-    public void doCheckApplyTime(String accountNumber) {
+    public void doCheckTimes(String accountNumber) {
         Withdraw condition = new Withdraw();
         condition.setAccountNumber(accountNumber);
-        condition.setStatus(EWithdrawStatus.toApprove.getCode());
+        condition.setStatus("13");// 待申请，审核成功待支付
         if (withdrawDAO.selectTotalCount(condition) > 0) {
-            throw new BizException("xn000000", "取现记录还有未审核，不可再次申请");
+            throw new BizException("xn000000", "上笔取现申请还未处理成功，不能再次申请");
         }
     }
 }
