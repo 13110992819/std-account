@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.std.account.ao.IWithdrawAO;
 import com.std.account.api.AProcessor;
+import com.std.account.common.DateUtil;
 import com.std.account.common.JsonUtil;
 import com.std.account.core.StringValidater;
 import com.std.account.domain.Withdraw;
@@ -39,6 +40,20 @@ public class XN802755 extends AProcessor {
         condition.setChannelOrder(req.getChannelOrder());
         condition.setCompanyCode(req.getCompanyCode());
         condition.setSystemCode(req.getSystemCode());
+
+        condition.setApplyDatetimeStart(DateUtil.getFrontDate(
+            req.getApplyDateStart(), false));
+        condition.setApplyDatetimeEnd(DateUtil.getFrontDate(
+            req.getApplyDateEnd(), true));
+        condition.setApproveDatetimeStart(DateUtil.getFrontDate(
+            req.getApproveDateStart(), false));
+        condition.setApproveDatetimeEnd(DateUtil.getFrontDate(
+            req.getApproveDateEnd(), true));
+        condition.setPayDatetimeStart(DateUtil.getFrontDate(
+            req.getPayDateStart(), false));
+        condition.setPayDatetimeEnd(DateUtil.getFrontDate(req.getPayDateEnd(),
+            true));
+
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
             orderColumn = IWithdrawAO.DEFAULT_ORDER_COLUMN;

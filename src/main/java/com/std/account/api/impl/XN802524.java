@@ -28,6 +28,7 @@ public class XN802524 extends AProcessor {
         Jour condition = new Jour();
         condition.setAccountNumber(req.getAccountNumber());
         condition.setBizType(req.getBizType());
+        condition.setStatus(req.getStatus());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
             orderColumn = IJourAO.DEFAULT_ORDER_COLUMN;
