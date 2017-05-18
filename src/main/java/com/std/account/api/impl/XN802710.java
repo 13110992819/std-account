@@ -39,9 +39,9 @@ public class XN802710 extends AProcessor {
         Long transAmount = StringValidater.toLong(req.getAmount());
         if (EChannelType.WeChat_H5.getCode().equals(req.getChannelType())) {
             return weChatAO.getPrepayIdH5(req.getApplyUser(), req.getOpenId(),
-                req.getApplyUser(), null, EJourBizType.AJ_CZ.getValue(),
-                EJourBizType.AJ_CZ.getCode(), EJourBizType.AJ_CZ.getValue(),
-                transAmount, null);
+                req.getApplyUser(), EJourBizType.AJ_CZ.getValue(),
+                EJourBizType.AJ_CZ.getValue(), EJourBizType.AJ_CZ.getCode(),
+                EJourBizType.AJ_CZ.getValue(), transAmount, null);
         } else {
             throw new BizException("xn000000", "暂时不支持该渠道");
         }
