@@ -92,6 +92,7 @@
 		,t.approve_note
 		,t.approve_datetime
 		,t.system_code
+		,t.company_code
 		FROM
 		tstd_hlorder t left join tstd_jour tj on t.jour_code = tj.code 
 		<include refid="where_condition" />
@@ -103,8 +104,8 @@
 	</select>
 
 	<select id="select_hlOrder_count" parameterType="hlOrder" resultType="java.lang.Long">
-		SELECT count(1) FROM 
-		tstd_hlorder t left join tstd_jour tj on t.jour_code = tj.code 
+		SELECT count(1) 
+		FROM tstd_hlorder t left join tstd_jour tj on t.jour_code = tj.code 
 		<include refid="where_condition" />
 	</select>
 

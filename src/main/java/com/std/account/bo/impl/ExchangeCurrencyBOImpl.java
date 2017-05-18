@@ -26,6 +26,7 @@ import com.std.account.exception.BizException;
 @Component
 public class ExchangeCurrencyBOImpl extends PaginableBOImpl<ExchangeCurrency>
         implements IExchangeCurrencyBO {
+
     @Autowired
     ISYSConfigBO sysConfigBO;
 
@@ -56,23 +57,6 @@ public class ExchangeCurrencyBOImpl extends PaginableBOImpl<ExchangeCurrency>
             }
         }
         return data;
-    }
-
-    @Override
-    public int paySuccess(String code, String status, String payCode,
-            Long payAmount) {
-        int count = 0;
-        if (StringUtils.isNotBlank(code)) {
-            ExchangeCurrency data = new ExchangeCurrency();
-            data.setCode(code);
-            data.setStatus(status);
-            data.setPayCode(payCode);
-            data.setPayAmount(payAmount);
-            data.setPayDatetime(new Date());
-            count = exchangeCurrencyDAO.paySuccess(data);
-        }
-        return count;
-
     }
 
     @Override
@@ -110,19 +94,19 @@ public class ExchangeCurrencyBOImpl extends PaginableBOImpl<ExchangeCurrency>
     }
 
     @Override
-    public String saveExchange(String fromUserId, String toUserId,
-            Long transAmount, String currency, String systemCode) {
+    public String saveExchange(String fromUserId, Long fromAmount,
+            String fromCurrency, String toUserId, Long toAmount,
+            String toCurrency, String companyCode, String systemCode) {
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.EXCHANGE_CURRENCY.getCode());
         ExchangeCurrency data = new ExchangeCurrency();
         data.setCode(code);
         data.setToUserId(toUserId);
-
-        data.setToAmount(transAmount);
-        data.setToCurrency(currency);
+        data.setToAmount(toAmount);
+        data.setToCurrency(toCurrency);
         data.setFromUserId(fromUserId);
-        data.setFromAmount(transAmount);
-        data.setFromCurrency(currency);
+        data.setFromAmount(fromAmount);
+        data.setFromCurrency(fromCurrency);
 
         data.setCreateDatetime(new Date());
         data.setStatus(EExchangeCurrencyStatus.PAYED.getCode());
@@ -130,7 +114,7 @@ public class ExchangeCurrencyBOImpl extends PaginableBOImpl<ExchangeCurrency>
         data.setPayGroup(code);
         data.setSystemCode(systemCode);
 
-        data.setCompanyCode(systemCode);
+        data.setCompanyCode(companyCode);
         exchangeCurrencyDAO.doExchange(data);
         return code;
     }
@@ -182,34 +166,6 @@ public class ExchangeCurrencyBOImpl extends PaginableBOImpl<ExchangeCurrency>
     }
 
     @Override
-    public String payExchange(String fromUserId, String toUserId,
-            Long rmbAmount, Long toAmount, String currency, String payType,
-            String systemCode) {
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.EXCHANGE_CURRENCY.getCode());
-        ExchangeCurrency data = new ExchangeCurrency();
-        data.setCode(code);
-
-        data.setToUserId(toUserId);
-        data.setToAmount(toAmount);
-        data.setToCurrency(currency);
-        data.setFromUserId(fromUserId);
-        data.setFromAmount(rmbAmount);
-        data.setFromCurrency(ECurrency.CNY.getCode());
-
-        data.setCreateDatetime(new Date());
-        data.setStatus(EExchangeCurrencyStatus.TO_PAY.getCode());
-
-        data.setPayType(payType);
-        data.setPayGroup(code);
-
-        data.setSystemCode(systemCode);
-        data.setCompanyCode(systemCode);
-        exchangeCurrencyDAO.payExchange(data);
-        return code;
-    }
-
-    @Override
     public void doCheckZH(String userId, String fromCurrency, String toCurrency) {
         ExchangeCurrency condition = new ExchangeCurrency();
         condition.setFromUserId(userId);
@@ -238,4 +194,48 @@ public class ExchangeCurrencyBOImpl extends PaginableBOImpl<ExchangeCurrency>
                     + "次,本月申请次数已用尽");
         }
     }
+
+    // @Override
+    // public String payExchange(String fromUserId, String toUserId,
+    // Long rmbAmount, Long toAmount, String currency, String payType,
+    // String systemCode) {
+    // String code = OrderNoGenerater
+    // .generate(EGeneratePrefix.EXCHANGE_CURRENCY.getCode());
+    // ExchangeCurrency data = new ExchangeCurrency();
+    // data.setCode(code);
+    //
+    // data.setToUserId(toUserId);
+    // data.setToAmount(toAmount);
+    // data.setToCurrency(currency);
+    // data.setFromUserId(fromUserId);
+    // data.setFromAmount(rmbAmount);
+    // data.setFromCurrency(ECurrency.CNY.getCode());
+    //
+    // data.setCreateDatetime(new Date());
+    // data.setStatus(EExchangeCurrencyStatus.TO_PAY.getCode());
+    //
+    // data.setPayType(payType);
+    // data.setPayGroup(code);
+    //
+    // data.setSystemCode(systemCode);
+    // data.setCompanyCode(systemCode);
+    // exchangeCurrencyDAO.payExchange(data);
+    // return code;
+    // }
+    //
+    // @Override
+    // public int paySuccess(String code, String status, String payCode,
+    // Long payAmount) {
+    // int count = 0;
+    // if (StringUtils.isNotBlank(code)) {
+    // ExchangeCurrency data = new ExchangeCurrency();
+    // data.setCode(code);
+    // data.setStatus(status);
+    // data.setPayCode(payCode);
+    // data.setPayAmount(payAmount);
+    // data.setPayDatetime(new Date());
+    // count = exchangeCurrencyDAO.paySuccess(data);
+    // }
+    // return count;
+    // }
 }

@@ -24,6 +24,7 @@ public enum EJourBizType {
             "52", "汇赚宝摇一摇奖励"), AJ_YYFC("53", "汇赚宝摇一摇分成"), AJ_YYFC_REF("54",
             "推荐人摇一摇分成"), AJ_FSDHB("60", "发送得红包"), AJ_LQHB("61", "领取红包"), AJ_DUOBAO(
             "-70", "参与小目标"), AJ_DUOBAO_PRIZE("71", "小目标中奖");
+
     public static EJourBizType getBizType(String code) {
         Map<String, EJourBizType> map = getBizTypeMap();
         EJourBizType result = map.get(code);
