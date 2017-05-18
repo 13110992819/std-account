@@ -11,6 +11,9 @@ public class XN802700Req {
     // 针对账号（必填）
     private String accountNumber;
 
+    // 业务类型
+    private String bizType;
+
     // 充值金额（必填）
     private String amount;
 
@@ -32,6 +35,14 @@ public class XN802700Req {
 
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
+    }
+
+    public String getBizType() {
+        return bizType;
+    }
+
+    public void setBizType(String bizType) {
+        this.bizType = bizType;
     }
 
     public String getAmount() {

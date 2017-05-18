@@ -25,9 +25,9 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
     private IChargeDAO chargeDAO;
 
     @Override
-    public String applyOrderOffline(Account account, Long amount,
-            String payCardInfo, String payCardNo, String applyUser,
-            String applyNote) {
+    public String applyOrderOffline(Account account, EJourBizType bizType,
+            Long amount, String payCardInfo, String payCardNo,
+            String applyUser, String applyNote) {
         if (amount == 0) {
             throw new BizException("xn000000", "充值金额不能为0");
         }
@@ -41,8 +41,8 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
         data.setAmount(amount);
 
         data.setAccountName(account.getRealName());
-        data.setBizType(EJourBizType.AJ_CZ.getCode());
-        data.setBizNote(EJourBizType.AJ_CZ.getValue());
+        data.setBizType(bizType.getCode());
+        data.setBizNote(bizType.getValue());
         data.setPayCardInfo(payCardInfo);
         data.setPayCardNo(payCardNo);
 
