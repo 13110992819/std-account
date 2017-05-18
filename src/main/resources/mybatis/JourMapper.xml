@@ -230,4 +230,11 @@
 		WHERE
 		code = #{code}	
 	</update>
+	
+	<select id="select_totalAmount" parameterType="jour"
+		resultType="java.lang.Long">
+		SELECT ifnull(sum(trans_amount),0) FROM tstd_jour t 
+		<include refid="where_condition" />
+	</select>
+	
 </mapper>

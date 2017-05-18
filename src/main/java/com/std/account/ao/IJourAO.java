@@ -42,4 +42,7 @@ public interface IJourAO {
     public List<Jour> queryJourList(Jour condition);
 
     public Jour getJour(String code, String systemCode);
+
+    public Long getTotalAmount(String bizType, String channelType,
+            String accountNumber);
 }

@@ -15,6 +15,9 @@ package com.std.account.dto.req;
  */
 public class XN802900Req {
 
+    // 账户名称（必填）
+    private String accountNumber;
+
     // 业务类型（必填）
     private String bizType;
 
@@ -23,6 +26,14 @@ public class XN802900Req {
 
     public String getBizType() {
         return bizType;
+    }
+
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
     }
 
     public void setBizType(String bizType) {

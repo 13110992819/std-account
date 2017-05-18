@@ -96,6 +96,12 @@ public class JourAOImpl implements IJourAO {
         return jourBO.getJour(code, systemCode);
     }
 
+    @Override
+    public Long getTotalAmount(String bizType, String channelType,
+            String accountNumber) {
+        return jourBO.getTotalAmount(bizType, channelType, accountNumber);
+    }
+
     // /**
     // * @param accountNumber
     // * @param bankcardNumber
