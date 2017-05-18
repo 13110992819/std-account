@@ -171,7 +171,8 @@ public class AlipayAOImpl implements IAlipayAO {
         bizParams.put("product_code", "QUICK_MSECURITY_PAY"); // 销售产品码，商家和支付宝签约的产品码，为固定值QUICK_MSECURITY_PAY
         bizParams.put("passback_params", backUrl);
         bizParams.put("timeout_express", "1m");
-        bizParams.put("passback_params", systemCode + "||" + companyCode);
+        bizParams.put("passback_params", systemCode + "||" + companyCode + "||"
+                + backUrl);
         return JsonUtil.Object2Json(bizParams);
     }
 
@@ -209,7 +210,7 @@ public class AlipayAOImpl implements IAlipayAO {
                 String sellerId = paramsMap.get("seller_id");
                 String appId = paramsMap.get("app_id");
                 String alipayOrderNo = paramsMap.get("trade_no");
-                String bizBackUrl = paramsMap.get("passback_params");
+                String bizBackUrl = codes[2];
                 String tradeStatus = paramsMap.get("trade_status");
                 // 取到订单信息
                 Charge order = chargeBO.getCharge(outTradeNo, systemCode);
