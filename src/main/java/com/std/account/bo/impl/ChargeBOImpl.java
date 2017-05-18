@@ -42,7 +42,11 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
 
         data.setAccountName(account.getRealName());
         data.setBizType(bizType.getCode());
-        data.setBizNote(bizType.getValue());
+        if (StringUtils.isBlank(applyNote)) {
+            data.setBizNote(bizType.getValue());
+        } else {
+            data.setBizNote(applyNote);
+        }
         data.setPayCardInfo(payCardInfo);
         data.setPayCardNo(payCardNo);
 
