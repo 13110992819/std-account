@@ -32,7 +32,7 @@ public enum EJourBizType {
         Map<String, EJourBizType> map = getBizTypeMap();
         EJourBizType result = map.get(code);
         if (result == null) {
-            new BizException("XN0000", code + "对应的bizType不存在");
+            throw new BizException("XN0000", code + "对应的bizType不存在");
         }
         return result;
     }
