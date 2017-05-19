@@ -22,6 +22,7 @@ import com.std.account.domain.Withdraw;
 import com.std.account.enums.EAccountType;
 import com.std.account.enums.EBoolean;
 import com.std.account.enums.EChannelType;
+import com.std.account.enums.ECurrency;
 import com.std.account.enums.EJourBizType;
 import com.std.account.enums.EWithdrawStatus;
 import com.std.account.exception.BizException;
@@ -155,10 +156,14 @@ public class WithdrawAOImpl implements IWithdrawAO {
         Account dbAccount = accountBO.getAccount(data.getAccountNumber());
         // 扣减冻结流水
         accountBO.cutFrozenAmount(dbAccount, data.getAmount());
-        // 托管账户减钱
-        accountBO.changeAmount(data.getCompanyCode(), EChannelType.Offline,
-            null, null, data.getCode(), EJourBizType.AJ_QX, "线下取现",
-            -data.getAmount());
+        Account account = accountBO.getAccount(data.getAccountNumber());
+        if (ECurrency.CNY.getCode().equals(account.getCurrency())
+                || ECurrency.ZH_FRB.getCode().equals(account.getCurrency())) {
+            // 托管账户减钱
+            accountBO.changeAmount(data.getCompanyCode(), EChannelType.Offline,
+                null, null, data.getCode(), EJourBizType.AJ_QX, "线下取现",
+                -data.getAmount());
+        }
     }
 
     @Override
