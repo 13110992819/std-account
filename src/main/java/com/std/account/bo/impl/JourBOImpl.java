@@ -184,6 +184,6 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
         jour.setChannelType(channelType);
         jour.setAccountNumber(accountNumber);
         long a = jourDAO.selectTotalAmount(jour);
-        return jourDAO.selectTotalAmount(jour);
+        return Math.abs(a);
     }
 }

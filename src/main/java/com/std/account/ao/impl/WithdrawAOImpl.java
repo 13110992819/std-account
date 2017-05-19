@@ -21,6 +21,8 @@ import com.std.account.domain.User;
 import com.std.account.domain.Withdraw;
 import com.std.account.enums.EAccountType;
 import com.std.account.enums.EBoolean;
+import com.std.account.enums.EChannelType;
+import com.std.account.enums.EJourBizType;
 import com.std.account.enums.EWithdrawStatus;
 import com.std.account.exception.BizException;
 import com.std.account.util.AmountUtil;
@@ -153,6 +155,10 @@ public class WithdrawAOImpl implements IWithdrawAO {
         Account dbAccount = accountBO.getAccount(data.getAccountNumber());
         // 扣减冻结流水
         accountBO.cutFrozenAmount(dbAccount, data.getAmount());
+        // 托管账户减钱
+        accountBO.changeAmount(data.getCompanyCode(), EChannelType.Offline,
+            null, null, data.getCode(), EJourBizType.AJ_QX, "线下取现",
+            -data.getAmount());
     }
 
     @Override

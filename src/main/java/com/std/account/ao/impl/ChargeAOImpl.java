@@ -68,7 +68,12 @@ public class ChargeAOImpl implements IChargeAO {
 
     private void payOrderYES(Charge data, String payUser, String payNote) {
         chargeBO.payOrder(data, true, payUser, payNote);
+        // 账户加钱
         accountBO.changeAmount(data.getAccountNumber(), EChannelType.Offline,
+            null, null, data.getCode(), EJourBizType.AJ_CZ, "线下充值",
+            data.getAmount());
+        // 托管账户加钱
+        accountBO.changeAmount(data.getCompanyCode(), EChannelType.Offline,
             null, null, data.getCode(), EJourBizType.AJ_CZ, "线下充值",
             data.getAmount());
     }
