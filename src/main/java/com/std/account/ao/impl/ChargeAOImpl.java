@@ -18,6 +18,7 @@ import com.std.account.domain.User;
 import com.std.account.enums.EBoolean;
 import com.std.account.enums.EChannelType;
 import com.std.account.enums.EChargeStatus;
+import com.std.account.enums.ECurrency;
 import com.std.account.enums.EJourBizType;
 import com.std.account.exception.BizException;
 
@@ -72,10 +73,13 @@ public class ChargeAOImpl implements IChargeAO {
         accountBO.changeAmount(data.getAccountNumber(), EChannelType.Offline,
             null, null, data.getCode(), EJourBizType.AJ_CZ, "线下充值",
             data.getAmount());
-        // 托管账户加钱
-        accountBO.changeAmount(data.getCompanyCode(), EChannelType.Offline,
-            null, null, data.getCode(), EJourBizType.AJ_CZ, "线下充值",
-            data.getAmount());
+        Account account = accountBO.getAccount(data.getAccountNumber());
+        if (ECurrency.CNY.getCode().equals(account.getCurrency())) {
+            // 托管账户加钱
+            accountBO.changeAmount(data.getCompanyCode(), EChannelType.Offline,
+                null, null, data.getCode(), EJourBizType.AJ_CZ, "线下充值",
+                data.getAmount());
+        }
     }
 
     @Override
