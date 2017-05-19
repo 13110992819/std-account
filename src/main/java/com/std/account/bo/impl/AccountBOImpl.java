@@ -133,7 +133,7 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
         if (transAmount > 0) {
             data.setAddAmount(dbAccount.getAddAmount() + transAmount);
         }
-        data.setInAmount(data.getInAmount());
+        data.setInAmount(dbAccount.getInAmount());
         data.setLastOrder(lastOrder);
         accountDAO.updateAmount(data);
     }
@@ -156,7 +156,7 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
         if (amount > 0) {
             data.setAddAmount(dbAccount.getAddAmount() + amount);
         }
-        data.setInAmount(data.getInAmount());
+        data.setInAmount(dbAccount.getInAmount());
         data.setLastOrder(lastOrder);
         accountDAO.updateAmount(data);
     }
