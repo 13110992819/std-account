@@ -88,9 +88,16 @@
 	            	#{item}
                 </foreach> 
 			</if>
-			<if test="status != null and status != '' ">
-				AND t.status = #{status}
-			</if>
+			<choose>
+			     <when test='status == "in"'>
+				 	AND t.status not in(6)
+				 </when>
+				 <otherwise>
+					 <if test="status != null and status != '' ">
+						AND t.status = #{status}
+					</if>
+				 </otherwise>
+			</choose>
 			<if test="createDatetimeStart != null and createDatetimeStart != '' ">
 				<![CDATA[AND t.create_datetime >= #{createDatetimeStart}]]>
 			</if>

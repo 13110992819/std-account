@@ -8,7 +8,7 @@ package com.std.account.enums;
 // 状态变化路径共4条：1-3;1-4-5;1-4-3;6
 public enum EJourStatus {
     // todoCallBack("0", "刚生成待回调"),
-    todoCheck("1", "已回调通过,待对账"),
+    todoCheck("1", "待对账"),
 
     // callBack_NO("2", "回调不通过")
     Checked_YES("3", "已对账且账已平"), Checked_NO("4", "帐不平待调账审批"), Adjusted("5",
