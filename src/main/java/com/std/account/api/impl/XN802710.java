@@ -41,7 +41,7 @@ public class XN802710 extends AProcessor {
             return weChatAO.getPrepayIdH5(req.getApplyUser(), req.getOpenId(),
                 req.getApplyUser(), EJourBizType.AJ_CZ.getValue(),
                 EJourBizType.AJ_CZ.getValue(), EJourBizType.AJ_CZ.getCode(),
-                EJourBizType.AJ_CZ.getValue(), transAmount, null);
+                "微信H5支付充值", transAmount, null);
         } else {
             throw new BizException("xn000000", "暂时不支持该渠道");
         }

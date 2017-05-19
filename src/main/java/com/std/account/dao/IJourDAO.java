@@ -28,4 +28,6 @@ public interface IJourDAO extends IBaseDAO<Jour> {
      * @history:
      */
     public int adjustJour(Jour data);
+
+    public long selectTotalAmount(Jour data);
 }

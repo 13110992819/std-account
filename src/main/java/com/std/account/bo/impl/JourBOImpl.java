@@ -175,4 +175,15 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
     public List<Jour> queryJourList(Jour condition) {
         return jourDAO.selectList(condition);
     }
+
+    @Override
+    public Long getTotalAmount(String bizType, String channelType,
+            String accountNumber) {
+        Jour jour = new Jour();
+        jour.setBizType(bizType);
+        jour.setChannelType(channelType);
+        jour.setAccountNumber(accountNumber);
+        long a = jourDAO.selectTotalAmount(jour);
+        return Math.abs(a);
+    }
 }

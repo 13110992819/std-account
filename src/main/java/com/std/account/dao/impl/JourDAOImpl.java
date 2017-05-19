@@ -83,4 +83,10 @@ public class JourDAOImpl extends AMybatisTemplate implements IJourDAO {
     public int adjustJour(Jour data) {
         return super.update(NAMESPACE.concat("update_adjust_jour"), data);
     }
+
+    @Override
+    public long selectTotalAmount(Jour data) {
+        return super.selectTotalCount(NAMESPACE.concat("select_totalAmount"),
+            data);
+    }
 }

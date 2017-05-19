@@ -37,4 +37,7 @@ public interface IJourBO extends IPaginableBO<Jour> {
 
     public Jour getJour(String code, String systemCode);
 
+    public Long getTotalAmount(String bizType, String channelType,
+            String accountNumber);
+
 }
