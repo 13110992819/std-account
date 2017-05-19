@@ -74,7 +74,8 @@ public class ChargeAOImpl implements IChargeAO {
             null, null, data.getCode(), EJourBizType.AJ_CZ, "线下充值",
             data.getAmount());
         Account account = accountBO.getAccount(data.getAccountNumber());
-        if (ECurrency.CNY.getCode().equals(account.getCurrency())) {
+        if (ECurrency.CNY.getCode().equals(account.getCurrency())
+                || ECurrency.ZH_FRB.getCode().equals(account.getCurrency())) {
             // 托管账户加钱
             accountBO.changeAmount(data.getCompanyCode(), EChannelType.Offline,
                 null, null, data.getCode(), EJourBizType.AJ_CZ, "线下充值",
