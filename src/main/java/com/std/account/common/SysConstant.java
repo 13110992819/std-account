@@ -21,4 +21,10 @@ public class SysConstant {
 
     // B端用户取现时效
     public static String BUSERQXSX = "buserQxsx";
+
+    // C端用户每月取现次数
+    public static String CUSERMONTIMES = "cuserMonTimes";
+
+    // B端用户每月取现次数
+    public static String BUSERMONTIMES = "buserMonTimes";
 }

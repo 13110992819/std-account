@@ -2,19 +2,24 @@ package com.std.account.bo.impl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.std.account.bo.IBankcardBO;
+import com.std.account.bo.ISYSConfigBO;
 import com.std.account.bo.IWithdrawBO;
 import com.std.account.bo.base.PaginableBOImpl;
+import com.std.account.common.DateUtil;
+import com.std.account.common.SysConstant;
 import com.std.account.core.OrderNoGenerater;
 import com.std.account.dao.IWithdrawDAO;
 import com.std.account.domain.Account;
 import com.std.account.domain.Bankcard;
 import com.std.account.domain.Withdraw;
+import com.std.account.enums.EAccountType;
 import com.std.account.enums.EChannelType;
 import com.std.account.enums.EGeneratePrefix;
 import com.std.account.enums.EWithdrawStatus;
@@ -28,6 +33,9 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw> implements
 
     @Autowired
     private IWithdrawDAO withdrawDAO;
+
+    @Autowired
+    ISYSConfigBO sysConfigBO;
 
     @Override
     public String applyOrder(Account account, Long amount, Long fee,
@@ -110,9 +118,33 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw> implements
      * @see com.std.account.bo.IWithdrawBO#doCheckTimes(java.lang.String)
      */
     @Override
-    public void doCheckTimes(String accountNumber) {
+    public void doCheckTimes(Account account) {
+        // 判断本月申请次数是否达到上限
+        Map<String, String> argsMap = sysConfigBO.getConfigsMap(
+            account.getSystemCode(), account.getCompanyCode());
+        String monthTimesKey = null;
+        if (EAccountType.Customer.getCode().equals(account.getType())) {
+            monthTimesKey = SysConstant.CUSERMONTIMES;
+        } else if (EAccountType.Business.getCode().equals(account.getType())) {
+            monthTimesKey = SysConstant.BUSERMONTIMES;
+        }
+        String monthTimesValue = argsMap.get(monthTimesKey);
+        if (StringUtils.isNotBlank(monthTimesValue)) {// 月取现次数判断
+            Withdraw condition = new Withdraw();
+            condition.setAccountNumber(account.getAccountNumber());
+            condition.setApplyDatetimeStart(DateUtil.getCurrentMonthFirstDay());
+            condition.setApplyDatetimeEnd(DateUtil.getCurrentMonthLastDay());
+            long totalCount = withdrawDAO.selectTotalCount(condition);
+            long maxMonthTimes = Long.valueOf(monthTimesValue);
+            if (totalCount >= maxMonthTimes) {
+                throw new BizException("xn0000", "每月取现最多" + maxMonthTimes
+                        + "次,本月申请次数已用尽");
+            }
+        }
+
+        // 判断是否还有未处理的取现记录
         Withdraw condition = new Withdraw();
-        condition.setAccountNumber(accountNumber);
+        condition.setAccountNumber(account.getAccountNumber());
         condition.setStatus("13");// 待申请，审核成功待支付
         if (withdrawDAO.selectTotalCount(condition) > 0) {
             throw new BizException("xn000000", "上笔取现申请还未处理成功，不能再次申请");

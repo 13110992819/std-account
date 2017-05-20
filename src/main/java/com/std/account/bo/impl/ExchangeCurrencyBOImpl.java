@@ -176,7 +176,7 @@ public class ExchangeCurrencyBOImpl extends PaginableBOImpl<ExchangeCurrency>
         condition.setStatus(EExchangeCurrencyStatus.TO_PAY.getCode());
         long totalCount = exchangeCurrencyDAO.selectTotalCount(condition);
         if (totalCount > 0) {
-            throw new BizException("xn0000", "已经有未审核转化订单不能重复提交");
+            throw new BizException("xn0000", "已经有未审核转化订单，不能再次提交申请");
         }
         // 每月的转化次数是有限制的
         String exchangeTimes = sysConfigBO.getSYSConfig(

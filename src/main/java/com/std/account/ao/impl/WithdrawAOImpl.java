@@ -49,9 +49,9 @@ public class WithdrawAOImpl implements IWithdrawAO {
         if (amount <= 0) {
             throw new BizException("xn000000", "提现金额需大于零");
         }
-        // 只能申请一笔取现
-        withdrawBO.doCheckTimes(accountNumber);
         Account dbAccount = accountBO.getAccount(accountNumber);
+        // 判断本月是否次数已满，且现在只能有一笔取现未支付记录
+        withdrawBO.doCheckTimes(dbAccount);
         // 验证交易密码
         userBO.checkTradePwd(dbAccount.getUserId(), tradePwd);
         if (dbAccount.getAmount() < amount) {
@@ -77,9 +77,9 @@ public class WithdrawAOImpl implements IWithdrawAO {
         if (amount <= 0) {
             throw new BizException("xn000000", "提现金额需大于零");
         }
-        // 只能申请一笔取现
-        withdrawBO.doCheckTimes(accountNumber);
         Account dbAccount = accountBO.getAccount(accountNumber);
+        // 判断本月是否次数已满，且现在只能有一笔取现未支付记录
+        withdrawBO.doCheckTimes(dbAccount);
         if (dbAccount.getAmount() < amount) {
             throw new BizException("xn000000", "余额不足");
         }
