@@ -7,6 +7,9 @@ public class XN802807Req {
     // 针对户名（手机号或其他）
     private String accountName;
 
+    // 币种
+    private String currency;
+
     // 流水号
     private String jourCode;
 
@@ -144,4 +147,11 @@ public class XN802807Req {
         this.channelType = channelType;
     }
 
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
 }

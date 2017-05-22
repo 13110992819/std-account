@@ -12,6 +12,9 @@ public class XN802805Req extends APageReq {
     // 针对户名（手机号或其他）
     private String accountName;
 
+    // 币种
+    private String currency;
+
     // 流水号
     private String jourCode;
 
@@ -44,6 +47,25 @@ public class XN802805Req extends APageReq {
 
     // 系统编号
     private String systemCode;
+
+    // 公司编号
+    private String companyCode;
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
 
     public String getAccountNumber() {
         return accountNumber;

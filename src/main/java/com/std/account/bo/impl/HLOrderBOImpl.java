@@ -37,7 +37,10 @@ public class HLOrderBOImpl extends PaginableBOImpl<HLOrder> implements
         data.setCode(code);
         data.setAccountNumber(account.getAccountNumber());
         data.setAccountName(account.getRealName());
+
+        data.setCurrency(account.getCurrency());
         data.setJourCode(jour.getCode());
+        data.setChannelType(jour.getChannelType());
         if (applyAmount > 0) {
             data.setDirection(EDirection.PLUS.getCode());
         } else {

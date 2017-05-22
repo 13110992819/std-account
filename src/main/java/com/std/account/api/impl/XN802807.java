@@ -28,6 +28,7 @@ public class XN802807 extends AProcessor {
         HLOrder condition = new HLOrder();
         condition.setAccountNumber(req.getAccountNumber());
         condition.setAccountName(req.getAccountName());
+        condition.setCurrency(req.getCurrency());
         condition.setJourCode(req.getJourCode());
         condition.setChannelType(req.getChannelType());
         condition.setDirection(req.getDirection());

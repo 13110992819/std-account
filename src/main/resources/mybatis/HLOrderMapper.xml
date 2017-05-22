@@ -6,18 +6,21 @@
 		<result column="code" property="code" />
 		<result column="account_number" property="accountNumber" />
 		<result column="account_name" property="accountName" />
+		<result column="currency" property="currency" />
 		<result column="jour_code" property="jourCode" />
-		<result column="direction" property="direction" />
 		
+		<result column="channel_type" property="channelType" />
+		<result column="direction" property="direction" />
 		<result column="amount" property="amount" />
 		<result column="status" property="status" />
 		<result column="apply_user" property="applyUser" />
+		
 		<result column="apply_note" property="applyNote" />
 		<result column="apply_datetime" property="applyDatetime" />
-		
 		<result column="approve_user" property="approveUser" />
 		<result column="approve_note" property="approveNote" />
 		<result column="approve_datetime" property="approveDatetime" />
+		
 		<result column="system_code" property="systemCode" />
 		<result column="company_code" property="companyCode" />
 	</resultMap>
@@ -32,16 +35,19 @@
 			<if test="accountName != null and accountName != '' ">
 				AND t.account_name like "%"#{accountName}"%"
 			</if>
+			<if test="currency != null and currency != '' ">
+				AND t.currency = #{currency}
+			</if>	
 			<if test="direction != null and direction != '' ">
 				AND t.direction = #{direction}
 			</if>
 			<choose>
 			     <when test='channelType == "out"'>
-				 	AND tj.channel_type not in(0)
+				 	AND t.channel_type not in(0)
 				 </when>
 				 <otherwise>
 					 <if test="channelType != null and channelType != '' ">
-						AND tj.channel_type = #{channelType}
+						AND t.channel_type = #{channelType}
 					 </if>
 				 </otherwise>
 			</choose>
@@ -79,22 +85,25 @@
 		t.code
 		,t.account_number
 		,t.account_name
+		,t.currency
 		,t.jour_code
-		,t.direction
 		
+		,t.channel_type
+		,t.direction
 		,t.amount
 		,t.status
 		,t.apply_user
+		
 		,t.apply_note
 		,t.apply_datetime
-		
 		,t.approve_user
 		,t.approve_note
 		,t.approve_datetime
+		
 		,t.system_code
 		,t.company_code
 		FROM
-		tstd_hlorder t left join tstd_jour tj on t.jour_code = tj.code 
+		tstd_hlorder t
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -105,7 +114,7 @@
 
 	<select id="select_hlOrder_count" parameterType="hlOrder" resultType="java.lang.Long">
 		SELECT count(1) 
-		FROM tstd_hlorder t left join tstd_jour tj on t.jour_code = tj.code 
+		FROM tstd_hlorder t
 		<include refid="where_condition" />
 	</select>
 
@@ -115,15 +124,17 @@
 		code
 		,account_number
 		,account_name
+		,currency
 		,jour_code
-		,direction
 		
+		,channel_type
+		,direction
 		,amount
 		,status
 		,apply_user
+		
 		,apply_note
 		,apply_datetime
-		
 		,system_code
 		,company_code
 		)
@@ -131,15 +142,17 @@
 		#{code}
 		,#{accountNumber}
 		,#{accountName}
+		,#{currency}
 		,#{jourCode}
-		,#{direction}
 		
+		,#{channelType}
+		,#{direction}
 		,#{amount}
 		,#{status}
 		,#{applyUser}
+		
 		,#{applyNote}
 		,#{applyDatetime}
-		
 		,#{systemCode}
 		,#{companyCode}
 		)
