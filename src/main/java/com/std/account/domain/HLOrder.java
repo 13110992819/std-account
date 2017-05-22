@@ -1,6 +1,7 @@
 package com.std.account.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import com.std.account.dao.base.ABaseDO;
 
@@ -74,6 +75,17 @@ public class HLOrder extends ABaseDO {
 
     // 审批时间止
     private Date approveDatetimeEnd;
+
+    // 流水列表(给前端构造,不可删除)
+    private List<Jour> jourList;
+
+    public List<Jour> getJourList() {
+        return jourList;
+    }
+
+    public void setJourList(List<Jour> jourList) {
+        this.jourList = jourList;
+    }
 
     public String getCompanyCode() {
         return companyCode;

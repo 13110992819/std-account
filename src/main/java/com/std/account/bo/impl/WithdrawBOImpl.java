@@ -49,19 +49,20 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw> implements
         Withdraw data = new Withdraw();
         data.setCode(code);
         data.setAccountNumber(account.getAccountNumber());
-
-        // 取现户名，应该和银行卡户名一致
-        Bankcard bankcard = bankcardBO.getBankcardInfo(code);
-        if (null == bankcard) {
-            data.setAccountName(account.getRealName());
-        } else {
-            data.setAccountName(bankcard.getRealName());
-        }
         data.setAmount(amount);
         data.setFee(fee);
 
         data.setChannelType(EChannelType.Offline.getCode());
         data.setPayCardInfo(payCardInfo);
+        // 取现户名，应该和银行卡户名一致
+        Bankcard bankcard = bankcardBO.getBankcardByBankcardNumber(payCardNo);
+        if (null == bankcard) {
+            data.setAccountName(account.getRealName());
+        } else {
+            // 设置银行名称和银行名称
+            data.setAccountName(bankcard.getRealName());
+            data.setPayCardInfo(bankcard.getBankName());
+        }
         data.setPayCardNo(payCardNo);
         data.setStatus(EWithdrawStatus.toApprove.getCode());
         data.setApplyUser(applyUser);
