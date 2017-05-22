@@ -43,6 +43,17 @@ public class XN802807Req {
     // 系统编号
     private String systemCode;
 
+    // 公司编号
+    private String companyCode;
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
+
     public String getAccountNumber() {
         return accountNumber;
     }
