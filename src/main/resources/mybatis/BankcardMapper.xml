@@ -134,6 +134,7 @@
 		UPDATE tstd_bankcard
 		SET
 		bankcard_number = #{bankcardNumber}
+		,real_name = #{realName}
 		,bank_code = #{bankCode}
 		,bank_name = #{bankName}
 		,subbranch = #{subbranch}

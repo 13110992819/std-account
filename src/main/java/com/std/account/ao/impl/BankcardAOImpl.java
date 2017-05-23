@@ -3,6 +3,7 @@ package com.std.account.ao.impl;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +39,10 @@ public class BankcardAOImpl implements IBankcardAO {
     @Override
     public int editBankcard(Bankcard data) {
         Bankcard bankcard = bankcardBO.getBankcard(data.getCode());
+        // 户名有传就修改，不传不修改
+        if (StringUtils.isBlank(data.getRealName())) {
+            data.setRealName(bankcard.getRealName());
+        }
         if (!bankcard.getBankcardNumber().equals(data.getBankcardNumber())) { // 有修改就去判断是否唯一
             List<Bankcard> list = bankcardBO.queryBankcardList(
                 bankcard.getUserId(), bankcard.getSystemCode());
