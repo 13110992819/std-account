@@ -32,21 +32,15 @@ public class BankcardAOImpl implements IBankcardAO {
         if (CollectionUtils.isNotEmpty(list)) {
             throw new BizException("xn0000", "您已绑定银行卡,无需绑定多张");
         }
-        for (Bankcard bankcard : list) {
-            if (data.getBankcardNumber().equals(bankcard.getBankcardNumber())) {
-                throw new BizException("xn0000", "银行卡号已存在");
-            }
-        }
         return bankcardBO.saveBankcard(data);
     }
 
     @Override
     public int editBankcard(Bankcard data) {
         Bankcard bankcard = bankcardBO.getBankcard(data.getCode());
-        // 有更改就去判断是否唯一
-        if (!bankcard.getBankcardNumber().equals(data.getBankcardNumber())) {
+        if (!bankcard.getBankcardNumber().equals(data.getBankcardNumber())) { // 有修改就去判断是否唯一
             List<Bankcard> list = bankcardBO.queryBankcardList(
-                data.getUserId(), bankcard.getSystemCode());
+                bankcard.getUserId(), bankcard.getSystemCode());
             for (Bankcard card : list) {
                 if (data.getBankcardNumber().equals(card.getBankcardNumber())) {
                     throw new BizException("xn0000", "银行卡号已存在");

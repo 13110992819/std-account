@@ -138,7 +138,6 @@
 		,bank_name = #{bankName}
 		,subbranch = #{subbranch}
 		,bind_mobile = #{bindMobile}
-		,status = #{status}
 		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
