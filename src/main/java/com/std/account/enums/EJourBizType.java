@@ -29,7 +29,7 @@ public enum EJourBizType {
             "LTSFC", "量体师分成")
 
     // 姚橙
-    , YC_O2O("YC_O2O", "姚橙O2O支付");
+    , YC_O2O("YC_O2O", "姚橙O2O支付"), YC_MALL("YC_MALL", "姚橙商城支付");
 
     public static EJourBizType getBizType(String code) {
         Map<String, EJourBizType> map = getBizTypeMap();
