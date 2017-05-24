@@ -26,7 +26,12 @@ public enum EJourBizType {
             "-70", "参与小目标"), AJ_DUOBAO_PRIZE("71", "小目标中奖")
     // 定制通
     , AJ_GWFK("GW", "购物付款"), AJ_TK("GWTK", "购物退款"), AJ_HHRFC("HHRFC", "合伙人分成"), AJ_LTSFC(
-            "LTSFC", "量体师分成");
+            "LTSFC", "量体师分成")
+
+    // 姚橙
+    , YC_O2O("YC_O2O", "姚橙O2O支付"), YC_MALL("YC_MALL", "姚橙商城购物支付"), YC_MALL_BACK(
+            "YC_MALL_BACK", "姚橙商城购物退款"), YC_XNCZ_P("YC_XNCZ_P", "姚橙充值专区用款"), YC_XNCZ_M(
+            "-94", "菜狗充值专区退款");
 
     public static EJourBizType getBizType(String code) {
         Map<String, EJourBizType> map = getBizTypeMap();
