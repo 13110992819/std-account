@@ -27,6 +27,7 @@ public class XN802012 extends AProcessor {
     public Object doBusiness() throws BizException {
         Bankcard data = new Bankcard();
         data.setCode(req.getCode());
+        data.setRealName(req.getRealName());
         data.setBankcardNumber(req.getBankcardNumber());
         data.setBankCode(req.getBankCode());
         data.setBankName(req.getBankName());

@@ -9,6 +9,9 @@ public class XN802012Req {
     // 编号(必填)
     public String code;
 
+    // 户名(选填，有传就修改，没传不修改)
+    public String realName;
+
     // 卡号(必填)
     public String bankcardNumber;
 
@@ -29,6 +32,14 @@ public class XN802012Req {
 
     // 备注（选填）
     public String remark;
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
 
     public String getBankCode() {
         return bankCode;

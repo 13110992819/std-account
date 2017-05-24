@@ -1,5 +1,6 @@
 package com.std.account.ao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,6 +77,11 @@ public class HLOrderAOImpl implements IHLOrderAO {
 
     @Override
     public HLOrder getHLOrder(String code, String systemCode) {
-        return hlOrderBO.getHLOrder(code, systemCode);
+        HLOrder hLOrder = hlOrderBO.getHLOrder(code, systemCode);
+        Jour jour = jourBO.getJour(hLOrder.getJourCode(), systemCode);
+        List<Jour> jourList = new ArrayList<Jour>();
+        jourList.add(jour);
+        hLOrder.setJourList(jourList);
+        return hLOrder;
     }
 }

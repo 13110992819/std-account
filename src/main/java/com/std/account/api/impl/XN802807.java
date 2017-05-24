@@ -28,6 +28,7 @@ public class XN802807 extends AProcessor {
         HLOrder condition = new HLOrder();
         condition.setAccountNumber(req.getAccountNumber());
         condition.setAccountName(req.getAccountName());
+        condition.setCurrency(req.getCurrency());
         condition.setJourCode(req.getJourCode());
         condition.setChannelType(req.getChannelType());
         condition.setDirection(req.getDirection());
@@ -45,12 +46,14 @@ public class XN802807 extends AProcessor {
         condition.setApproveDatetimeEnd(DateUtil.getFrontDate(
             req.getApproveDateEnd(), true));
         condition.setSystemCode(req.getSystemCode());
+        condition.setCompanyCode(req.getCompanyCode());
         return hlOrderAO.queryHLOrderList(condition);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN802807Req.class);
-        StringValidater.validateBlank(req.getSystemCode());
+        StringValidater
+            .validateBlank(req.getSystemCode(), req.getCompanyCode());
     }
 }

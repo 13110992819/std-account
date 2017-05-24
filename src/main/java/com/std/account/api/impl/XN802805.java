@@ -30,23 +30,26 @@ public class XN802805 extends AProcessor {
         HLOrder condition = new HLOrder();
         condition.setAccountNumber(req.getAccountNumber());
         condition.setAccountName(req.getAccountName());
+        condition.setCurrency(req.getCurrency());
         condition.setJourCode(req.getJourCode());
         condition.setChannelType(req.getChannelType());
+
         condition.setDirection(req.getDirection());
         condition.setStatus(req.getStatus());
-
         condition.setApplyUser(req.getApplyUser());
         condition.setApplyDatetimeStart(DateUtil.getFrontDate(
             req.getApplyDateStart(), false));
         condition.setApplyDatetimeEnd(DateUtil.getFrontDate(
             req.getApplyDateEnd(), true));
+
         condition.setApproveUser(req.getApproveUser());
         condition.setApproveDatetimeStart(DateUtil.getFrontDate(
             req.getApproveDateStart(), false));
-
         condition.setApproveDatetimeEnd(DateUtil.getFrontDate(
             req.getApproveDateEnd(), true));
         condition.setSystemCode(req.getSystemCode());
+        condition.setCompanyCode(req.getCompanyCode());
+
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
             orderColumn = IHLOrderAO.DEFAULT_ORDER_COLUMN;
@@ -61,6 +64,7 @@ public class XN802805 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN802805Req.class);
         StringValidater.validateNumber(req.getStart(), req.getLimit());
-        StringValidater.validateBlank(req.getSystemCode());
+        StringValidater
+            .validateBlank(req.getSystemCode(), req.getCompanyCode());
     }
 }

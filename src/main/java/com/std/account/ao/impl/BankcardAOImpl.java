@@ -3,6 +3,7 @@ package com.std.account.ao.impl;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,21 +33,19 @@ public class BankcardAOImpl implements IBankcardAO {
         if (CollectionUtils.isNotEmpty(list)) {
             throw new BizException("xn0000", "您已绑定银行卡,无需绑定多张");
         }
-        for (Bankcard bankcard : list) {
-            if (data.getBankcardNumber().equals(bankcard.getBankcardNumber())) {
-                throw new BizException("xn0000", "银行卡号已存在");
-            }
-        }
         return bankcardBO.saveBankcard(data);
     }
 
     @Override
     public int editBankcard(Bankcard data) {
         Bankcard bankcard = bankcardBO.getBankcard(data.getCode());
-        // 有更改就去判断是否唯一
-        if (!bankcard.getBankcardNumber().equals(data.getBankcardNumber())) {
+        // 户名有传就修改，不传不修改
+        if (StringUtils.isBlank(data.getRealName())) {
+            data.setRealName(bankcard.getRealName());
+        }
+        if (!bankcard.getBankcardNumber().equals(data.getBankcardNumber())) { // 有修改就去判断是否唯一
             List<Bankcard> list = bankcardBO.queryBankcardList(
-                data.getUserId(), bankcard.getSystemCode());
+                bankcard.getUserId(), bankcard.getSystemCode());
             for (Bankcard card : list) {
                 if (data.getBankcardNumber().equals(card.getBankcardNumber())) {
                     throw new BizException("xn0000", "银行卡号已存在");

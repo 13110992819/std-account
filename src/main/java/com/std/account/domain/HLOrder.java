@@ -1,6 +1,7 @@
 package com.std.account.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import com.std.account.dao.base.ABaseDO;
 
@@ -20,8 +21,14 @@ public class HLOrder extends ABaseDO {
     // 针对户名（手机号或其他）
     private String accountName;
 
+    // 针对币种
+    private String currency;
+
     // 针对流水
     private String jourCode;
+
+    // 渠道类型
+    private String channelType;
 
     // 红冲还是蓝补
     private String direction;
@@ -69,8 +76,16 @@ public class HLOrder extends ABaseDO {
     // 审批时间止
     private Date approveDatetimeEnd;
 
-    // 流水渠道类型
-    private String channelType;
+    // 流水列表(给前端构造,不可删除)
+    private List<Jour> jourList;
+
+    public List<Jour> getJourList() {
+        return jourList;
+    }
+
+    public void setJourList(List<Jour> jourList) {
+        this.jourList = jourList;
+    }
 
     public String getCompanyCode() {
         return companyCode;
@@ -232,4 +247,11 @@ public class HLOrder extends ABaseDO {
         return approveDatetime;
     }
 
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
 }
