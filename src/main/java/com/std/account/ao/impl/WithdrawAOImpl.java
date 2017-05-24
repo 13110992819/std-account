@@ -43,6 +43,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
     private ISYSConfigBO sysConfigBO;
 
     @Override
+    @Transactional
     public String applyOrderTradePwd(String accountNumber, Long amount,
             String payCardInfo, String payCardNo, String applyUser,
             String applyNote, String tradePwd) {
