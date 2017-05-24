@@ -173,7 +173,7 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
         }
         // 记录流水
         String lastOrder = jourBO.addJour(dbAccount, EChannelType.Offline,
-            withdrawCode, null, withdrawCode, EJourBizType.AJ_QX, "线下取现冻结金额",
+            null, null, withdrawCode, EJourBizType.AJ_QX, "线下取现冻结金额",
             -freezeAmount);
         Long nowFrozenAmount = dbAccount.getFrozenAmount() + freezeAmount;
         Account data = new Account();
@@ -199,7 +199,7 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
 
         // 记录流水
         String lastOrder = jourBO.addJour(dbAccount, EChannelType.Offline,
-            withdrawCode, null, withdrawCode, EJourBizType.AJ_QX, "线下取现解冻金额",
+            null, null, withdrawCode, EJourBizType.AJ_QX, "线下取现解冻金额",
             freezeAmount);
         Account data = new Account();
         data.setAccountNumber(dbAccount.getAccountNumber());
