@@ -27,10 +27,9 @@ public class XN802420 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        return null;
-        // exchangeCurrencyAO.payExchange(req.getFromUserId(),
-        // req.getToUserId(), StringValidater.toLong(req.getAmount()),
-        // req.getCurrency(), req.getPayType());
+        return exchangeCurrencyAO.payExchange(req.getFromUserId(),
+            req.getToUserId(), StringValidater.toLong(req.getAmount()),
+            req.getCurrency(), req.getPayType());
     }
 
     /** 

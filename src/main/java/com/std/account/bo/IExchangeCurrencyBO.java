@@ -45,7 +45,7 @@ public interface IExchangeCurrencyBO extends IPaginableBO<ExchangeCurrency> {
             Long rmbAmount, Long toAmount, String currency, String payType,
             String systemCode);
 
-    // public int paySuccess(String code, String status, String payCode,
-    // Long payAmount);
+    public int paySuccess(String code, String status, String payCode,
+            Long payAmount);
 
 }

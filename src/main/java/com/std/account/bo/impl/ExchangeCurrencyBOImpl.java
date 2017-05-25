@@ -215,8 +215,11 @@ public class ExchangeCurrencyBOImpl extends PaginableBOImpl<ExchangeCurrency>
         data.setFromCurrency(ECurrency.CNY.getCode());
 
         data.setCreateDatetime(new Date());
-        data.setStatus(EExchangeCurrencyStatus.TO_PAY.getCode());
-
+        if (EPayType.RMB_YE.getCode().equals(payType)) {
+            data.setStatus(EExchangeCurrencyStatus.PAYED.getCode());
+        } else {
+            data.setStatus(EExchangeCurrencyStatus.TO_PAY.getCode());
+        }
         data.setPayType(payType);
         data.setPayGroup(code);
 
@@ -225,20 +228,20 @@ public class ExchangeCurrencyBOImpl extends PaginableBOImpl<ExchangeCurrency>
         exchangeCurrencyDAO.payExchange(data);
         return code;
     }
-    //
-    // @Override
-    // public int paySuccess(String code, String status, String payCode,
-    // Long payAmount) {
-    // int count = 0;
-    // if (StringUtils.isNotBlank(code)) {
-    // ExchangeCurrency data = new ExchangeCurrency();
-    // data.setCode(code);
-    // data.setStatus(status);
-    // data.setPayCode(payCode);
-    // data.setPayAmount(payAmount);
-    // data.setPayDatetime(new Date());
-    // count = exchangeCurrencyDAO.paySuccess(data);
-    // }
-    // return count;
-    // }
+
+    @Override
+    public int paySuccess(String code, String status, String payCode,
+            Long payAmount) {
+        int count = 0;
+        if (StringUtils.isNotBlank(code)) {
+            ExchangeCurrency data = new ExchangeCurrency();
+            data.setCode(code);
+            data.setStatus(status);
+            data.setPayCode(payCode);
+            data.setPayAmount(payAmount);
+            data.setPayDatetime(new Date());
+            count = exchangeCurrencyDAO.paySuccess(data);
+        }
+        return count;
+    }
 }
