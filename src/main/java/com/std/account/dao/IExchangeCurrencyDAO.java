@@ -12,8 +12,8 @@ public interface IExchangeCurrencyDAO extends IBaseDAO<ExchangeCurrency> {
 
     int doExchange(ExchangeCurrency data);
 
-    // int payExchange(ExchangeCurrency data);
-    //
-    // int paySuccess(ExchangeCurrency data);
+    int payExchange(ExchangeCurrency data);
+
+    int paySuccess(ExchangeCurrency data);
 
 }

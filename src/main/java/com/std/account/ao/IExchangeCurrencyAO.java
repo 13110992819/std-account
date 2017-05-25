@@ -24,4 +24,7 @@ public interface IExchangeCurrencyAO {
     public void doTransfer(String fromUserId, String fromCurrency,
             String toUserId, String toCurrency, Long amount);
 
+    public Object payExchange(String fromUserId, String toUserId, Long amount,
+            String currency, String payType);
+
 }

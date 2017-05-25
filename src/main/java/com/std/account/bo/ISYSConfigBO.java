@@ -67,4 +67,7 @@ public interface ISYSConfigBO extends IPaginableBO<SYSConfig> {
     // 获取人民币对菜狗币配置值：1菜狗币=多少菜狗积分
     public Double getCGB2CGJF();
 
+    // 获取人民币对橙币配置值：1人民币=橙币
+    public Double getCNY2CB();
+
 }

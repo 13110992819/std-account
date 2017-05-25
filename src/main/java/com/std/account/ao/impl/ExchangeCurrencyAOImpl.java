@@ -10,14 +10,17 @@ import com.std.account.bo.IAccountBO;
 import com.std.account.bo.IExchangeCurrencyBO;
 import com.std.account.bo.IUserBO;
 import com.std.account.bo.base.Paginable;
+import com.std.account.common.UserUtil;
 import com.std.account.domain.Account;
 import com.std.account.domain.ExchangeCurrency;
 import com.std.account.domain.User;
+import com.std.account.dto.res.BooleanRes;
 import com.std.account.enums.EBoolean;
 import com.std.account.enums.EChannelType;
 import com.std.account.enums.ECurrency;
 import com.std.account.enums.EExchangeCurrencyStatus;
 import com.std.account.enums.EJourBizType;
+import com.std.account.enums.EPayType;
 import com.std.account.enums.ESystemCode;
 import com.std.account.exception.BizException;
 import com.std.account.util.AmountUtil;
@@ -151,63 +154,66 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
                 null, code, EJourBizType.Transfer_CURRENCY, bizNote, toAmount);
     }
 
-    // @Override
-    // @Transactional
-    // public Object payExchange(String fromUserId, String toUserId, Long
-    // amount,
-    // String currency, String payType) {
-    // Object result = null;
-    // User fromUser = userBO.getRemoteUser(fromUserId);
-    // // 获取微信公众号支付prepayid
-    // if (EPayType.RMB_YE.getCode().equals(payType)) {
-    // rmbYePay(fromUser, toUserId, amount, currency, payType);
-    // } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {
-    // result = weixinH5Pay(fromUser, toUserId, amount, currency, payType);
-    // } else if (EPayType.WEIXIN_QR_CODE.getCode().equals(payType)) {
-    // result = weixinQrCodePay(fromUser, toUserId, amount, currency,
-    // payType);
-    // } else {
-    // throw new BizException("XN000000", "现只支持微信H5和微信二维码，其他方式不支持");
-    // }
-    // return result;
-    // }
+    @Override
+    @Transactional
+    public Object payExchange(String fromUserId, String toUserId, Long amount,
+            String currency, String payType) {
+        Object result = null;
+        User fromUser = userBO.getRemoteUser(fromUserId);
+        // 获取微信公众号支付prepayid
+        if (EPayType.RMB_YE.getCode().equals(payType)) {
+            result = rmbYePay(fromUser, toUserId, amount, currency, payType);
+        } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {
+            // result = weixinH5Pay(fromUser, toUserId, amount, currency,
+            // payType);
+        } else if (EPayType.WEIXIN_QR_CODE.getCode().equals(payType)) {
+            // result = weixinQrCodePay(fromUser, toUserId, amount, currency,
+            // payType);
+        } else {
+            throw new BizException("XN000000", "现只支持微信H5和微信二维码，其他方式不支持");
+        }
+        return result;
+    }
 
-    // /**
-    // * 人民币购买虚拟币
-    // * @param user
-    // * @param amount
-    // * @param currency
-    // * @param payType
-    // * @return
-    // * @create: 2017年4月20日 下午6:02:46 xieyj
-    // * @history:
-    // */
-    // private void rmbYePay(User fromUser, String toUser, Long amount,
-    // String currency, String payType) {
-    // EJourBizType bizType = null;
-    // if (ECurrency.CG_CGB.getCode().equals(currency)) {
-    // bizType = EJourBizType.AJ_CGBGM;
-    // } else {
-    // throw new BizException("xn000000", "暂未支持当前币种微信扫描支付");
-    // }
-    //
-    // Long rmbAmount = AmountUtil.mulJinFen(amount, 1 / exchangeCurrencyBO
-    // .getExchangeRate(ECurrency.CNY.getCode(), currency));
-    // // 产生记录
-    // exchangeCurrencyBO.payExchange(fromUser.getUserId(), toUser, rmbAmount,
-    // amount, currency, payType, fromUser.getSystemCode());
-    //
-    // // 去方币种兑换
-    // accountAO.transAmountCZB(fromUser.getUserId(), toUser,
-    // ECurrency.CNY.getCode(), rmbAmount, bizType.getCode(),
-    // bizType.getValue(), UserUtil.getUserMobile(fromUser.getMobile())
-    // + bizType.getValue());
-    // // 来方币种兑换
-    // accountAO.transAmountCZB(toUser, fromUser.getUserId(), currency,
-    // amount, bizType.getCode(),
-    // UserUtil.getUserMobile(fromUser.getMobile()) + bizType.getValue(),
-    // bizType.getValue());
-    // }
+    /**
+    * 人民币余额购买虚拟币
+    * @param user
+    * @param amount
+    * @param currency
+    * @param payType
+    * @return
+    * @create: 2017年4月20日 下午6:02:46 xieyj
+    * @history:
+    */
+    private Object rmbYePay(User fromUser, String toUser, Long amount,
+            String currency, String payType) {
+        EJourBizType bizType = null;
+        if (ECurrency.CG_CGB.getCode().equals(currency)) {
+            bizType = EJourBizType.CG_CGBGM;
+        } else if (ECurrency.YC_CB.getCode().equals(currency)) {
+            bizType = EJourBizType.YC_CBGM;
+        } else {
+            throw new BizException("xn000000", "币种未识别或不支持购买");
+        }
+
+        Long rmbAmount = AmountUtil.mulJinFen(amount, 1 / exchangeCurrencyBO
+            .getExchangeRate(ECurrency.CNY.getCode(), currency));
+        // 产生记录
+        String code = exchangeCurrencyBO.payExchange(fromUser.getUserId(),
+            toUser, rmbAmount, amount, currency, payType,
+            fromUser.getSystemCode());
+        // 人民币划转
+        accountBO.transAmountCZB(fromUser.getUserId(), ECurrency.CNY.getCode(),
+            toUser, ECurrency.CNY.getCode(), rmbAmount, bizType,
+            bizType.getValue(), UserUtil.getUserMobile(fromUser.getMobile())
+                    + bizType.getValue(), code);
+        // 购买的币种划转
+        accountBO.transAmountCZB(toUser, currency, toUser, currency, amount,
+            bizType,
+            UserUtil.getUserMobile(fromUser.getMobile()) + bizType.getValue(),
+            bizType.getValue(), code);
+        return new BooleanRes(true);
+    }
 
     // /**
     // * 二维码扫描购买虚拟币

@@ -88,6 +88,9 @@ public class ExchangeCurrencyBOImpl extends PaginableBOImpl<ExchangeCurrency>
         } else if (ECurrency.CG_CGB.getCode().equalsIgnoreCase(fromCurrency)
                 && ECurrency.CG_JF.getCode().equalsIgnoreCase(toCurrency)) {
             return sysConfigBO.getCGB2CGJF();
+        } else if (ECurrency.CNY.getCode().equalsIgnoreCase(fromCurrency)
+                && ECurrency.YC_CB.getCode().equalsIgnoreCase(toCurrency)) {
+            return sysConfigBO.getCNY2CB();
         } else {
             throw new BizException("xn000000", "兑换比例不存在，请检查钱包汇率规则参数");
         }
@@ -195,33 +198,33 @@ public class ExchangeCurrencyBOImpl extends PaginableBOImpl<ExchangeCurrency>
         }
     }
 
-    // @Override
-    // public String payExchange(String fromUserId, String toUserId,
-    // Long rmbAmount, Long toAmount, String currency, String payType,
-    // String systemCode) {
-    // String code = OrderNoGenerater
-    // .generate(EGeneratePrefix.EXCHANGE_CURRENCY.getCode());
-    // ExchangeCurrency data = new ExchangeCurrency();
-    // data.setCode(code);
-    //
-    // data.setToUserId(toUserId);
-    // data.setToAmount(toAmount);
-    // data.setToCurrency(currency);
-    // data.setFromUserId(fromUserId);
-    // data.setFromAmount(rmbAmount);
-    // data.setFromCurrency(ECurrency.CNY.getCode());
-    //
-    // data.setCreateDatetime(new Date());
-    // data.setStatus(EExchangeCurrencyStatus.TO_PAY.getCode());
-    //
-    // data.setPayType(payType);
-    // data.setPayGroup(code);
-    //
-    // data.setSystemCode(systemCode);
-    // data.setCompanyCode(systemCode);
-    // exchangeCurrencyDAO.payExchange(data);
-    // return code;
-    // }
+    @Override
+    public String payExchange(String fromUserId, String toUserId,
+            Long rmbAmount, Long toAmount, String currency, String payType,
+            String systemCode) {
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.EXCHANGE_CURRENCY.getCode());
+        ExchangeCurrency data = new ExchangeCurrency();
+        data.setCode(code);
+
+        data.setToUserId(toUserId);
+        data.setToAmount(toAmount);
+        data.setToCurrency(currency);
+        data.setFromUserId(fromUserId);
+        data.setFromAmount(rmbAmount);
+        data.setFromCurrency(ECurrency.CNY.getCode());
+
+        data.setCreateDatetime(new Date());
+        data.setStatus(EExchangeCurrencyStatus.TO_PAY.getCode());
+
+        data.setPayType(payType);
+        data.setPayGroup(code);
+
+        data.setSystemCode(systemCode);
+        data.setCompanyCode(systemCode);
+        exchangeCurrencyDAO.payExchange(data);
+        return code;
+    }
     //
     // @Override
     // public int paySuccess(String code, String status, String payCode,
