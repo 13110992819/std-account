@@ -49,12 +49,16 @@ public class CallbackBzdhConroller {
 
                 if (EJourBizType.CG_CGBGM.getCode().equals(bizType)) {
                     System.out.println("**** 进入菜狗币购买售卖，服务器回调 start****");
-                    // exchangeCurrencyAO.paySuccess(payGroup, payCode, amount);
+                    exchangeCurrencyAO.paySuccess(payGroup, payCode, amount);
                     System.out.println("**** 进入菜狗币购买售卖，服务器回调 end****");
+                } else if (EJourBizType.YC_CBGM.getCode().equals(bizType)) {
+                    System.out.println("**** 进入橙币购买售卖，服务器回调 start****");
+                    exchangeCurrencyAO.paySuccess(payGroup, payCode, amount);
+                    System.out.println("**** 进入橙币购买售卖，服务器回调 end****");
                 } else if (EJourBizType.EXCHANGE_CURRENCY.getCode().equals(
                     bizType)) {
                     System.out.println("**** 进入币种兑换，服务器回调 start****");
-                    // exchangeCurrencyAO.paySuccess(payGroup, payCode, amount);
+                    exchangeCurrencyAO.paySuccess(payGroup, payCode, amount);
                     System.out.println("**** 进入币种兑换，服务器回调 end****");
                 }
             } catch (Exception e) {
