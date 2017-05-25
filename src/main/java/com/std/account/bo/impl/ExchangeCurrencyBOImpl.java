@@ -215,17 +215,13 @@ public class ExchangeCurrencyBOImpl extends PaginableBOImpl<ExchangeCurrency>
         data.setFromCurrency(ECurrency.CNY.getCode());
 
         data.setCreateDatetime(new Date());
-        if (EPayType.RMB_YE.getCode().equals(payType)) {
-            data.setStatus(EExchangeCurrencyStatus.PAYED.getCode());
-        } else {
-            data.setStatus(EExchangeCurrencyStatus.TO_PAY.getCode());
-        }
+        data.setStatus(EExchangeCurrencyStatus.TO_PAY.getCode());
         data.setPayType(payType);
         data.setPayGroup(code);
 
         data.setSystemCode(systemCode);
         data.setCompanyCode(systemCode);
-        exchangeCurrencyDAO.payExchange(data);
+        exchangeCurrencyDAO.applyExchange(data);
         return code;
     }
 

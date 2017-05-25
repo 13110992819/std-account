@@ -205,17 +205,17 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
         Long rmbAmount = AmountUtil.mulJinFen(amount, 1 / exchangeCurrencyBO
             .getExchangeRate(ECurrency.CNY.getCode(), currency));
         // 产生记录
-        String code = exchangeCurrencyBO.payExchange(fromUser.getUserId(),
-            toUser, rmbAmount, amount, currency, payType,
-            fromUser.getSystemCode());
+        String code = exchangeCurrencyBO.saveExchange(fromUser.getUserId(),
+            rmbAmount, ECurrency.CNY.getCode(), toUser, amount, currency,
+            fromUser.getCompanyCode(), fromUser.getSystemCode());
         // 人民币划转
         accountBO.transAmountCZB(fromUser.getUserId(), ECurrency.CNY.getCode(),
             toUser, ECurrency.CNY.getCode(), rmbAmount, bizType,
             bizType.getValue(), UserUtil.getUserMobile(fromUser.getMobile())
                     + bizType.getValue(), code);
         // 购买的币种划转
-        accountBO.transAmountCZB(toUser, currency, toUser, currency, amount,
-            bizType,
+        accountBO.transAmountCZB(toUser, currency, fromUser.getUserId(),
+            currency, amount, bizType,
             UserUtil.getUserMobile(fromUser.getMobile()) + bizType.getValue(),
             bizType.getValue(), code);
         return new BooleanRes(true);
