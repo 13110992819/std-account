@@ -319,7 +319,8 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
         // 购买的币种划转
         accountBO.transAmountCZB(exchangeCurrency.getToUserId(),
             exchangeCurrency.getToCurrency(), exchangeCurrency.getFromUserId(),
-            exchangeCurrency.getToCurrency(), transAmount, bizType,
+            exchangeCurrency.getToCurrency(), exchangeCurrency.getToAmount(),
+            bizType,
             UserUtil.getUserMobile(fromUser.getMobile()) + bizType.getValue(),
             bizType.getValue(), exchangeCurrency.getCode());
     }
