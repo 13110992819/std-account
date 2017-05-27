@@ -12,6 +12,9 @@ public class XN802524Req extends APageReq {
     // 业务类型(选填)
     private String bizType;
 
+    // 渠道类型（选填）
+    private String channelType;
+
     // 状态(选填)
     private String status;
 
@@ -37,6 +40,14 @@ public class XN802524Req extends APageReq {
 
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
+    }
+
+    public String getChannelType() {
+        return channelType;
+    }
+
+    public void setChannelType(String channelType) {
+        this.channelType = channelType;
     }
 
 }
