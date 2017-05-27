@@ -126,7 +126,7 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
     public void doTransfer(String fromUserId, String fromCurrency,
             String toUserId, String toCurrency, Long transAmount) {
         // 转化前提是否满足
-        if (!ECurrency.CNY.getCode().equals(toCurrency)) {
+        if (ECurrency.CNY.getCode().equals(toCurrency)) {
             throw new BizException("xn000000", "转化币种不能是人民币");
         }
         Account fromAccount = accountBO.getAccountByUser(fromUserId,
