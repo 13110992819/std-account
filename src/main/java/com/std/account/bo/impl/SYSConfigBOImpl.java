@@ -155,4 +155,10 @@ public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig> implements
             EExchangeRate.CGB2CGJF.getCode(), ESystemCode.CAIGO.getCode()));
     }
 
+    @Override
+    public Double getCNY2CB() {
+        return Double.valueOf(this.getSYSConfig(EExchangeRate.CNY2CB.getCode(),
+            ESystemCode.YAOCHENG.getCode()));
+    }
+
 }

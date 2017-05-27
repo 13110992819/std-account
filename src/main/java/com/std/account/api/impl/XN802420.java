@@ -15,7 +15,7 @@ import com.std.account.spring.SpringContextHolder;
  * @since: 2017年3月30日 下午2:15:48 
  * @history:
  */
-// 用人民币买虚拟币(暂未实现)
+// 用人民币买虚拟币
 public class XN802420 extends AProcessor {
     private IExchangeCurrencyAO exchangeCurrencyAO = SpringContextHolder
         .getBean(IExchangeCurrencyAO.class);
@@ -27,10 +27,9 @@ public class XN802420 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        return null;
-        // exchangeCurrencyAO.payExchange(req.getFromUserId(),
-        // req.getToUserId(), StringValidater.toLong(req.getAmount()),
-        // req.getCurrency(), req.getPayType());
+        return exchangeCurrencyAO.payExchange(req.getFromUserId(),
+            req.getToUserId(), StringValidater.toLong(req.getAmount()),
+            req.getCurrency(), req.getPayType());
     }
 
     /** 

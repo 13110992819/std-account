@@ -41,11 +41,11 @@ public interface IExchangeCurrencyBO extends IPaginableBO<ExchangeCurrency> {
 
     public void doCheckZH(String userId, String fromCurrency, String toCurrency);
 
-    // public String payExchange(String fromUserId, String toUserId,
-    // Long rmbAmount, Long toAmount, String currency, String payType,
-    // String systemCode);
-    //
-    // public int paySuccess(String code, String status, String payCode,
-    // Long payAmount);
+    public String payExchange(String fromUserId, String toUserId,
+            Long rmbAmount, Long toAmount, String currency, String payType,
+            String systemCode);
+
+    public int paySuccess(String code, String status, String payCode,
+            Long payAmount);
 
 }
