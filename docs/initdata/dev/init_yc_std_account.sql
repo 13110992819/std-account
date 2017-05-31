@@ -6,13 +6,6 @@ LIMIT 0, 10000
 */
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','CNY2CB','1','',now(),'1人民币兑换多少橙券','CD-CYC000009','CD-CYC000009');
 
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('2','CUSERQXBS','100','',now(),'C端取现金额倍数','CD-CYC000009','CD-CYC000009');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('2','CUSERQXFL','0.02','',now(),'C端取现手续费率','CD-CYC000009','CD-CYC000009');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('2','CUSERQXSX','1','',now(),'C端取现时效(单位：天)','CD-CYC000009','CD-CYC000009');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('3','BUSERQXBS','100','',now(),'B端取现金额倍数','CD-CYC000009','CD-CYC000009');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('3','BUSERQXFL','0.02','',now(),'B端取现手续费率','CD-CYC000009','CD-CYC000009');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('3','BUSERQXSX','1','',now(),'B端取现时效(单位：天)','CD-CYC000009','CD-CYC000009');
-
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('3','CUSERMONTIMES','5','',now(),'C端每月取现次数','CD-CYC000009','CD-CYC000009');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('3','BUSERMONTIMES','30','',now(),'B端每月取现次数','CD-CYC000009','CD-CYC000009');
 
