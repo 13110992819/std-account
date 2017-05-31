@@ -26,7 +26,7 @@ public enum ECurrency {
 
     CG_CGB("CGB", "菜狗币"), CG_JF("CGJF", "菜狗积分"),
 
-    YC_CB("CB", "橙币");
+    YC_CB("CB", "橙券");
 
     public static Map<String, ECurrency> getCurrencyMap() {
         Map<String, ECurrency> map = new HashMap<String, ECurrency>();

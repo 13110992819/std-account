@@ -4,7 +4,7 @@ LIMIT 0, 10000
 
 -- Date: 2017-04-05 23:32
 */
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','CNY2CB','1','',now(),'1人民币兑换多少姚橙卡','CD-CYC000009','CD-CYC000009');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','CNY2CB','1','',now(),'1人民币兑换多少姚橙券','CD-CYC000009','CD-CYC000009');
 
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('2','CUSERQXBS','100','',now(),'C端取现金额倍数','CD-CYC000009','CD-CYC000009');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('2','CUSERQXFL','0.02','',now(),'C端取现手续费率','CD-CYC000009','CD-CYC000009');
@@ -24,7 +24,7 @@ LIMIT 0, 400
 */
 INSERT INTO `tstd_account` (`account_number`,`user_id`,`real_name`,`type`,`status`,`currency`,`amount`,`frozen_amount`,`md5`,`create_datetime`,`last_order`,`company_code`,`system_code`) VALUES ('CD-CYC000009','SYS_USER_YAOCHENG_TG','平台托管账户','P','0','CNY',0,0,'b99e0407fedc3d160f73fec8d1fa9a0c',now(),NULL,'CD-CYC000009','CD-CYC000009');
 INSERT INTO `tstd_account` (`account_number`,`user_id`,`real_name`,`type`,`status`,`currency`,`amount`,`frozen_amount`,`md5`,`create_datetime`,`last_order`,`company_code`,`system_code`) VALUES ('YCA2016100000000000000','SYS_USER_YAOCHENG','平台人民币账户','P','0','CNY',0,0,'d3b907844e4c1c51573c6be663f57eaf',now(),NULL,'CD-CYC000009','CD-CYC000009');
-INSERT INTO `tstd_account` (`account_number`,`user_id`,`real_name`,`type`,`status`,`currency`,`amount`,`frozen_amount`,`md5`,`create_datetime`,`last_order`,`company_code`,`system_code`) VALUES ('YCA2016100000000000001','SYS_USER_YAOCHENG','平台橙卡账户','P','0','CB',0,0,'6a3ea19778f8e415f8371457636abf7a',now(),NULL,'CD-CYC000009','CD-CYC000009');
+INSERT INTO `tstd_account` (`account_number`,`user_id`,`real_name`,`type`,`status`,`currency`,`amount`,`frozen_amount`,`md5`,`create_datetime`,`last_order`,`company_code`,`system_code`) VALUES ('YCA2016100000000000001','SYS_USER_YAOCHENG','平台橙券账户','P','0','CB',0,0,'6a3ea19778f8e415f8371457636abf7a',now(),NULL,'CD-CYC000009','CD-CYC000009');
 
 
 /*
@@ -48,7 +48,7 @@ INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_d
 
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('0',NULL,'currency','货币','admin',now(),'','CD-CYC000009');
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','currency','CNY','人民币','admin',now(),'','CD-CYC000009');
-INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','currency','CB','橙卡','admin',now(),'','CD-CYC000009');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','currency','CB','橙券','admin',now(),'','CD-CYC000009');
 
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('0',NULL,'account_type','账户类型','admin',now(),'','CD-CYC000009');
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','account_type','C','C端用户','admin',now(),'','CD-CYC000009');
