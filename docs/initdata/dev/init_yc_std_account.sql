@@ -4,7 +4,7 @@ LIMIT 0, 10000
 
 -- Date: 2017-04-05 23:32
 */
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','CNY2CB','1','',now(),'1人民币兑换多少姚橙券','CD-CYC000009','CD-CYC000009');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','CNY2CB','1','',now(),'1人民币兑换多少橙券','CD-CYC000009','CD-CYC000009');
 
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('2','CUSERQXBS','100','',now(),'C端取现金额倍数','CD-CYC000009','CD-CYC000009');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('2','CUSERQXFL','0.02','',now(),'C端取现手续费率','CD-CYC000009','CD-CYC000009');
