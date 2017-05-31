@@ -150,15 +150,21 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
                 + ECurrency.getCurrencyMap().get(fromCurrency).getValue()
                 + "转化为" + CalculationUtil.divi(toAmount)
                 + ECurrency.getCurrencyMap().get(toCurrency).getValue();
+        String fromBizNote = bizNote;
+        String toBizNote = bizNote;
+        if (fromCurrency.equals(toCurrency)) {
+            fromBizNote = "代发代销至账户[" + toAccount.getRealName() + "]";
+            toBizNote = "账户[" + toAccount.getRealName() + "]代发代销";
+        }
         String code = exchangeCurrencyBO.saveExchange(fromUserId, transAmount,
             fromCurrency, toUserId, toAmount, toCurrency,
             fromAccount.getCompanyCode(), fromAccount.getSystemCode());
         accountBO.changeAmount(fromAccount.getAccountNumber(),
             EChannelType.NBZ, null, null, code, EJourBizType.Transfer_CURRENCY,
-            bizNote, -transAmount);
-        accountBO
-            .changeAmount(toAccount.getAccountNumber(), EChannelType.NBZ, null,
-                null, code, EJourBizType.Transfer_CURRENCY, bizNote, toAmount);
+            fromBizNote, -transAmount);
+        accountBO.changeAmount(toAccount.getAccountNumber(), EChannelType.NBZ,
+            null, null, code, EJourBizType.Transfer_CURRENCY, toBizNote,
+            toAmount);
     }
 
     @Override
