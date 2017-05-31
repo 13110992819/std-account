@@ -62,7 +62,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
         Long fee = doGetFee(dbAccount.getType(), amount,
             dbAccount.getSystemCode(), dbAccount.getCompanyCode());
         // 取现总金额
-        amount = amount - fee;
+        amount = amount + fee;
         String withdrawCode = withdrawBO.applyOrder(dbAccount, amount, fee,
             payCardInfo, payCardNo, applyUser, applyNote);
         // 冻结取现金额
@@ -88,7 +88,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
         Long fee = doGetFee(dbAccount.getType(), amount,
             dbAccount.getSystemCode(), dbAccount.getCompanyCode());
         // 取现总金额
-        amount = amount - fee;
+        amount = amount + fee;
         String withdrawCode = withdrawBO.applyOrder(dbAccount, amount, fee,
             payCardInfo, payCardNo, applyUser, applyNote);
         // 冻结取现金额
@@ -240,6 +240,6 @@ public class WithdrawAOImpl implements IWithdrawAO {
         if (StringUtils.isNotBlank(feeRateValue)) {
             feeRate = Double.valueOf(feeRateValue);
         }
-        return AmountUtil.mul(-amount, feeRate);
+        return AmountUtil.mul(amount, feeRate);
     }
 }
