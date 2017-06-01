@@ -1,14 +1,19 @@
 package com.std.account.api.impl;
 
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 
+import com.std.account.ao.IAccountAO;
 import com.std.account.ao.IWithdrawAO;
 import com.std.account.api.AProcessor;
 import com.std.account.common.DateUtil;
 import com.std.account.common.JsonUtil;
 import com.std.account.core.StringValidater;
+import com.std.account.domain.Account;
 import com.std.account.domain.Withdraw;
 import com.std.account.dto.req.XN802755Req;
+import com.std.account.enums.ECurrency;
 import com.std.account.exception.BizException;
 import com.std.account.exception.ParaException;
 import com.std.account.spring.SpringContextHolder;
@@ -23,12 +28,28 @@ public class XN802755 extends AProcessor {
     private IWithdrawAO withdrawAO = SpringContextHolder
         .getBean(IWithdrawAO.class);
 
+    private IAccountAO accountAO = SpringContextHolder
+        .getBean(IAccountAO.class);
+
     private XN802755Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
         Withdraw condition = new Withdraw();
-        condition.setAccountNumber(req.getAccountNumber());
+        if (StringUtils.isNotBlank(req.getUserId())) {
+            try {
+                List<Account> accounts = accountAO.getAccountByUserId(
+                    req.getUserId(), ECurrency.CNY.getCode());
+                if (accounts.size() > 0) {
+                    condition.setAccountNumber(accounts.get(0)
+                        .getAccountNumber());
+                }
+            } catch (Exception e) {
+            }
+        }
+        if (StringUtils.isNotBlank(req.getAccountNumber())) {
+            condition.setAccountNumber(req.getAccountNumber());
+        }
         condition.setAccountName(req.getAccountName());
         condition.setChannelType(req.getChannelType());
         condition.setStatus(req.getStatus());

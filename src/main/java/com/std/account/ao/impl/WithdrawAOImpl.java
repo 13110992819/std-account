@@ -231,7 +231,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
         if (StringUtils.isNotBlank(qxBsValue)) {
             // 取现金额倍数
             Long qxBs = AmountUtil.mul(1000L, Double.valueOf(qxBsValue));
-            if (qxBs > 0 && -amount % qxBs > 0) {
+            if (qxBs > 0 && amount % qxBs > 0) {
                 throw new BizException("xn000000", "请取" + qxBsValue + "的倍数");
             }
         }
@@ -240,6 +240,6 @@ public class WithdrawAOImpl implements IWithdrawAO {
         if (StringUtils.isNotBlank(feeRateValue)) {
             feeRate = Double.valueOf(feeRateValue);
         }
-        return AmountUtil.mul(-amount, feeRate);
+        return AmountUtil.mul(amount, feeRate);
     }
 }

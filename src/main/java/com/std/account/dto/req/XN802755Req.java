@@ -64,6 +64,10 @@ public class XN802755Req extends APageReq {
     // 支付时间止
     private String payDateEnd;
 
+    // ******** db *****
+    // 针对用户编号
+    private String userId;
+
     public String getApplyDateStart() {
         return applyDateStart;
     }
@@ -198,5 +202,13 @@ public class XN802755Req extends APageReq {
 
     public void setCompanyCode(String companyCode) {
         this.companyCode = companyCode;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }
