@@ -15,11 +15,15 @@ public enum EJourBizType {
     // 正汇
     , AJ_GW("-30", "购物"), AJ_GWTK("30", "购物退款"), AJ_QRSH("32", "确认收货，商户收钱"), AJ_GMZKQ(
             "-40", "购买折扣券"), ZH_O2O("-ZH1", "正汇O2O支付"), ZH_STOCK("-ZH2",
-            "正汇分红权分红"), GD_MALL("GD_MALL", "积分商城消费"), GD_O2O("GD_O2O",
-            "O2O店铺积分消费"), AJ_GMHZB("-50", "购买汇赚宝"), AJ_GMHZBFC("51", "购买汇赚宝分成"), AJ_YYJL(
+            "正汇分红权分红"), AJ_GMHZB("-50", "购买汇赚宝"), AJ_GMHZBFC("51", "购买汇赚宝分成"), AJ_YYJL(
             "52", "汇赚宝摇一摇奖励"), AJ_YYFC("53", "汇赚宝摇一摇分成"), AJ_YYFC_REF("54",
             "推荐人摇一摇分成"), AJ_FSDHB("60", "发送得红包"), AJ_LQHB("61", "领取红包"), AJ_DUOBAO(
             "-70", "参与小目标"), AJ_DUOBAO_PRIZE("71", "小目标中奖")
+
+    // 管道
+    , GD_MALL("GD_MALL", "积分商城消费"), GD_O2O("GD_O2O", "O2O店铺积分消费"), GD_WCDDSJF(
+            "GD_WCDDSJF", "完成订单送积分")
+
     // 城市网
     , CSW_PAY("100", "城市网商品积分购买支付")
 
