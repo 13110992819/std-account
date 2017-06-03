@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,8 @@ import com.std.account.exception.BizException;
 
 @Service
 public class AccountAOImpl implements IAccountAO {
+    private static Logger logger = Logger.getLogger(AccountAOImpl.class);
+
     @Autowired
     private IAccountBO accountBO;
 
@@ -61,6 +64,9 @@ public class AccountAOImpl implements IAccountAO {
     public void transAmountCZB(String fromUserId, String fromCurrency,
             String toUserId, String toCurrency, Long transAmount,
             String bizType, String fromBizNote, String toBizNote, String refNo) {
+        logger.info("划转来方用户编号：" + fromUserId + ",来方币种：" + fromCurrency
+                + ",去方用户编号：" + toUserId + ",去方币种：" + toCurrency + ",划转金额："
+                + transAmount / 1000 + ",业务类型：" + bizType + ",参考订单号：" + refNo);
         EJourBizType a = EJourBizType.getBizType(bizType);
         accountBO.transAmountCZB(fromUserId, fromCurrency, toUserId,
             toCurrency, transAmount, a, fromBizNote, toBizNote, refNo);

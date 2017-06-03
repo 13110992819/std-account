@@ -13,6 +13,7 @@ import java.util.List;
 import com.std.account.annotation.ServiceModule;
 import com.std.account.bo.base.Paginable;
 import com.std.account.domain.Jour;
+import com.std.account.dto.res.XN802901Res;
 
 /** 
  * @author: xieyj 
@@ -45,4 +46,16 @@ public interface IJourAO {
 
     public Long getTotalAmount(String bizType, String channelType,
             String accountNumber);
+
+    /**
+     * 获取一段时间统计金额
+     * @param accountNumber
+     * @param dateStart
+     * @param dateEnd
+     * @return 
+     * @create: 2017年5月31日 下午8:46:22 xieyj
+     * @history:
+     */
+    public XN802901Res getTotalAmountByDate(String accountNumber,
+            String dateStart, String dateEnd);
 }
