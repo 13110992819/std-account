@@ -1,6 +1,7 @@
 package com.std.account.ao.impl;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,8 +9,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.std.account.ao.IExchangeCurrencyAO;
 import com.std.account.bo.IAccountBO;
 import com.std.account.bo.IExchangeCurrencyBO;
+import com.std.account.bo.ISYSConfigBO;
 import com.std.account.bo.IUserBO;
 import com.std.account.bo.base.Paginable;
+import com.std.account.common.SysConstant;
 import com.std.account.domain.Account;
 import com.std.account.domain.ExchangeCurrency;
 import com.std.account.domain.User;
@@ -35,6 +38,9 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
 
     @Autowired
     private IExchangeCurrencyBO exchangeCurrencyBO;
+
+    @Autowired
+    private ISYSConfigBO sysConfigBO;
 
     @Override
     public Paginable<ExchangeCurrency> queryExchangeCurrencyPage(int start,
@@ -156,6 +162,21 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
     @Transactional
     public void doTransferC2CByZhFR(String fromUserId, String toMobile,
             Long transAmount, String tradePwd) {
+        if (transAmount <= 0) {
+            throw new BizException("xn000000", "划转金额需大于零");
+        }
+        String transAmountBsValue = sysConfigBO.getSYSConfig(
+            SysConstant.TRANSAMOUNTBS, ESystemCode.ZHPAY.getCode());
+        if (StringUtils.isNotBlank(transAmountBsValue)) {
+            // 转账金额倍数
+            Long transAmountBs = AmountUtil.mul(1000L,
+                Double.valueOf(transAmountBsValue));
+            if (transAmountBs > 0 && transAmount % transAmountBs > 0) {
+                throw new BizException("xn000000", "请取" + transAmountBsValue
+                        + "的倍数");
+            }
+        }
+
         // 验证交易密码
         userBO.checkTradePwd(fromUserId, tradePwd);
         // 验证双方是否C端用户
