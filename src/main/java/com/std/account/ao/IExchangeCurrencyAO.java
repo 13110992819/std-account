@@ -24,4 +24,8 @@ public interface IExchangeCurrencyAO {
     public void doTransfer(String fromUserId, String fromCurrency,
             String toUserId, String toCurrency, Long amount);
 
+    // C端用户间分润划转资金(正汇)
+    public void doTransferC2CByZhFR(String fromUserId, String toMobile, Long amount,
+            String tradePwd);
+
 }
