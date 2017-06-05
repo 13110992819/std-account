@@ -46,7 +46,6 @@ public enum EJourBizType {
             "YC_MALL_BACK", "姚橙商城购物退款"), YC_XNCZ_P("YC_XNCZ_P", "姚橙充值专区支付"), YC_XNCZ_M(
             "YC_XNCZ_M", "姚橙充值专区退款"), YC_CBGM("YC_CBGM", "橙券购买"), YC_SCB(
             "YC_SCB", "扫描二维码送橙券");
-    ;
 
     public static EJourBizType getBizType(String code) {
         Map<String, EJourBizType> map = getBizTypeMap();
