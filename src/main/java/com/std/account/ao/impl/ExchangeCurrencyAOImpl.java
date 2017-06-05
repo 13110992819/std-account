@@ -189,12 +189,12 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
         if (toUserId.equals(fromUser.getUserId())) {
             throw new BizException("xn000000", "不能给自己转账");
         }
+
         // 开始资金划转
         String currency = ECurrency.ZH_FRB.getCode();
         Account fromAccount = accountBO.getAccountByUser(fromUserId, currency);
         Account toAccount = accountBO.getAccountByUser(toUserId, currency);
-        String bizNote = fromUser.getMobile() + "用户转账" + toMobile + "用户"
-                + ECurrency.getCurrencyMap().get(currency).getValue() + "金额"
+        String bizNote = fromUser.getMobile() + "用户转账" + toMobile + "用户分润"
                 + CalculationUtil.divi(transAmount);
 
         String code = exchangeCurrencyBO.saveExchange(fromUserId, transAmount,
