@@ -29,4 +29,7 @@ public interface IExchangeCurrencyAO {
 
     public void paySuccess(String payGroup, String payCode, Long transAmount);
 
+    // C端用户间分润划转资金(正汇)
+    public void doTransferC2CByZhFR(String fromUserId, String toMobile,
+            Long amount, String tradePwd);
 }

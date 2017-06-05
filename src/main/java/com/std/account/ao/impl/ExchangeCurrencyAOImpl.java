@@ -330,4 +330,10 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
             UserUtil.getUserMobile(fromUser.getMobile()) + bizType.getValue(),
             bizType.getValue(), exchangeCurrency.getCode());
     }
+
+    @Transactional
+    public void doTransferC2CByZhFR(String fromUserId, String toMobile,
+            Long amount, String tradePwd) {
+
+    }
 }

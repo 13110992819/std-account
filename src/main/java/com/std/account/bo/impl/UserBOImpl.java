@@ -46,7 +46,7 @@ public class UserBOImpl implements IUserBO {
             userId = res.getUserId();
         }
         if (StringUtils.isBlank(userId)) {
-            throw new BizException("xn0000", "手机号用户不存在");
+            throw new BizException("xn0000", mobile + "手机号用户不存在");
         }
         return userId;
     }

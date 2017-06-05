@@ -16,6 +16,9 @@
 2，打包
    scp -P22 ./std-account.war root@121.43.101.148:/home
    T6dh%$%$ss1
+   
+      scp -P22 ./tomcat_std_mall root@106.15.49.68:/mnt/wwwroot/zhpay
+   
 
 3，部署
   ssh root@121.43.101.148 -p 22
