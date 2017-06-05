@@ -155,7 +155,7 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
         String toBizNote = bizNote;
         if (fromCurrency.equals(toCurrency)) {
             fromBizNote = "代发代销至账户[" + toAccount.getRealName() + "]";
-            toBizNote = "账户[" + toAccount.getRealName() + "]代发代销";
+            toBizNote = "账户[" + fromAccount.getRealName() + "]代发代销";
         }
         String code = exchangeCurrencyBO.saveExchange(fromUserId, transAmount,
             fromCurrency, toUserId, toAmount, toCurrency,
