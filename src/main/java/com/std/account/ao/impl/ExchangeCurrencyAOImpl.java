@@ -176,7 +176,6 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
                         + "的倍数");
             }
         }
-
         // 验证交易密码
         userBO.checkTradePwd(fromUserId, tradePwd);
         // 验证双方是否C端用户
@@ -186,7 +185,10 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
         }
         String toUserId = userBO.isUserExist(toMobile, EUserKind.F1,
             fromUser.getSystemCode());
-
+        // 同一个用户不可以相互转账
+        if (toUserId.equals(fromUser.getUserId())) {
+            throw new BizException("xn000000", "不能给自己转账");
+        }
         // 开始资金划转
         String currency = ECurrency.ZH_FRB.getCode();
         Account fromAccount = accountBO.getAccountByUser(fromUserId, currency);

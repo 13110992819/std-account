@@ -37,4 +37,4 @@
   ../bin/shutdown.sh
   ../bin/startup.sh
   
-   http://121.43.101.148:8906/std-account/api
+   http://118.178.124.16:5606/std-account/api
