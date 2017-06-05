@@ -26,6 +26,7 @@ import com.std.account.enums.EExchangeCurrencyStatus;
 import com.std.account.enums.EJourBizType;
 import com.std.account.enums.EPayType;
 import com.std.account.enums.ESystemCode;
+import com.std.account.enums.EUserKind;
 import com.std.account.exception.BizException;
 import com.std.account.util.AmountUtil;
 import com.std.account.util.CalculationUtil;
@@ -331,9 +332,37 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
             bizType.getValue(), exchangeCurrency.getCode());
     }
 
+    @Override
     @Transactional
     public void doTransferC2CByZhFR(String fromUserId, String toMobile,
-            Long amount, String tradePwd) {
+            Long transAmount, String tradePwd) {
+        // 验证交易密码
+        userBO.checkTradePwd(fromUserId, tradePwd);
+        // 验证双方是否C端用户
+        User fromUser = userBO.getRemoteUser(fromUserId);
+        if (!EUserKind.F1.getCode().equals(fromUser.getKind())) {
+            throw new BizException("xn000000", "当前划转用户不是C端用户，不能进行转账业务");
+        }
+        String toUserId = userBO.isUserExist(toMobile, EUserKind.F1,
+            fromUser.getSystemCode());
 
+        // 开始资金划转
+        String currency = ECurrency.ZH_FRB.getCode();
+        Account fromAccount = accountBO.getAccountByUser(fromUserId, currency);
+        Account toAccount = accountBO.getAccountByUser(toUserId, currency);
+        String bizNote = fromUser.getMobile() + "用户转账" + toMobile + "用户"
+                + ECurrency.getCurrencyMap().get(currency).getValue() + "金额"
+                + CalculationUtil.divi(transAmount);
+
+        String code = exchangeCurrencyBO.saveExchange(fromUserId, transAmount,
+            currency, toUserId, transAmount, currency,
+            fromAccount.getCompanyCode(), fromAccount.getSystemCode());
+
+        accountBO.changeAmount(fromAccount.getAccountNumber(),
+            EChannelType.NBZ, null, null, code,
+            EJourBizType.Transfer_CURRENCY_C2C, bizNote, -transAmount);
+        accountBO.changeAmount(toAccount.getAccountNumber(), EChannelType.NBZ,
+            null, null, code, EJourBizType.Transfer_CURRENCY_C2C, bizNote,
+            transAmount);
     }
 }

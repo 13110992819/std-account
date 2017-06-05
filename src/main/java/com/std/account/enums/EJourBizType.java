@@ -9,7 +9,8 @@ public enum EJourBizType {
     // 通用业务类型 每个系统的分布说明
     AJ_REG("01", "注册送积分"), AJ_SIGN("02", "每日签到"), AJ_CZ("11", "充值"), AJ_QX(
             "-11", "取现"), AJ_HCLB("HL", "红冲蓝补"), Transfer_CURRENCY("201",
-            "同币种的划转"), EXCHANGE_CURRENCY("200", "币种兑换")
+            "同币种的划转"), EXCHANGE_CURRENCY("200", "币种兑换"), Transfer_CURRENCY_C2C(
+            "206", "C端用户间转账")
 
     // 各自系统特有的业务类型
     // 正汇
