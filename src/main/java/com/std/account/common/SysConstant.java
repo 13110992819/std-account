@@ -27,4 +27,7 @@ public class SysConstant {
 
     // B端用户每月取现次数
     public static String BUSERMONTIMES = "BUSERMONTIMES";
+
+    // C端2C端转账金额倍数
+    public static String TRANSAMOUNTBS = "TRANSAMOUNTBS";
 }
