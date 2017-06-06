@@ -18,6 +18,9 @@
    T6dh%$%$ss1
    
       scp -P22 ./tomcat_std_mall root@106.15.49.68:/mnt/wwwroot/zhpay
+      
+      
+      scp -P22 ./std-account.war root@139.224.200.54:/mnt/www/zhpay/package/v3.2.1/2nd
    
 
 3，部署
