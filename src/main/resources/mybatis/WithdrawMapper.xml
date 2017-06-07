@@ -6,6 +6,7 @@
 		<result column="code" property="code" />
 		<result column="account_number" property="accountNumber" />
 		<result column="account_name" property="accountName" />
+		<result column="type" property="type" />
 		<result column="amount" property="amount" />
 		<result column="fee" property="fee" />
 		
@@ -38,6 +39,9 @@
 			</if>
 			<if test="accountNumber != null and accountNumber != '' ">
 				AND t.account_number = #{accountNumber}
+			</if>
+			<if test="type != null and type != '' ">
+				AND t.type = #{type}
 			</if>
 			<if test="accountName != null and accountName != '' ">
 				AND t.account_name like "%"#{accountName}"%"
@@ -110,6 +114,7 @@
 		t.code
 		,t.account_number
 		,t.account_name
+		,t.type
 		,t.amount
 		,t.fee
 		

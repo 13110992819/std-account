@@ -69,6 +69,7 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw> implements
             data.setAccountName(bankcard.getRealName());
             data.setPayCardInfo(bankcard.getBankName());
         }
+        // 获取银行编号
         ChannelBank channelBank = channelBankBO.getChannelBank(bankcard
             .getBankCode());
         if (null != channelBank) {
