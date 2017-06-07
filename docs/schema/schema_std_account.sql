@@ -85,28 +85,30 @@ DROP TABLE IF EXISTS `tstd_withdraw`;
 CREATE TABLE `tstd_withdraw` (
   `code` varchar(32) NOT NULL COMMENT '针对编号',
   `account_number` varchar(32) DEFAULT NULL COMMENT '针对账号',
-  `account_name` varchar(64) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '针对户名',
+  `account_name` varchar(32) DEFAULT NULL COMMENT '针对户名',
+  `type` varchar(4) DEFAULT NULL COMMENT '类别（B端账号，C端账号，平台账号）',
   `amount` bigint(20) DEFAULT NULL COMMENT '取现金额',
   `fee` bigint(20) DEFAULT NULL COMMENT '手续费',
 
   `channel_type` varchar(32) DEFAULT NULL COMMENT '支付渠道',
+  `channel_bank` varchar(32) DEFAULT NULL COMMENT '渠道银行代号',
   `channel_order` varchar(32) DEFAULT NULL COMMENT '支付渠道编号',
   `pay_card_info` varchar(255) DEFAULT NULL COMMENT '支付渠道账号信息',
   `pay_card_no` varchar(32) DEFAULT NULL COMMENT '支付渠道账号',
   `status` varchar(4) NOT NULL COMMENT '状态',
-
+  
   `apply_user` varchar(32) DEFAULT NULL COMMENT '申请人',
   `apply_note` varchar(255) DEFAULT NULL COMMENT '申请说明',
-  `apply_datetime` datetime DEFAULT NULL COMMENT '申请时间',
+  `apply_datetime`  datetime DEFAULT NULL COMMENT '申请时间',
   `approve_user` varchar(32) DEFAULT NULL COMMENT '审批人',
   `approve_note` varchar(255) DEFAULT NULL COMMENT '审批说明',
-
+  
   `approve_datetime` varchar(32) DEFAULT NULL COMMENT '审批时间',
   `pay_user` varchar(32) DEFAULT NULL COMMENT '支付回录人',
   `pay_note` varchar(32) DEFAULT NULL COMMENT '支付回录说明',
   `pay_group` varchar(32) DEFAULT NULL COMMENT '支付组号',
   `pay_code` varchar(32) DEFAULT NULL COMMENT '支付渠道订单编号',
-
+  
   `pay_datetime` datetime DEFAULT NULL COMMENT '支付回录时间',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
@@ -120,7 +122,7 @@ DROP TABLE IF EXISTS `tstd_hlorder`;
 CREATE TABLE `tstd_hlorder` (
   `code` varchar(32) NOT NULL COMMENT '编号',
   `account_number` varchar(32) NOT NULL COMMENT '账号',
-  `account_name` varchar(64) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '针对户名',
+  `account_name` varchar(32) DEFAULT NULL COMMENT '针对户名',
   `currency` varchar(8) DEFAULT NULL COMMENT '币种',
   `jour_code` varchar(32) DEFAULT NULL COMMENT '流水号',
   

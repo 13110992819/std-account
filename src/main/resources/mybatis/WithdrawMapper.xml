@@ -10,6 +10,7 @@
 		<result column="fee" property="fee" />
 		
 		<result column="channel_type" property="channelType" />
+		<result column="channel_bank" property="channelBank" />
 		<result column="pay_card_info" property="payCardInfo" />
 		<result column="pay_card_no" property="payCardNo" />
 		<result column="status" property="status" />
@@ -43,6 +44,9 @@
 			</if>
 			<if test="channelType != null and channelType != '' ">
 				AND t.channel_type = #{channelType}
+			</if>
+			<if test="channelBank != null and channelBank != '' ">
+				AND t.channel_bank = #{channelBank}
 			</if>
 			<if test="payCardNo != null and payCardNo != '' ">
 				AND t.pay_card_no = #{payCardNo}
@@ -110,6 +114,7 @@
 		,t.fee
 		
 		,t.channel_type
+		,t.channel_bank
 		,t.pay_card_info
 		,t.pay_card_no
 		,t.status
@@ -151,10 +156,12 @@
 		code
 		,account_number
 		,account_name
+		,type
 		,amount
 		,fee
 		
 		,channel_type
+		,channel_bank
 		,pay_card_info
 		,pay_card_no
 		,status
@@ -169,10 +176,12 @@
 		#{code}
 		,#{accountNumber}
 		,#{accountName}
+		,#{type}
 		,#{amount}
 		,#{fee}
 		
 		,#{channelType}
+		,#{channelBank}
 		,#{payCardInfo}
 		,#{payCardNo}
 		,#{status}

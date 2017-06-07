@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.std.account.bo.IBankcardBO;
+import com.std.account.bo.IChannelBankBO;
 import com.std.account.bo.ISYSConfigBO;
 import com.std.account.bo.IWithdrawBO;
 import com.std.account.bo.base.PaginableBOImpl;
@@ -18,6 +19,7 @@ import com.std.account.core.OrderNoGenerater;
 import com.std.account.dao.IWithdrawDAO;
 import com.std.account.domain.Account;
 import com.std.account.domain.Bankcard;
+import com.std.account.domain.ChannelBank;
 import com.std.account.domain.Withdraw;
 import com.std.account.enums.EAccountType;
 import com.std.account.enums.EChannelType;
@@ -37,6 +39,9 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw> implements
     @Autowired
     ISYSConfigBO sysConfigBO;
 
+    @Autowired
+    IChannelBankBO channelBankBO;
+
     @Override
     public String applyOrder(Account account, Long amount, Long fee,
             String payCardInfo, String payCardNo, String applyUser,
@@ -49,6 +54,7 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw> implements
         Withdraw data = new Withdraw();
         data.setCode(code);
         data.setAccountNumber(account.getAccountNumber());
+        data.setType(account.getType());
         data.setAmount(amount);
         data.setFee(fee);
 
@@ -62,6 +68,11 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw> implements
             // 设置银行名称和银行名称
             data.setAccountName(bankcard.getRealName());
             data.setPayCardInfo(bankcard.getBankName());
+        }
+        ChannelBank channelBank = channelBankBO.getChannelBank(bankcard
+            .getBankCode());
+        if (null != channelBank) {
+            data.setChannelBank(channelBank.getChannelBank());
         }
         data.setPayCardNo(payCardNo);
         data.setStatus(EWithdrawStatus.toApprove.getCode());

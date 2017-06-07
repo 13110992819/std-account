@@ -24,4 +24,6 @@ public interface IChannelBankBO extends IPaginableBO<ChannelBank> {
 
     public ChannelBank getChannelBank(Long id);
 
+    public ChannelBank getChannelBank(String bankCode);
+
 }

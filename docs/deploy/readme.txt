@@ -21,8 +21,9 @@
       
       
       scp -P22 ./std-account.war root@139.224.200.54:/mnt/www/zhpay/package/v3.2.1/2nd
+      
+      scp -P22 ./zhqb-release_321.apk root@139.224.200.54:/mnt/www/zhpay/package/v3.2.1/2nd
    
-
 3，部署
   ssh root@121.43.101.148 -p 22
   T6dh%$%$ss1
@@ -40,4 +41,4 @@
   ../bin/shutdown.sh
   ../bin/startup.sh
   
-   http://118.178.124.16:5606/std-account/api
+   http://139.224.200.54:5606/std-account/api
