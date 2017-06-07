@@ -14,6 +14,9 @@ INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`r
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('3','BUSERMONTIMES','30','',now(),'B端每月取现次数','CD-CZH000001','CD-CZH000001');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('3','TRANSAMOUNTBS','100','',now(),'C端对C端转账金额倍数','CD-CZH000001','CD-CZH000001');
 
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('3','CUSERQXBS','5','',now(),'C端取现金额倍数','CD-CZH000001','CD-CZH000001');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('3','QXDBZDJE','50000','',now(),'取现单笔最大金额','CD-CZH000001','CD-CZH000001');
+
 /*
 -- Query: select `type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code` from tsys_dict
 LIMIT 0, 10000

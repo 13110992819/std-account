@@ -6,22 +6,26 @@ import org.springframework.stereotype.Component;
 
 import com.std.account.bo.base.Paginable;
 import com.std.account.domain.Bankcard;
+import com.std.account.dto.req.XN802010Req;
+import com.std.account.dto.req.XN802012Req;
+import com.std.account.dto.req.XN802013Req;
 
 /**
- * 
- * @author: asus 
- * @since: 2016年12月22日 下午3:29:32 
+ * @author: xieyj 
+ * @since: 2017年6月7日 下午10:34:08 
  * @history:
  */
 @Component
 public interface IBankcardAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    public String addBankcard(Bankcard data);
+    public String addBankcard(XN802010Req req);
 
-    public int dropBankcard(String code);
+    public void dropBankcard(String code);
 
-    public int editBankcard(Bankcard data);
+    public void editBankcard(XN802012Req req);
+
+    public void editBankcard(XN802013Req req);
 
     public Paginable<Bankcard> queryBankcardPage(int start, int limit,
             Bankcard condition);

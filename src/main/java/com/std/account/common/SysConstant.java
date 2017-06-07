@@ -30,4 +30,8 @@ public class SysConstant {
 
     // C端2C端转账金额倍数
     public static String TRANSAMOUNTBS = "TRANSAMOUNTBS";
+
+    // 取现单笔最大金额
+    public static String QXDBZDJE = "QXDBZDJE";
+
 }

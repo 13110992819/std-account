@@ -9,8 +9,12 @@ import org.springframework.stereotype.Service;
 
 import com.std.account.ao.IBankcardAO;
 import com.std.account.bo.IBankcardBO;
+import com.std.account.bo.IUserBO;
 import com.std.account.bo.base.Paginable;
 import com.std.account.domain.Bankcard;
+import com.std.account.dto.req.XN802010Req;
+import com.std.account.dto.req.XN802012Req;
+import com.std.account.dto.req.XN802013Req;
 import com.std.account.exception.BizException;
 
 /**
@@ -24,43 +28,101 @@ public class BankcardAOImpl implements IBankcardAO {
     @Autowired
     private IBankcardBO bankcardBO;
 
+    @Autowired
+    private IUserBO userBO;
+
     @Override
-    public synchronized String addBankcard(Bankcard data) {
+    public String addBankcard(XN802010Req req) {
         // 判断卡号是否重复
-        List<Bankcard> list = bankcardBO.queryBankcardList(data.getUserId(),
-            data.getSystemCode());
-        // 新增时
+        List<Bankcard> list = bankcardBO.queryBankcardList(req.getUserId(),
+            req.getSystemCode());
         if (CollectionUtils.isNotEmpty(list)) {
             throw new BizException("xn0000", "您已绑定银行卡,无需绑定多张");
         }
+
+        Bankcard data = new Bankcard();
+        data.setSystemCode(req.getSystemCode());
+        data.setBankcardNumber(req.getBankcardNumber());
+        data.setBankCode(req.getBankCode());
+        data.setBankName(req.getBankName());
+        data.setSubbranch(req.getSubbranch());
+        data.setBindMobile(req.getBindMobile());
+        data.setUserId(req.getUserId());
+        data.setRealName(req.getRealName());
+        data.setType(req.getType());
+        data.setCurrency(req.getCurrency());
+        data.setRemark(req.getRemark());
         return bankcardBO.saveBankcard(data);
     }
 
     @Override
-    public int editBankcard(Bankcard data) {
-        Bankcard bankcard = bankcardBO.getBankcard(data.getCode());
-        // 户名有传就修改，不传不修改
-        if (StringUtils.isBlank(data.getRealName())) {
-            data.setRealName(bankcard.getRealName());
+    public void dropBankcard(String code) {
+        if (!bankcardBO.isBankcardExist(code)) {
+            throw new BizException("xn0000", "银行卡编号不存在");
         }
-        if (!bankcard.getBankcardNumber().equals(data.getBankcardNumber())) { // 有修改就去判断是否唯一
+        bankcardBO.removeBankcard(code);
+    }
+
+    @Override
+    public void editBankcard(XN802012Req req) {
+        Bankcard bankcard = bankcardBO.getBankcard(req.getCode());
+        if (!bankcard.getBankcardNumber().equals(req.getBankcardNumber())) { // 有修改就去判断是否唯一
             List<Bankcard> list = bankcardBO.queryBankcardList(
                 bankcard.getUserId(), bankcard.getSystemCode());
             for (Bankcard card : list) {
-                if (data.getBankcardNumber().equals(card.getBankcardNumber())) {
+                if (req.getBankcardNumber().equals(card.getBankcardNumber())) {
                     throw new BizException("xn0000", "银行卡号已存在");
                 }
             }
         }
-        return bankcardBO.refreshBankcard(data);
+        Bankcard data = new Bankcard();
+        data.setCode(req.getCode());
+        // 户名有传就修改，不传不修改
+        if (StringUtils.isBlank(req.getRealName())) {
+            data.setRealName(bankcard.getRealName());
+        } else {
+            data.setRealName(req.getRealName());
+        }
+        data.setBankcardNumber(req.getBankcardNumber());
+        data.setBankCode(req.getBankCode());
+        data.setBankName(req.getBankName());
+        data.setSubbranch(req.getSubbranch());
+        data.setBindMobile(req.getBindMobile());
+        data.setStatus(req.getStatus());
+        data.setRemark(req.getRemark());
+        bankcardBO.refreshBankcard(data);
     }
 
     @Override
-    public int dropBankcard(String code) {
-        if (!bankcardBO.isBankcardExist(code)) {
-            throw new BizException("xn0000", "记录编号不存在");
+    public void editBankcard(XN802013Req req) {
+        Bankcard bankcard = bankcardBO.getBankcard(req.getCode());
+        userBO.checkTradePwd(bankcard.getUserId(), req.getTradePwd());
+        if (!bankcard.getBankcardNumber().equals(req.getBankcardNumber())) { // 有修改就去判断是否唯一
+            List<Bankcard> list = bankcardBO.queryBankcardList(
+                bankcard.getUserId(), bankcard.getSystemCode());
+            for (Bankcard card : list) {
+                if (req.getBankcardNumber().equals(card.getBankcardNumber())) {
+                    throw new BizException("xn0000", "银行卡号已存在");
+                }
+            }
         }
-        return bankcardBO.removeBankcard(code);
+        Bankcard data = new Bankcard();
+        // 户名有传就修改，不传不修改
+        if (StringUtils.isBlank(req.getRealName())) {
+            data.setRealName(bankcard.getRealName());
+        } else {
+            data.setRealName(req.getRealName());
+        }
+        data.setCode(req.getCode());
+        data.setBankcardNumber(req.getBankcardNumber());
+        data.setBankCode(req.getBankCode());
+        data.setBankName(req.getBankName());
+        data.setSubbranch(req.getSubbranch());
+        data.setBindMobile(req.getBindMobile());
+        data.setStatus(req.getStatus());
+        data.setRemark(req.getRemark());
+        bankcardBO.refreshBankcard(data);
+        editBankcard(req);
     }
 
     @Override

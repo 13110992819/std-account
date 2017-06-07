@@ -227,6 +227,16 @@ public class WithdrawAOImpl implements IWithdrawAO {
         } else {// 暂定其他账户类型不收手续费
             return 0L;
         }
+        // 取现单笔最大金额
+        String qxDbzdjeValue = argsMap.get(SysConstant.QXDBZDJE);
+        if (StringUtils.isNotBlank(qxDbzdjeValue)) {
+            Long qxDbzdje = AmountUtil
+                .mul(1000L, Double.valueOf(qxDbzdjeValue));
+            if (amount > qxDbzdje) {
+                throw new BizException("xn000000", "取现单笔最大金额" + qxDbzdjeValue
+                        + "。");
+            }
+        }
         String qxBsValue = argsMap.get(qxbs);
         if (StringUtils.isNotBlank(qxBsValue)) {
             // 取现金额倍数
