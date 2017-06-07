@@ -3,6 +3,7 @@ package com.std.account.ao.impl;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,9 +12,11 @@ import com.std.account.ao.IExchangeCurrencyAO;
 import com.std.account.ao.IWeChatAO;
 import com.std.account.bo.IAccountBO;
 import com.std.account.bo.IExchangeCurrencyBO;
+import com.std.account.bo.ISYSConfigBO;
 import com.std.account.bo.IUserBO;
 import com.std.account.bo.base.Paginable;
 import com.std.account.common.PropertiesUtil;
+import com.std.account.common.SysConstant;
 import com.std.account.common.UserUtil;
 import com.std.account.domain.Account;
 import com.std.account.domain.ExchangeCurrency;
@@ -45,6 +48,9 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
 
     @Autowired
     private IWeChatAO weChatAO;
+
+    @Autowired
+    private ISYSConfigBO sysConfigBO;
 
     @Override
     public Paginable<ExchangeCurrency> queryExchangeCurrencyPage(int start,
@@ -336,6 +342,20 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
     @Transactional
     public void doTransferC2CByZhFR(String fromUserId, String toMobile,
             Long transAmount, String tradePwd) {
+        if (transAmount <= 0) {
+            throw new BizException("xn000000", "划转金额需大于零");
+        }
+        String transAmountBsValue = sysConfigBO.getSYSConfig(
+            SysConstant.TRANSAMOUNTBS, ESystemCode.ZHPAY.getCode());
+        if (StringUtils.isNotBlank(transAmountBsValue)) {
+            // 转账金额倍数
+            Long transAmountBs = AmountUtil.mul(1000L,
+                Double.valueOf(transAmountBsValue));
+            if (transAmountBs > 0 && transAmount % transAmountBs > 0) {
+                throw new BizException("xn000000", "请取" + transAmountBsValue
+                        + "的倍数");
+            }
+        }
         // 验证交易密码
         userBO.checkTradePwd(fromUserId, tradePwd);
         // 验证双方是否C端用户
@@ -345,13 +365,16 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
         }
         String toUserId = userBO.isUserExist(toMobile, EUserKind.F1,
             fromUser.getSystemCode());
+        // 同一个用户不可以相互转账
+        if (toUserId.equals(fromUser.getUserId())) {
+            throw new BizException("xn000000", "不能给自己转账");
+        }
 
         // 开始资金划转
         String currency = ECurrency.ZH_FRB.getCode();
         Account fromAccount = accountBO.getAccountByUser(fromUserId, currency);
         Account toAccount = accountBO.getAccountByUser(toUserId, currency);
-        String bizNote = fromUser.getMobile() + "用户转账" + toMobile + "用户"
-                + ECurrency.getCurrencyMap().get(currency).getValue() + "金额"
+        String bizNote = fromUser.getMobile() + "用户转账" + toMobile + "用户分润"
                 + CalculationUtil.divi(transAmount);
 
         String code = exchangeCurrencyBO.saveExchange(fromUserId, transAmount,
