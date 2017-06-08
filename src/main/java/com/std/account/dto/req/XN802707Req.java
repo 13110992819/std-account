@@ -25,6 +25,9 @@ public class XN802707Req extends AListReq {
     // 针对户名（手机号或其他）
     private String accountName;
 
+    // 类型
+    private String type;
+
     // 币种
     private String currency;
 
@@ -94,6 +97,22 @@ public class XN802707Req extends AListReq {
 
     public void setAccountName(String accountName) {
         this.accountName = accountName;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 
     public String getBizType() {
@@ -190,13 +209,5 @@ public class XN802707Req extends AListReq {
 
     public void setCompanyCode(String companyCode) {
         this.companyCode = companyCode;
-    }
-
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
     }
 }

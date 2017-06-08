@@ -31,7 +31,7 @@ public class XN802520Req extends APageReq {
     private String realName;
 
     // 账户类型
-    private String accountType;
+    private String type;
 
     // 业务类型
     private String bizType;
@@ -132,12 +132,12 @@ public class XN802520Req extends APageReq {
         this.realName = realName;
     }
 
-    public String getAccountType() {
-        return accountType;
+    public String getType() {
+        return type;
     }
 
-    public void setAccountType(String accountType) {
-        this.accountType = accountType;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getBizType() {

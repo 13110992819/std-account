@@ -32,6 +32,7 @@ public class XN802707 extends AProcessor {
         condition.setAccountNumber(req.getAccountNumber());
         condition.setAccountName(req.getAccountName());
 
+        condition.setType(req.getType());
         condition.setCurrency(req.getCurrency());
         condition.setBizType(req.getBizType());
         condition.setPayCardNo(req.getPayCardNo());

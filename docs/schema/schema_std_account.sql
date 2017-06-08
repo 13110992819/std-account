@@ -28,28 +28,31 @@ CREATE TABLE `tstd_jour` (
   `ref_no` varchar(32) DEFAULT NULL COMMENT '参考订单号',
   `channel_type` varchar(32) DEFAULT NULL COMMENT '支付渠道类型',
   `channel_order` varchar(32) DEFAULT NULL COMMENT '支付渠道单号',
-  `account_number` varchar(32) DEFAULT NULL COMMENT '账号',
   
+  `account_number` varchar(32) DEFAULT NULL COMMENT '账号',
   `trans_amount` bigint(32) DEFAULT NULL COMMENT '变动金额',
   `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
   `real_name` varchar(64) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '真实姓名',
+  `type` varchar(4) DEFAULT NULL COMMENT '账户类型',
+  
+  `currency` varchar(8) DEFAULT NULL COMMENT '币种',
   `biz_type` varchar(32) DEFAULT NULL COMMENT '业务类型',
   `biz_note` varchar(255) DEFAULT NULL COMMENT '业务类型',
-  
   `pre_amount` bigint(32) DEFAULT NULL COMMENT '变动前金额',
   `post_amount` bigint(32) DEFAULT NULL COMMENT '变动后金额',
+  
   `status` varchar(4) DEFAULT NULL COMMENT '状态',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
-  
   `work_date` varchar(8) DEFAULT NULL COMMENT '拟对账时间',
   `check_user` varchar(32) DEFAULT NULL COMMENT '对账人',
+  
   `check_note` varchar(255) DEFAULT NULL COMMENT '对账说明',
   `check_datetime` datetime DEFAULT NULL COMMENT '对账时间',
   `adjust_user` varchar(32) DEFAULT NULL COMMENT '调账人',
-  
   `adjust_note` varchar(255) DEFAULT NULL COMMENT '调账说明',
   `adjust_datetime` datetime DEFAULT NULL COMMENT '调账时间',
+  
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
   PRIMARY KEY (`code`)
@@ -63,20 +66,23 @@ CREATE TABLE `tstd_charge` (
   `amount` bigint(20) DEFAULT NULL COMMENT '充值金额',
   
   `account_name` varchar(32) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '针对户名',
+  `type` varchar(4) DEFAULT NULL COMMENT '账户类型',
+  `currency` varchar(8) DEFAULT NULL COMMENT '币种',
   `biz_type` varchar(32) DEFAULT NULL,
   `biz_note` varchar(255) DEFAULT NULL,
+  
   `pay_card_info` varchar(255) DEFAULT NULL COMMENT '支付渠道账号信息',
   `pay_card_no` varchar(32) DEFAULT NULL COMMENT '支付渠道账号',
-  
   `status` varchar(4) NOT NULL COMMENT '状态',
   `apply_user` varchar(32) DEFAULT NULL COMMENT '申请人',
   `apply_datetime` datetime DEFAULT NULL COMMENT '申请时间',
+  
   `pay_user` varchar(32) DEFAULT NULL COMMENT '支付回录人',
   `pay_note` varchar(255) DEFAULT NULL COMMENT '支付渠道说明',
-  
   `pay_datetime` datetime DEFAULT NULL COMMENT '支付时间',
   `channel_type` varchar(32) DEFAULT NULL COMMENT '支付渠道',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
+  
   `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
   PRIMARY KEY (`code`) COMMENT '充值订单'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -88,28 +94,29 @@ CREATE TABLE `tstd_withdraw` (
   `account_name` varchar(32) DEFAULT NULL COMMENT '针对户名',
   `type` varchar(4) DEFAULT NULL COMMENT '类别（B端账号，C端账号，平台账号）',
   `amount` bigint(20) DEFAULT NULL COMMENT '取现金额',
+  
   `fee` bigint(20) DEFAULT NULL COMMENT '手续费',
-
   `channel_type` varchar(32) DEFAULT NULL COMMENT '支付渠道',
   `channel_bank` varchar(32) DEFAULT NULL COMMENT '渠道银行代号',
   `channel_order` varchar(32) DEFAULT NULL COMMENT '支付渠道编号',
   `pay_card_info` varchar(255) DEFAULT NULL COMMENT '支付渠道账号信息',
+  
   `pay_card_no` varchar(32) DEFAULT NULL COMMENT '支付渠道账号',
   `status` varchar(4) NOT NULL COMMENT '状态',
-  
   `apply_user` varchar(32) DEFAULT NULL COMMENT '申请人',
   `apply_note` varchar(255) DEFAULT NULL COMMENT '申请说明',
   `apply_datetime`  datetime DEFAULT NULL COMMENT '申请时间',
+  
   `approve_user` varchar(32) DEFAULT NULL COMMENT '审批人',
   `approve_note` varchar(255) DEFAULT NULL COMMENT '审批说明',
-  
   `approve_datetime` varchar(32) DEFAULT NULL COMMENT '审批时间',
+  
   `pay_user` varchar(32) DEFAULT NULL COMMENT '支付回录人',
   `pay_note` varchar(32) DEFAULT NULL COMMENT '支付回录说明',
   `pay_group` varchar(32) DEFAULT NULL COMMENT '支付组号',
   `pay_code` varchar(32) DEFAULT NULL COMMENT '支付渠道订单编号',
-  
   `pay_datetime` datetime DEFAULT NULL COMMENT '支付回录时间',
+  
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
   PRIMARY KEY (`code`) COMMENT '取现订单'

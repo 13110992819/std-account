@@ -41,6 +41,12 @@ public class Jour extends ABaseDO {
     // 流水所属真实姓名
     private String realName;
 
+    // 类型(B B端账号，C C端账号，P 平台账号)
+    private String type;
+
+    // 币种
+    private String currency;
+
     // 业务类型
     private String bizType;
 
@@ -102,12 +108,6 @@ public class Jour extends ABaseDO {
     // 查询条件2：创建终止时间
     private Date createDatetimeEnd;
 
-    // 类型(B B端账号，C C端账号，P 平台账号)
-    private String accountType;
-
-    // 币种
-    private String currency;
-
     public String getCurrency() {
         return currency;
     }
@@ -124,12 +124,12 @@ public class Jour extends ABaseDO {
         this.bizTypeList = bizTypeList;
     }
 
-    public String getAccountType() {
-        return accountType;
+    public String getType() {
+        return type;
     }
 
-    public void setAccountType(String accountType) {
-        this.accountType = accountType;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public Date getCreateDatetimeStart() {

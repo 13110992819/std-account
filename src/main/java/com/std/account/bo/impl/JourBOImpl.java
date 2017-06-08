@@ -70,17 +70,19 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
 
         data.setUserId(dbAccount.getUserId());
         data.setRealName(dbAccount.getRealName());
+        data.setType(dbAccount.getType());
+        data.setCurrency(dbAccount.getCurrency());
         data.setBizType(bizType.getCode());
+
         data.setBizNote(bizNote);
         data.setPreAmount(dbAccount.getAmount());
         data.setPostAmount(dbAccount.getAmount() + transAmount);
-
         data.setStatus(EJourStatus.todoCheck.getCode());
         data.setRemark("记得对账哦");
+
         data.setCreateDatetime(new Date());
         data.setWorkDate(DateUtil.dateToStr(new Date(),
             DateUtil.DB_DATE_FORMAT_STRING));
-
         data.setChannelType(channelType.getCode());
         data.setSystemCode(dbAccount.getSystemCode());
         data.setCompanyCode(dbAccount.getCompanyCode());
