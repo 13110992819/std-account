@@ -51,6 +51,7 @@ public class XN802755 extends AProcessor {
             condition.setAccountNumber(req.getAccountNumber());
         }
         condition.setAccountName(req.getAccountName());
+        condition.setType(req.getType());
         condition.setChannelType(req.getChannelType());
         condition.setStatus(req.getStatus());
         condition.setApplyUser(req.getApplyUser());

@@ -233,8 +233,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
             Long qxDbzdje = AmountUtil
                 .mul(1000L, Double.valueOf(qxDbzdjeValue));
             if (amount > qxDbzdje) {
-                throw new BizException("xn000000", "取现单笔最大金额" + qxDbzdjeValue
-                        + "。");
+                throw new BizException("xn000000", "取现单笔最大金额不能超过"
+                        + qxDbzdjeValue + "元。");
             }
         }
         String qxBsValue = argsMap.get(qxbs);
@@ -242,7 +242,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
             // 取现金额倍数
             Long qxBs = AmountUtil.mul(1000L, Double.valueOf(qxBsValue));
             if (qxBs > 0 && amount % qxBs > 0) {
-                throw new BizException("xn000000", "请取" + qxBsValue + "的倍数");
+                throw new BizException("xn000000", "金额请取" + qxBsValue + "的倍数");
             }
         }
         String feeRateValue = argsMap.get(qxfl);

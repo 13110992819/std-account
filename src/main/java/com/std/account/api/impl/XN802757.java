@@ -28,6 +28,7 @@ public class XN802757 extends AProcessor {
         Withdraw condition = new Withdraw();
         condition.setAccountNumber(req.getAccountNumber());
         condition.setAccountName(req.getAccountName());
+        condition.setType(req.getType());
         condition.setChannelType(req.getChannelType());
         condition.setStatus(req.getStatus());
         condition.setApplyUser(req.getApplyUser());

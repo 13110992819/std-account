@@ -19,6 +19,9 @@ public class XN802755Req extends APageReq {
     // 针对户名（手机号或其他）
     private String accountName;
 
+    // 类型
+    private String type;
+
     // 支付渠道
     private String channelType;
 
@@ -46,6 +49,8 @@ public class XN802755Req extends APageReq {
     // 公司编号
     private String companyCode;
 
+    // ******** db *****
+
     // 申请时间起
     private String applyDateStart;
 
@@ -64,9 +69,16 @@ public class XN802755Req extends APageReq {
     // 支付时间止
     private String payDateEnd;
 
-    // ******** db *****
     // 针对用户编号
     private String userId;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public String getApplyDateStart() {
         return applyDateStart;
