@@ -41,4 +41,4 @@
   ../bin/shutdown.sh
   ../bin/startup.sh
   
-   http://139.224.200.54:5606/std-account/api
+   http://106.15.49.68:5606/std-account/api
