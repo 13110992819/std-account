@@ -126,7 +126,8 @@ public class JourAOImpl implements IJourAO {
         Long withdrawAmount = 0L;// 取现金额
         for (Jour jour : jourList) {
             Long transAmount = jour.getTransAmount();
-            if (transAmount > 0) {
+            if (transAmount > 0
+                    && !EJourBizType.AJ_QX.getCode().equals(jour.getBizType())) {// 取现解冻排除
                 incomeAmount += transAmount;
             }
             if (EJourBizType.AJ_QX.getCode().equals(jour.getBizType())) {
