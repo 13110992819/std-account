@@ -32,7 +32,20 @@ public class DateUtil {
 
     public static final String TIME_BEGIN = " 00:00:00";
 
-    public static final String TIME_END = " 23:59:59";;
+    public static final String TIME_END = " 23:59:59";
+
+    /**
+     * 统计两个时间差，返回的是天数(即24小时算一天，少于24小时就为0，用这个的时候最好把小时、分钟等去掉)
+     * @param beginDate
+     * @param endDate
+     * @return 
+     * @create: 2015年11月16日 上午11:20:51 myb858
+     * @history:
+     */
+    public static int daysBetween(Date beginDate, Date endDate) {
+        long times = endDate.getTime() - beginDate.getTime();
+        return (int) (times / 60 / 60 / 1000 / 24);
+    }
 
     public static Date getRelativeDate(Date startDate, int second) {
         Calendar calendar = Calendar.getInstance();

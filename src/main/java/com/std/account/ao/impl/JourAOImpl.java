@@ -12,6 +12,7 @@ import com.std.account.ao.IJourAO;
 import com.std.account.bo.IAccountBO;
 import com.std.account.bo.IHLOrderBO;
 import com.std.account.bo.IJourBO;
+import com.std.account.bo.IJourHistoryBO;
 import com.std.account.bo.base.Paginable;
 import com.std.account.common.DateUtil;
 import com.std.account.domain.Account;
@@ -32,6 +33,9 @@ public class JourAOImpl implements IJourAO {
 
     @Autowired
     private IJourBO jourBO;
+
+    @Autowired
+    private IJourHistoryBO jourHistoryBO;
 
     @Autowired
     private IAccountBO accountBO;
@@ -89,7 +93,12 @@ public class JourAOImpl implements IJourAO {
             condition.setBizType(null);
             condition.setBizTypeList(bizTypeList);
         }
-        return jourBO.queryJourList(condition);
+        List<Jour> jourList = jourBO.queryJourList(condition);
+        List<Jour> jourHistoryList = jourHistoryBO.queryJourList(condition);
+        List<Jour> result = new ArrayList<Jour>();
+        result.addAll(jourList);
+        result.addAll(jourHistoryList);
+        return result;
     }
 
     @Override

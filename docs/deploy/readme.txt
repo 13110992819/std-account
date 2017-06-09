@@ -14,21 +14,13 @@
   cd /Users/myb858/Documents/workspace/.metadata/.plugins/org.eclipse.wst.server.core/tmp5/wtpwebapps
   
 2，打包
-   scp -P22 ./std-account.war root@121.43.101.148:/home
-   T6dh%$%$ss1
-   
-      scp -P22 ./tomcat_std_mall root@106.15.49.68:/mnt/wwwroot/zhpay
-      
-      
-      scp -P22 ./std-account.war root@139.224.200.54:/mnt/www/zhpay/package/v3.2.1/2nd
-      
-      scp -P22 ./zhqb-release_321.apk root@139.224.200.54:/mnt/www/zhpay/package/v3.2.1/2nd
-   
+   scp -P22 ./std-account.war root@106.15.49.68:/home
+   zhkj12580QQ
 3，部署
-  ssh root@121.43.101.148 -p 22
-  T6dh%$%$ss1
+  ssh root@106.15.49.68 -p 22
+  zhkj12580QQ
   
-  cd /home/wwwroot/common/tomcat_std_account/webapps
+  cd /mnt/www/zhpay/tomcat_std_account/webapps
   rm -rf std-account.war
   cp ./std-account/WEB-INF/classes/application.properties .
   cp ./std-account/WEB-INF/classes/config.properties .

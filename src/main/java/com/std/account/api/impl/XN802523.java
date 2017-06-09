@@ -11,7 +11,7 @@ import com.std.account.exception.ParaException;
 import com.std.account.spring.SpringContextHolder;
 
 /**
- * 根据业务订单编号(refNo)查询所有关联流水(front)
+ * 根据业务订单编号(refNo)查询所有关联流水(front/oss)
  * @author: xieyj 
  * @since: 2016年12月24日 上午8:17:00 
  * @history:

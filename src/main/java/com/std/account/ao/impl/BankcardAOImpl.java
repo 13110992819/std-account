@@ -122,7 +122,6 @@ public class BankcardAOImpl implements IBankcardAO {
         data.setStatus(req.getStatus());
         data.setRemark(req.getRemark());
         bankcardBO.refreshBankcard(data);
-        editBankcard(req);
     }
 
     @Override
