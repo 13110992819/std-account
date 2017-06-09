@@ -22,7 +22,7 @@ public class JourHistoryDAOImpl extends AMybatisTemplate implements
      */
     @Override
     public int insert(Jour data) {
-        return super.insert(NAMESPACE.concat("insert_jour"), data);
+        return super.insert(NAMESPACE.concat("insert_jourHistory"), data);
     }
 
     /** 
@@ -38,7 +38,7 @@ public class JourHistoryDAOImpl extends AMybatisTemplate implements
      */
     @Override
     public Jour select(Jour condition) {
-        return super.select(NAMESPACE.concat("select_jour"), condition,
+        return super.select(NAMESPACE.concat("select_jourHistory"), condition,
             Jour.class);
     }
 
@@ -47,8 +47,8 @@ public class JourHistoryDAOImpl extends AMybatisTemplate implements
      */
     @Override
     public long selectTotalCount(Jour condition) {
-        return super.selectTotalCount(NAMESPACE.concat("select_jour_count"),
-            condition);
+        return super.selectTotalCount(
+            NAMESPACE.concat("select_jourHistory_count"), condition);
     }
 
     /** 
@@ -56,8 +56,8 @@ public class JourHistoryDAOImpl extends AMybatisTemplate implements
      */
     @Override
     public List<Jour> selectList(Jour condition) {
-        return super.selectList(NAMESPACE.concat("select_jour"), condition,
-            Jour.class);
+        return super.selectList(NAMESPACE.concat("select_jourHistory"),
+            condition, Jour.class);
     }
 
     /** 
@@ -65,24 +65,8 @@ public class JourHistoryDAOImpl extends AMybatisTemplate implements
      */
     @Override
     public List<Jour> selectList(Jour condition, int start, int count) {
-        return super.selectList(NAMESPACE.concat("select_jour"), start, count,
-            condition, Jour.class);
-    }
-
-    /** 
-     * @see com.xnjr.account.dao.IJourHistoryDAO.account.dao.IAJourHistoryDAO#checkJourHistory(com.JourHistory.account.domain.AccountJourHistory)
-     */
-    @Override
-    public int checkJour(Jour data) {
-        return super.update(NAMESPACE.concat("update_check_jour"), data);
-    }
-
-    /** 
-     * @see com.std.account.dao.IJourHistoryDAO#adjustJourHistory(com.std.account.domain.JourHistory)
-     */
-    @Override
-    public int adjustJour(Jour data) {
-        return super.update(NAMESPACE.concat("update_adjust_jour"), data);
+        return super.selectList(NAMESPACE.concat("select_jourHistory"), start,
+            count, condition, Jour.class);
     }
 
     @Override

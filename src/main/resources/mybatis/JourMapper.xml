@@ -164,7 +164,7 @@
 
 	<select id="select_jour_count" parameterType="jour"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tstd_jour
+		SELECT count(1) FROM tstd_jour t
 		<include refid="where_condition" />
 	</select>
 

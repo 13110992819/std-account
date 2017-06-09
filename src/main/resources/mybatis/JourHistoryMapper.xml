@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.std.account.dao.IJourHistoryDAO">
-	<resultMap id="jour_DB_Result" type="jour">
+	<resultMap id="jourHistory_DB_Result" type="jour">
 		<result column="code" property="code" />
 		<result column="pay_group" property="payGroup" />
 		<result column="ref_no" property="refNo" />
@@ -118,7 +118,7 @@
 			</if>
 		</trim>
 	</sql>
-	<select id="select_jourHistory" parameterType="jour" resultMap="jour_DB_Result">
+	<select id="select_jourHistory" parameterType="jour" resultMap="jourHistory_DB_Result">
 		SELECT
 		t.code
 		,t.pay_group
@@ -164,7 +164,7 @@
 
 	<select id="select_jourHistory_count" parameterType="jour"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tstd_jour_history
+		SELECT count(1) FROM tstd_jour_history t
 		<include refid="where_condition" />
 	</select>
 

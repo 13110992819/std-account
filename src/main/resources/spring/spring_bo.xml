@@ -18,6 +18,9 @@
 	<bean id="jourBO" class="com.std.account.bo.impl.JourBOImpl">
 		<property name="paginableDAO" ref="jourDAOImpl" />
 	</bean>
+	<bean id="jourHistoryBO" class="com.std.account.bo.impl.JourHistoryBOImpl">
+		<property name="paginableDAO" ref="jourHistoryDAOImpl" />
+	</bean> 
 	<bean id="companyChannelBO" class="com.std.account.bo.impl.CompanyChannelBOImpl">
 		<property name="paginableDAO" ref="companyChannelDAOImpl"/>
 	</bean>	

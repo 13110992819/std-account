@@ -69,12 +69,5 @@ public class XN802530 extends AProcessor {
         StringValidater.validateNumber(req.getStart(), req.getLimit());
         StringValidater
             .validateBlank(req.getSystemCode(), req.getCompanyCode());
-        if (StringUtils.isNotBlank(req.getDateStart())) {
-            throw new BizException("xn702000", "开始时间不能为空");
-        }
-        if (StringUtils.isNotBlank(req.getDateEnd())) {
-            throw new BizException("xn702000", "结束时间不能为空");
-        }
-
     }
 }
