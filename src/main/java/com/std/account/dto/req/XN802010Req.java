@@ -8,37 +8,37 @@ package com.std.account.dto.req;
  */
 public class XN802010Req {
     // 系统编号（必填）
-    public String systemCode;
+    private String systemCode;
 
     // 银行编号
     private String bankCode;
 
     // 卡号（必填）
-    public String bankcardNumber;
+    private String bankcardNumber;
 
     // 银行名称（必填）
-    public String bankName;
+    private String bankName;
 
     // 支行名称（必填）
-    public String subbranch;
+    private String subbranch;
 
     // 绑定手机号（必填）
-    public String bindMobile;
+    private String bindMobile;
 
     // 用户编号（必填）
-    public String userId;
+    private String userId;
 
     // 用户姓名（必填）
-    public String realName;
+    private String realName;
 
     // 类型（必填）
-    public String type;
+    private String type;
 
     // 币种（必填）
-    public String currency;
+    private String currency;
 
     // 备注（选填）
-    public String remark;
+    private String remark;
 
     public String getBankCode() {
         return bankCode;

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.std.account.dao.IJourDAO">
-	<resultMap id="jour_DB_Result" type="jour">
+<mapper namespace="com.std.account.dao.IJourHistoryDAO">
+	<resultMap id="jourHistory_DB_Result" type="jour">
 		<result column="code" property="code" />
 		<result column="pay_group" property="payGroup" />
 		<result column="ref_no" property="refNo" />
@@ -118,7 +118,7 @@
 			</if>
 		</trim>
 	</sql>
-	<select id="select_jour" parameterType="jour" resultMap="jour_DB_Result">
+	<select id="select_jourHistory" parameterType="jour" resultMap="jourHistory_DB_Result">
 		SELECT
 		t.code
 		,t.pay_group
@@ -153,7 +153,7 @@
 		,t.system_code
 		,t.company_code
 		FROM
-		tstd_jour t
+		tstd_jour_history t
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -162,15 +162,15 @@
 		</trim>
 	</select>
 
-	<select id="select_jour_count" parameterType="jour"
+	<select id="select_jourHistory_count" parameterType="jour"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tstd_jour t
+		SELECT count(1) FROM tstd_jour_history t
 		<include refid="where_condition" />
 	</select>
 
-	<insert id="insert_jour" parameterType="jour">
+	<insert id="insert_jourHistory" parameterType="jour">
 		INSERT INTO
-		tstd_jour(
+		tstd_jour_history(
 		code
 		,pay_group
 		,ref_no
@@ -226,32 +226,9 @@
 		)
 	</insert>
 	
-	<update id="update_check_jour" parameterType="jour">
-		UPDATE tstd_jour
-		SET
-		status= #{status}
-		,check_user=#{checkUser}
-		,check_note=#{checkNote}
-		,check_datetime=#{checkDatetime}
-		WHERE
-		code = #{code}	
-	</update>
-	
-	<update id="update_adjust_jour" parameterType="jour">
-		UPDATE tstd_jour
-		SET
-		status= #{status}
-		,adjust_user=#{adjustUser}
-		,adjust_note=#{adjustNote}
-		,adjust_datetime=#{adjustDatetime}
-		WHERE
-		code = #{code}	
-	</update>
-	
 	<select id="select_totalAmount" parameterType="jour"
 		resultType="java.lang.Long">
-		SELECT ifnull(sum(trans_amount),0) FROM tstd_jour t 
+		SELECT ifnull(sum(trans_amount),0) FROM tstd_jour_history t 
 		<include refid="where_condition" />
 	</select>
-	
 </mapper>

@@ -2,6 +2,8 @@ package com.std.account.bo.impl;
 
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -76,6 +78,20 @@ public class ChannelBankBOImpl extends PaginableBOImpl<ChannelBank> implements
             data = channelBankDAO.select(condition);
             if (data == null) {
                 throw new BizException("xn0000", "渠道银行不存在");
+            }
+        }
+        return data;
+    }
+
+    @Override
+    public ChannelBank getChannelBank(String bankCode) {
+        ChannelBank data = null;
+        if (StringUtils.isNotBlank(bankCode)) {
+            ChannelBank condition = new ChannelBank();
+            condition.setBankCode(bankCode);
+            List<ChannelBank> list = channelBankDAO.selectList(condition);
+            if (CollectionUtils.isNotEmpty(list)) {
+                data = list.get(0);
             }
         }
         return data;

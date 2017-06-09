@@ -25,6 +25,9 @@ public class XN802705Req extends APageReq {
     // 针对户名（手机号或其他）
     private String accountName;
 
+    // 类型
+    private String type;
+
     // 币种
     private String currency;
 
@@ -198,5 +201,13 @@ public class XN802705Req extends APageReq {
 
     public void setCurrency(String currency) {
         this.currency = currency;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

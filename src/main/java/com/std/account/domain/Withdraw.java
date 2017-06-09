@@ -20,6 +20,9 @@ public class Withdraw extends ABaseDO {
     // 针对户名（手机号或其他）
     private String accountName;
 
+    // 账户类型
+    private String type;
+
     // 取现金额
     private Long amount;
 
@@ -28,6 +31,9 @@ public class Withdraw extends ABaseDO {
 
     // 支付渠道
     private String channelType;
+
+    // 渠道银行代号
+    private String channelBank;
 
     // 支付渠道账号信息（如开户支行）
     private String payCardInfo;
@@ -179,6 +185,14 @@ public class Withdraw extends ABaseDO {
         this.accountName = accountName;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public Long getAmount() {
         return amount;
     }
@@ -201,6 +215,14 @@ public class Withdraw extends ABaseDO {
 
     public void setChannelType(String channelType) {
         this.channelType = channelType;
+    }
+
+    public String getChannelBank() {
+        return channelBank;
+    }
+
+    public void setChannelBank(String channelBank) {
+        this.channelBank = channelBank;
     }
 
     public String getPayCardInfo() {
@@ -299,6 +321,14 @@ public class Withdraw extends ABaseDO {
         this.payGroup = payGroup;
     }
 
+    public String getChannelOrder() {
+        return channelOrder;
+    }
+
+    public void setChannelOrder(String channelOrder) {
+        this.channelOrder = channelOrder;
+    }
+
     public Date getPayDatetime() {
         return payDatetime;
     }
@@ -313,14 +343,6 @@ public class Withdraw extends ABaseDO {
 
     public void setSystemCode(String systemCode) {
         this.systemCode = systemCode;
-    }
-
-    public String getChannelOrder() {
-        return channelOrder;
-    }
-
-    public void setChannelOrder(String channelOrder) {
-        this.channelOrder = channelOrder;
     }
 
     public String getCompanyCode() {

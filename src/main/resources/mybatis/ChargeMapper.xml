@@ -10,20 +10,23 @@
 		<result column="amount" property="amount" />
 		
 		<result column="account_name" property="accountName" />
+		<result column="type" property="type" />
+		<result column="currency" property="currency" />
 		<result column="biz_type" property="bizType" />
 		<result column="biz_note" property="bizNote" />
+		
 		<result column="pay_card_info" property="payCardInfo" />
 		<result column="pay_card_no" property="payCardNo" />
-		
 		<result column="status" property="status" />
 		<result column="apply_user" property="applyUser" />
 		<result column="apply_note" property="applyNote" />
+		
 		<result column="apply_datetime" property="applyDatetime" />
 		<result column="pay_user" property="payUser" />
-		
 		<result column="pay_note" property="payNote" />
 		<result column="pay_datetime" property="payDatetime" />
 		<result column="channel_type" property="channelType" />
+		
 		<result column="system_code" property="systemCode" />
 		<result column="company_code" property="companyCode" />
 	</resultMap>
@@ -44,8 +47,11 @@
 			<if test="accountName != null and accountName != '' ">
 				AND t.account_name like "%"#{accountName}"%"
 			</if>
+			<if test="type != null and type != '' ">
+				AND t.type = #{type}
+			</if>
 			<if test="currency != null and currency != '' ">
-				AND ta.currency = #{currency}
+				AND t.currency = #{currency}
 			</if>
 			<if test="bizType != null and bizType != '' ">
 				AND t.biz_type = #{bizType}
@@ -94,24 +100,26 @@
 		,t.amount
 		
 		,t.account_name
-		,ta.currency
+		,t.type
+		,t.currency
 		,t.biz_type
 		,t.biz_note
+		
 		,t.pay_card_info
 		,t.pay_card_no
-		
 		,t.status
 		,t.apply_user
 		,t.apply_datetime
+		
 		,t.pay_user
 		,t.pay_note
-		
 		,t.pay_datetime
 		,t.channel_type
 		,t.system_code
+		
 		,t.company_code
 		FROM
-		tstd_charge t inner join tstd_account ta on t.account_number = ta.account_number
+		tstd_charge t
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -121,7 +129,7 @@
 	</select>
 
 	<select id="select_charge_count" parameterType="charge" resultType="java.lang.Long">
-		SELECT count(1) FROM tstd_charge t inner join tstd_account ta on t.account_number = ta.account_number
+		SELECT count(1) FROM tstd_charge t
 		<include refid="where_condition" />
 	</select>
 	
@@ -134,17 +142,19 @@
 		,amount
 		
 		,account_name
+		,type
+		,currency
 		,biz_type
 		,biz_note
+		
 		,pay_card_info
 		,pay_card_no
-		
 		,status
 		,apply_user
 		,apply_datetime
+		
 		,channel_type
 		,system_code
-
 		,company_code
 		)
 		VALUES(
@@ -155,17 +165,19 @@
 		,#{amount}
 		
 		,#{accountName}
+		,#{type}
+		,#{currency}
 		,#{bizType}
 		,#{bizNote}
+		
 		,#{payCardInfo}
 		,#{payCardNo}
-		
 		,#{status}
 		,#{applyUser}
 		,#{applyDatetime}
+		
 		,#{channelType}
 		,#{systemCode}
-		
 		,#{companyCode}
 		)
 	</insert>

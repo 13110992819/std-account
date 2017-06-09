@@ -8,7 +8,7 @@ package com.std.account.dto.req;
  */
 public class XN802011Req {
     // 编号
-    public String code;
+    private String code;
 
     public String getCode() {
         return code;

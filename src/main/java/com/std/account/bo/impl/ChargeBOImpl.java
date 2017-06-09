@@ -41,6 +41,8 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
         data.setAmount(amount);
 
         data.setAccountName(account.getRealName());
+        data.setType(account.getType());
+        data.setCurrency(account.getCurrency());
         data.setBizType(bizType.getCode());
         if (StringUtils.isBlank(applyNote)) {
             data.setBizNote(bizType.getValue());
@@ -77,6 +79,8 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
         data.setAmount(transAmount);
 
         data.setAccountName(account.getRealName());
+        data.setType(account.getType());
+        data.setCurrency(account.getCurrency());
         data.setBizType(bizType.getCode());
         data.setBizNote(bizNote);
         data.setPayCardInfo(null);
@@ -140,5 +144,4 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
         }
         return order;
     }
-
 }

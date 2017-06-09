@@ -9,25 +9,25 @@ package com.std.account.dto.req;
 public class XN802016Req {
 
     // 系统编号
-    public String systemCode;
+    private String systemCode;
 
     // 银行卡号
-    public String bankcardNumber;
+    private String bankcardNumber;
 
     // 银行名称
-    public String bankName;
+    private String bankName;
 
     // 用户编号
-    public String userId;
+    private String userId;
 
     // 用户姓名
-    public String realName;
+    private String realName;
 
     // 类型
-    public String type;
+    private String type;
 
     // 状态(0 不可用 1可用)
-    public String status;
+    private String status;
 
     public String getSystemCode() {
         return systemCode;

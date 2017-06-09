@@ -29,6 +29,12 @@ public class Charge extends ABaseDO {
     // 针对户名
     private String accountName;
 
+    // 类别（C端账号/B端账号/P平台账号）
+    private String type;
+
+    // 币种
+    private String currency;
+
     // 业务类型编号（因为什么业务类型而充值）
     private String bizType;
 
@@ -81,27 +87,8 @@ public class Charge extends ABaseDO {
     // 支付时间止
     private Date payDatetimeEnd;
 
-    // 币种
-    private String currency;
-
     // 用户信息
     private User user;
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
 
     public String getCode() {
         return code;
@@ -109,6 +96,22 @@ public class Charge extends ABaseDO {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getPayGroup() {
+        return payGroup;
+    }
+
+    public void setPayGroup(String payGroup) {
+        this.payGroup = payGroup;
+    }
+
+    public String getRefNo() {
+        return refNo;
+    }
+
+    public void setRefNo(String refNo) {
+        this.refNo = refNo;
     }
 
     public String getAccountNumber() {
@@ -119,14 +122,6 @@ public class Charge extends ABaseDO {
         this.accountNumber = accountNumber;
     }
 
-    public String getAccountName() {
-        return accountName;
-    }
-
-    public void setAccountName(String accountName) {
-        this.accountName = accountName;
-    }
-
     public Long getAmount() {
         return amount;
     }
@@ -135,12 +130,44 @@ public class Charge extends ABaseDO {
         this.amount = amount;
     }
 
-    public String getChannelType() {
-        return channelType;
+    public String getAccountName() {
+        return accountName;
     }
 
-    public void setChannelType(String channelType) {
-        this.channelType = channelType;
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    public String getBizType() {
+        return bizType;
+    }
+
+    public void setBizType(String bizType) {
+        this.bizType = bizType;
+    }
+
+    public String getBizNote() {
+        return bizNote;
+    }
+
+    public void setBizNote(String bizNote) {
+        this.bizNote = bizNote;
     }
 
     public String getPayCardInfo() {
@@ -199,14 +226,6 @@ public class Charge extends ABaseDO {
         this.payNote = payNote;
     }
 
-    public String getPayGroup() {
-        return payGroup;
-    }
-
-    public void setPayGroup(String payGroup) {
-        this.payGroup = payGroup;
-    }
-
     public Date getPayDatetime() {
         return payDatetime;
     }
@@ -215,12 +234,28 @@ public class Charge extends ABaseDO {
         this.payDatetime = payDatetime;
     }
 
+    public String getChannelType() {
+        return channelType;
+    }
+
+    public void setChannelType(String channelType) {
+        this.channelType = channelType;
+    }
+
     public String getSystemCode() {
         return systemCode;
     }
 
     public void setSystemCode(String systemCode) {
         this.systemCode = systemCode;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 
     public Date getApplyDatetimeStart() {
@@ -255,36 +290,11 @@ public class Charge extends ABaseDO {
         this.payDatetimeEnd = payDatetimeEnd;
     }
 
-    public String getCompanyCode() {
-        return companyCode;
+    public User getUser() {
+        return user;
     }
 
-    public void setCompanyCode(String companyCode) {
-        this.companyCode = companyCode;
+    public void setUser(User user) {
+        this.user = user;
     }
-
-    public String getBizType() {
-        return bizType;
-    }
-
-    public void setBizType(String bizType) {
-        this.bizType = bizType;
-    }
-
-    public String getBizNote() {
-        return bizNote;
-    }
-
-    public void setBizNote(String bizNote) {
-        this.bizNote = bizNote;
-    }
-
-    public String getRefNo() {
-        return refNo;
-    }
-
-    public void setRefNo(String refNo) {
-        this.refNo = refNo;
-    }
-
 }
