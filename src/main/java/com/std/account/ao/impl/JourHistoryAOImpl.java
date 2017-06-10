@@ -52,13 +52,13 @@ public class JourHistoryAOImpl implements IJourHistoryAO {
     public Paginable<Jour> queryFrontJourPage(int start, int limit,
             Jour condition) {
         if (DateUtil.daysBetween(condition.getCreateDatetimeStart(),
-            condition.getCreateDatetimeEnd()) > 7) {
+            condition.getCreateDatetimeEnd()) >= 7) {
             throw new BizException("xn702000", "请选择7天内查询时间");
         }
-        if (DateUtil.daysBetween(condition.getCreateDatetimeEnd(),
-            DateUtil.getTodayStart()) < 7) {
-            throw new BizException("xn702000", "结束时间请选择今天后7天时间");
-        }
+         if (DateUtil.daysBetween(condition.getCreateDatetimeEnd(),
+         DateUtil.getTodayStart()) < 7) {
+         throw new BizException("xn702000", "结束时间请选择今天后7天时间");
+         }
         String bizType = condition.getBizType();
         if (StringUtils.isNotBlank(bizType)) {
             String[] bizTypeArrs = bizType.split(",");
