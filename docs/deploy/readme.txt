@@ -14,9 +14,15 @@
   cd /Users/myb858/Documents/workspace/.metadata/.plugins/org.eclipse.wst.server.core/tmp5/wtpwebapps
   
 2，打包
+   scp -P22 ./std-account.war root@121.43.101.148:/home
+   T6dh%$%$ss1
+   
    scp -P22 ./std-account.war root@106.15.49.68:/home
    zhkj12580QQ
 3，部署
+  ssh root@121.43.101.148 -p 22
+  T6dh%$%$ss1
+
   ssh root@106.15.49.68 -p 22
   zhkj12580QQ
   
@@ -32,5 +38,7 @@
   mv -f config.properties ./std-account/WEB-INF/classes/
   ../bin/shutdown.sh
   ../bin/startup.sh
+  
+   http://121.43.101.148:8906/std-account/api
   
    http://106.15.49.68:5606/std-account/api

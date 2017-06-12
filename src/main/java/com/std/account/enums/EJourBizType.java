@@ -49,7 +49,10 @@ public enum EJourBizType {
 
     // 健康E购
     , JKEG_FW("JKEG_FW", "服务购买"), JKEG_FWTK("JKEG_FWTK", "服务购买退款"), JKEG_O2O_RMB(
-            "JKEG_O2O_RMB", "店铺消费云币支付");
+            "JKEG_O2O_RMB", "店铺消费云币支付"), AJ_FT("03", "发帖送积分"), AJ_PL("04",
+            "评论送积分"), AJ_DZ("05", "点赞加积分"), AJ_BDZ("06", "被点赞送积分"), AJ_BPL(
+            "07", "被评论送积分"), JJ_STZ("10", "删除帖子"), JJ_SPL("11", "删除评论"), JJ_QXDZ(
+            "12", "取消点赞");
 
     public static EJourBizType getBizType(String code) {
         Map<String, EJourBizType> map = getBizTypeMap();

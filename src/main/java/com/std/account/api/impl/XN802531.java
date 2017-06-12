@@ -44,7 +44,7 @@ public class XN802531 extends AProcessor {
         condition.setOrder(orderColumn, req.getOrderDir());
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
-        return jourHistoryAO.queryJourPage(start, limit, condition);
+        return jourHistoryAO.queryFrontJourPage(start, limit, condition);
     }
 
     @Override
