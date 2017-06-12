@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.std.account.ao.IJourAO;
 import com.std.account.api.AProcessor;
+import com.std.account.common.DateUtil;
 import com.std.account.common.JsonUtil;
 import com.std.account.core.StringValidater;
 import com.std.account.domain.Jour;
@@ -30,6 +31,10 @@ public class XN802524 extends AProcessor {
         condition.setBizType(req.getBizType());
         condition.setChannelType(req.getChannelType());
         condition.setStatus(req.getStatus());
+        condition.setCreateDatetimeStart(DateUtil.getFrontDate(
+            req.getDateStart(), false));
+        condition.setCreateDatetimeEnd(DateUtil.getFrontDate(req.getDateEnd(),
+            true));
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
             orderColumn = IJourAO.DEFAULT_ORDER_COLUMN;
