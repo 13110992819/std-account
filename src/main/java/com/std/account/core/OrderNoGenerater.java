@@ -20,14 +20,14 @@ import com.std.account.common.DateUtil;
 public class OrderNoGenerater {
 
     /**
-     * 产生毫秒级+后5位随机数别主键序列
+     * 产生毫秒级+后8位随机数别主键序列
      * @param prefix
      * @return 
      * @create: 2015年9月28日 下午5:18:38 xieyj
      * @history:
      */
     public static String generate(String prefix) {
-        int random = Math.abs(new Random().nextInt()) % 100000;
+        int random = Math.abs(new Random().nextInt()) % 100000000;
         String today = DateUtil.getToday(DateUtil.DATA_TIME_PATTERN_4);
         return prefix + today + String.valueOf(random);
     }
