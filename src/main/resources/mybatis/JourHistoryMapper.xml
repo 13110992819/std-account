@@ -227,7 +227,7 @@
 	</insert>
 	
 	<update id="update_check_jour" parameterType="jour">
-		UPDATE tstd_jour
+		UPDATE tstd_jour_history
 		SET
 		status= #{status}
 		,check_user=#{checkUser}
@@ -238,7 +238,7 @@
 	</update>
 	
 	<update id="update_adjust_jour" parameterType="jour">
-		UPDATE tstd_jour
+		UPDATE tstd_jour_history
 		SET
 		status= #{status}
 		,adjust_user=#{adjustUser}

@@ -100,6 +100,7 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
         data.setAccountNumber(dbAccount.getAccountNumber());
         data.setUserId(dbAccount.getUserId());
         data.setRealName(dbAccount.getRealName());
+        data.setType(dbAccount.getType());
         data.setCurrency(dbAccount.getCurrency());
         data.setChannelType(EChannelType.NBZ.getCode());
 

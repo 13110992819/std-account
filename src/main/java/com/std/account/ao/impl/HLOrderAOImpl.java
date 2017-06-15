@@ -44,7 +44,7 @@ public class HLOrderAOImpl implements IHLOrderAO {
         if (null != jour) {
             approveOrderNow(order, jour, adjustResult, approveUser, approveNote);// 现在流水调账
         } else {
-            jour = jourHistoryBO.getJour(code, systemCode);
+            jour = jourHistoryBO.getJour(order.getJourCode(), systemCode);
             approveOrderHistory(order, jour, adjustResult, approveUser,
                 approveNote);// 历史流水调账
         }

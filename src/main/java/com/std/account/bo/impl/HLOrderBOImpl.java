@@ -77,6 +77,9 @@ public class HLOrderBOImpl extends PaginableBOImpl<HLOrder> implements
             condition.setCode(code);
             condition.setSystemCode(systemCode);
             order = hlOrderDAO.select(condition);
+            if (order == null) {
+                throw new BizException("xn000000", "单号不存在");
+            }
         }
         return order;
     }
