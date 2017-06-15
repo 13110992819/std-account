@@ -38,6 +38,9 @@
 			<if test="currency != null and currency != '' ">
 				AND t.currency = #{currency}
 			</if>	
+			<if test="jourCode != null and jourCode != '' ">
+				AND t.jour_code = #{jourCode}
+			</if>
 			<if test="direction != null and direction != '' ">
 				AND t.direction = #{direction}
 			</if>
