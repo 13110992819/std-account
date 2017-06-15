@@ -24,17 +24,7 @@ import com.std.account.dto.res.XN802901Res;
 public interface IJourAO {
     String DEFAULT_ORDER_COLUMN = "code";
 
-    /**
-     * 人工调账
-     * @param code
-     * @param checkAmount
-     * @param checkUser
-     * @param checkNote
-     * @param systemCode
-     * @param companyCode 
-     * @create: 2017年5月17日 下午6:37:21 xieyj
-     * @history:
-     */
+    // 流水对账(包括现在和历史流水)
     public void checkJour(String code, Long checkAmount, String checkUser,
             String checkNote, String systemCode);
 

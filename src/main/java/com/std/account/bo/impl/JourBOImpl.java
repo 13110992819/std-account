@@ -170,7 +170,18 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
             }
         }
         return data;
+    }
 
+    @Override
+    public Jour getJourNotException(String code, String systemCode) {
+        Jour data = null;
+        if (StringUtils.isNotBlank(code)) {
+            Jour condition = new Jour();
+            condition.setCode(code);
+            condition.setSystemCode(systemCode);
+            data = jourDAO.select(condition);
+        }
+        return data;
     }
 
     @Override

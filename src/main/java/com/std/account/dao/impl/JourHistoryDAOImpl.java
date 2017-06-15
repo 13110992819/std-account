@@ -69,6 +69,22 @@ public class JourHistoryDAOImpl extends AMybatisTemplate implements
             count, condition, Jour.class);
     }
 
+    /** 
+     * @see com.xnjr.account.dao.IJourDAO.account.dao.IAJourDAO#checkJour(com.Jour.account.domain.AccountJour)
+     */
+    @Override
+    public int checkJour(Jour data) {
+        return super.update(NAMESPACE.concat("update_check_jour"), data);
+    }
+
+    /** 
+     * @see com.std.account.dao.IJourDAO#adjustJour(com.std.account.domain.Jour)
+     */
+    @Override
+    public int adjustJour(Jour data) {
+        return super.update(NAMESPACE.concat("update_adjust_jour"), data);
+    }
+
     @Override
     public long selectTotalAmount(Jour data) {
         return super.selectTotalCount(NAMESPACE.concat("select_totalAmount"),
