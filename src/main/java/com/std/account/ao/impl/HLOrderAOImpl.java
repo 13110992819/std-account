@@ -104,7 +104,11 @@ public class HLOrderAOImpl implements IHLOrderAO {
     @Override
     public HLOrder getHLOrder(String code, String systemCode) {
         HLOrder hLOrder = hlOrderBO.getHLOrder(code, systemCode);
-        Jour jour = jourBO.getJour(hLOrder.getJourCode(), systemCode);
+        Jour jour = jourBO.getJourNotException(hLOrder.getJourCode(),
+            systemCode);
+        if (null == jour) {
+            jour = jourHistoryBO.getJour(hLOrder.getJourCode(), systemCode);
+        }
         List<Jour> jourList = new ArrayList<Jour>();
         jourList.add(jour);
         hLOrder.setJourList(jourList);

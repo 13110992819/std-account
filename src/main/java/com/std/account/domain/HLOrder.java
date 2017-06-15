@@ -76,7 +76,7 @@ public class HLOrder extends ABaseDO {
     // 审批时间止
     private Date approveDatetimeEnd;
 
-    // 流水列表(给前端构造,不可删除)
+    // 流水列表(管理端详情展示表格)
     private List<Jour> jourList;
 
     public List<Jour> getJourList() {
