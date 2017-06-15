@@ -41,4 +41,4 @@
   
    http://121.43.101.148:8906/std-account/api
   
-   http://139.224.200.54:5606/std-account/api
+   http://106.15.49.68:5606/std-account/api

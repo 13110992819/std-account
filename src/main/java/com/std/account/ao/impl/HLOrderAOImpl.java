@@ -11,6 +11,7 @@ import com.std.account.ao.IHLOrderAO;
 import com.std.account.bo.IAccountBO;
 import com.std.account.bo.IHLOrderBO;
 import com.std.account.bo.IJourBO;
+import com.std.account.bo.IJourHistoryBO;
 import com.std.account.bo.base.Paginable;
 import com.std.account.domain.HLOrder;
 import com.std.account.domain.Jour;
@@ -31,7 +32,7 @@ public class HLOrderAOImpl implements IHLOrderAO {
     private IJourBO jourBO;
 
     @Autowired
-    private IJourBO jourHistoryBO;
+    private IJourHistoryBO jourHistoryBO;
 
     @Override
     @Transactional
