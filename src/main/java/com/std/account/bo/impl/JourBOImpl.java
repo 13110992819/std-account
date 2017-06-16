@@ -100,6 +100,8 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
         data.setAccountNumber(dbAccount.getAccountNumber());
         data.setUserId(dbAccount.getUserId());
         data.setRealName(dbAccount.getRealName());
+        data.setType(dbAccount.getType());
+        data.setCurrency(dbAccount.getCurrency());
         data.setChannelType(EChannelType.NBZ.getCode());
 
         data.setRefNo(order.getCode());
@@ -170,7 +172,18 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
             }
         }
         return data;
+    }
 
+    @Override
+    public Jour getJourNotException(String code, String systemCode) {
+        Jour data = null;
+        if (StringUtils.isNotBlank(code)) {
+            Jour condition = new Jour();
+            condition.setCode(code);
+            condition.setSystemCode(systemCode);
+            data = jourDAO.select(condition);
+        }
+        return data;
     }
 
     @Override

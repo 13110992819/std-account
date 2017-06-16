@@ -1,5 +1,9 @@
 package com.std.account.ao.impl;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,5 +43,20 @@ public class SYSConfigAOImpl implements ISYSConfigAO {
     public SYSConfig getSYSConfig(String key, String companyCode,
             String systemCode) {
         return sysConfigBO.getSYSConfig(key, companyCode, systemCode);
+    }
+
+    /** 
+     * @see com.std.account.ao.ISYSConfigAO#getSYSConfig(java.util.List, java.lang.String, java.lang.String)
+     */
+    @Override
+    public Map<String, String> getSYSConfig(List<String> keyList,
+            String companyCode, String systemCode) {
+        Map<String, String> resultMap = new HashMap<String, String>();
+        for (String key : keyList) {
+            SYSConfig sysconfig = sysConfigBO.getSYSConfig(key, companyCode,
+                systemCode);
+            resultMap.put(sysconfig.getCkey(), sysconfig.getCvalue());
+        }
+        return resultMap;
     }
 }

@@ -11,5 +11,11 @@ import com.std.account.domain.Jour;
 public interface IJourHistoryDAO extends IBaseDAO<Jour> {
     String NAMESPACE = IJourHistoryDAO.class.getName().concat(".");
 
+    // 对账结果录入
+    public int checkJour(Jour data);
+
+    // 调账后状态更新
+    public int adjustJour(Jour data);
+
     public long selectTotalAmount(Jour data);
 }

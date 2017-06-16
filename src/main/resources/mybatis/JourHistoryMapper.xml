@@ -226,6 +226,28 @@
 		)
 	</insert>
 	
+	<update id="update_check_jour" parameterType="jour">
+		UPDATE tstd_jour_history
+		SET
+		status= #{status}
+		,check_user=#{checkUser}
+		,check_note=#{checkNote}
+		,check_datetime=#{checkDatetime}
+		WHERE
+		code = #{code}	
+	</update>
+	
+	<update id="update_adjust_jour" parameterType="jour">
+		UPDATE tstd_jour_history
+		SET
+		status= #{status}
+		,adjust_user=#{adjustUser}
+		,adjust_note=#{adjustNote}
+		,adjust_datetime=#{adjustDatetime}
+		WHERE
+		code = #{code}	
+	</update>
+	
 	<select id="select_totalAmount" parameterType="jour"
 		resultType="java.lang.Long">
 		SELECT ifnull(sum(trans_amount),0) FROM tstd_jour_history t 

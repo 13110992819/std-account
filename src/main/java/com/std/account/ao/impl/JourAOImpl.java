@@ -50,7 +50,17 @@ public class JourAOImpl implements IJourAO {
     @Transactional
     public void checkJour(String code, Long checkAmount, String checkUser,
             String checkNote, String systemCode) {
-        Jour jour = jourBO.getJour(code, systemCode);
+        Jour jour = jourBO.getJourNotException(code, systemCode);
+        if (null != jour) {
+            doCheckJourNow(code, checkAmount, checkUser, checkNote, jour);// 现在流水对账
+        } else {
+            jour = jourHistoryBO.getJour(code, systemCode);
+            doCheckJourHistory(code, checkAmount, checkUser, checkNote, jour);// 历史流水对账
+        }
+    }
+
+    private void doCheckJourNow(String code, Long checkAmount,
+            String checkUser, String checkNote, Jour jour) {
         if (!EJourStatus.todoCheck.getCode().equals(jour.getStatus())) {
             throw new BizException("xn000000", "该流水<" + code + ">不处于待对账状态");
         }
@@ -63,6 +73,23 @@ public class JourAOImpl implements IJourAO {
         } else {
             jourBO.doCheckJour(jour, EBoolean.YES, checkAmount, checkUser,
                 checkNote);
+        }
+    }
+
+    private void doCheckJourHistory(String code, Long checkAmount,
+            String checkUser, String checkNote, Jour jour) {
+        if (!EJourStatus.todoCheck.getCode().equals(jour.getStatus())) {
+            throw new BizException("xn000000", "该流水<" + code + ">不处于待对账状态");
+        }
+        if (checkAmount != 0) {
+            Account account = accountBO.getAccount(jour.getAccountNumber());
+            hlOrderBO.applyOrder(account, jour, checkAmount, checkUser,
+                checkNote);
+            jourHistoryBO.doCheckJour(jour, EBoolean.NO, checkAmount,
+                checkUser, checkNote);
+        } else {
+            jourHistoryBO.doCheckJour(jour, EBoolean.YES, checkAmount,
+                checkUser, checkNote);
         }
     }
 
