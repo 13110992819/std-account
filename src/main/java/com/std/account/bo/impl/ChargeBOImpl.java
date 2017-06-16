@@ -8,21 +8,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.std.account.bo.IChargeBO;
+import com.std.account.bo.ISYSConfigBO;
 import com.std.account.bo.base.PaginableBOImpl;
+import com.std.account.common.DateUtil;
+import com.std.account.common.SysConstant;
 import com.std.account.core.OrderNoGenerater;
 import com.std.account.dao.IChargeDAO;
 import com.std.account.domain.Account;
 import com.std.account.domain.Charge;
+import com.std.account.domain.SYSConfig;
 import com.std.account.enums.EChannelType;
 import com.std.account.enums.EChargeStatus;
 import com.std.account.enums.EGeneratePrefix;
 import com.std.account.enums.EJourBizType;
 import com.std.account.exception.BizException;
+import com.std.account.util.AmountUtil;
 
 @Component
 public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
     @Autowired
     private IChargeDAO chargeDAO;
+
+    @Autowired
+    private ISYSConfigBO sysConfigBO;
 
     @Override
     public String applyOrderOffline(Account account, EJourBizType bizType,
@@ -143,5 +151,38 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
             }
         }
         return order;
+    }
+
+    @Override
+    public void doCheckTodayPayAmount(String applyUser, Long payAmount,
+            EChannelType channelType, String companyCode, String systemCode) {
+        String dayMaxAmountKey = null;
+        if (EChannelType.Alipay.getCode().equals(channelType)) {
+            dayMaxAmountKey = SysConstant.ZFB_DAY_MAX_AMOUNT;
+        } else if (EChannelType.WeChat_APP.getCode().equals(channelType)) {
+            dayMaxAmountKey = SysConstant.WX_DAY_MAX_AMOUNT;
+        }
+        SYSConfig sysConfig = sysConfigBO.getSYSConfigNotException(
+            dayMaxAmountKey, companyCode, systemCode);
+        if (null != sysConfig) {// 系统参数未配置，不做判断
+            String dayMaxAmountValue = sysConfig.getCvalue();
+            Long dayMaxAmount = AmountUtil.mul(1000L,
+                Double.valueOf(dayMaxAmountValue));
+            if (dayMaxAmount.longValue() <= 0) {
+                throw new BizException("xn0000", "支付通道维护中，请使用余额支付。");
+            }
+            Charge condition = new Charge();
+            condition.setChannelType(channelType.getCode());
+            condition.setStatus(EChargeStatus.Pay_YES.getCode());
+            condition.setApplyUser(applyUser);
+            condition.setPayDatetimeStart(DateUtil.getTodayStart());
+            condition.setPayDatetimeEnd(DateUtil.getTodayEnd());
+            Long todayAmount = chargeDAO.selectTotalAmount(condition);
+            Long nowTodayAmount = todayAmount + payAmount;// 今日+本次支付是否超日限额
+            if (dayMaxAmount < nowTodayAmount) {
+                throw new BizException("xn0000", "该渠道每日限额" + dayMaxAmountValue
+                        + ",本次支付将超额，请明天再来");
+            }
+        }
     }
 }

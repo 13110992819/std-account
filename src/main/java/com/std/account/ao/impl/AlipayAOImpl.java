@@ -25,6 +25,7 @@ import com.std.account.bo.IAccountBO;
 import com.std.account.bo.IAlipayBO;
 import com.std.account.bo.IChargeBO;
 import com.std.account.bo.ICompanyChannelBO;
+import com.std.account.bo.ISYSConfigBO;
 import com.std.account.common.DateUtil;
 import com.std.account.common.JsonUtil;
 import com.std.account.common.PropertiesUtil;
@@ -66,6 +67,9 @@ public class AlipayAOImpl implements IAlipayAO {
     @Autowired
     IChargeBO chargeBO;
 
+    @Autowired
+    ISYSConfigBO sysConfigBO;
+
     // 配置说明
     // channel_company —— 卖家支付宝用户号
     // private_key1 —— APP_PRIVATE_KEY，开发者应用私钥，由开发者自己生成
@@ -81,6 +85,11 @@ public class AlipayAOImpl implements IAlipayAO {
         // 获取收款方账户信息
         Account toAccount = accountBO.getAccountByUser(toUser,
             ECurrency.CNY.getCode());
+        String systemCode = toAccount.getSystemCode();
+        String companyCode = toAccount.getCompanyCode();
+        // 支付前提验证
+        chargeBO.doCheckTodayPayAmount(applyUser, transAmount,
+            EChannelType.Alipay, companyCode, systemCode);
 
         // 落地此次付款的订单信息
         String chargeOrderCode = chargeBO.applyOrderOnline(toAccount, payGroup,
@@ -88,8 +97,6 @@ public class AlipayAOImpl implements IAlipayAO {
             EChannelType.Alipay, applyUser);
 
         // 获取支付宝支付配置参数
-        String systemCode = toAccount.getSystemCode();
-        String companyCode = toAccount.getCompanyCode();
         CompanyChannel companyChannel = companyChannelBO.getCompanyChannel(
             companyCode, systemCode, EChannelType.Alipay.getCode());
 

@@ -50,4 +50,10 @@ public class ChargeDAOImpl extends AMybatisTemplate implements IChargeDAO {
     public void payOrder(Charge data) {
         super.update(NAMESPACE.concat("pay_order"), data);
     }
+
+    @Override
+    public long selectTotalAmount(Charge condition) {
+        return super.selectTotalCount(NAMESPACE.concat("select_totalAmount"),
+            condition);
+    }
 }

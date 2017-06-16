@@ -190,4 +190,10 @@
 		,pay_datetime=#{payDatetime}
 		WHERE code = #{code}
 	</update>
+	
+	<select id="select_totalAmount" parameterType="charge"
+		resultType="java.lang.Long">
+		SELECT ifnull(sum(amount),0) FROM tstd_charge t 
+		<include refid="where_condition" />
+	</select>
 </mapper>

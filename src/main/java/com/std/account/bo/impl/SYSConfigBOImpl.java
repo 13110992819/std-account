@@ -115,6 +115,24 @@ public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig> implements
     }
 
     @Override
+    public SYSConfig getSYSConfigNotException(String key, String companyCode,
+            String systemCode) {
+        SYSConfig sysConfig = null;
+        if (StringUtils.isNotBlank(key) && StringUtils.isNotBlank(systemCode)
+                && StringUtils.isNotBlank(companyCode)) {
+            SYSConfig condition = new SYSConfig();
+            condition.setCkey(key);
+            condition.setCompanyCode(companyCode);
+            condition.setSystemCode(systemCode);
+            List<SYSConfig> sysConfigList = sysConfigDAO.selectList(condition);
+            if (CollectionUtils.isNotEmpty(sysConfigList)) {
+                sysConfig = sysConfigList.get(0);
+            }
+        }
+        return sysConfig;
+    }
+
+    @Override
     public String getSYSConfig(String key, String systemCode) {
         return getSYSConfig(key, systemCode, systemCode).getCvalue();
     }
@@ -160,5 +178,4 @@ public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig> implements
         return Double.valueOf(this.getSYSConfig(EExchangeRate.CNY2CB.getCode(),
             ESystemCode.YAOCHENG.getCode()));
     }
-
 }

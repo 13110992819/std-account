@@ -49,6 +49,9 @@ public interface ISYSConfigBO extends IPaginableBO<SYSConfig> {
     public SYSConfig getSYSConfig(String key, String companyCode,
             String systemCode);
 
+    public SYSConfig getSYSConfigNotException(String key, String companyCode,
+            String systemCode);
+
     // 获取人民币对正汇贡献值：1人民币=多少正汇贡献值
     public Double getCNY2GXZ();
 
@@ -69,5 +72,4 @@ public interface ISYSConfigBO extends IPaginableBO<SYSConfig> {
 
     // 获取人民币对橙券配置值：1人民币=橙券
     public Double getCNY2CB();
-
 }

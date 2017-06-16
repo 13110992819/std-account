@@ -63,11 +63,10 @@ public class WithdrawAOImpl implements IWithdrawAO {
             String payCardInfo, String payCardNo, String applyUser,
             String applyNote) {
         Account dbAccount = accountBO.getAccount(accountNumber);
-        // 参数检查
+        // 取现前提检查
         withdrawBO.doCheckArgs(dbAccount, amount);
         // 获取手续费
         Long fee = withdrawBO.doGetFee(dbAccount, amount);
-
         // 产生取现订单
         String withdrawCode = withdrawBO.applyOrder(dbAccount, amount, fee,
             payCardInfo, payCardNo, applyUser, applyNote);

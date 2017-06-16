@@ -24,6 +24,7 @@ import com.std.account.bo.IChargeBO;
 import com.std.account.bo.ICompanyChannelBO;
 import com.std.account.bo.IExchangeCurrencyBO;
 import com.std.account.bo.IJourBO;
+import com.std.account.bo.ISYSConfigBO;
 import com.std.account.bo.IUserBO;
 import com.std.account.bo.IWechatBO;
 import com.std.account.common.JsonUtil;
@@ -74,6 +75,9 @@ public class WeChatAOImpl implements IWeChatAO {
     @Autowired
     IExchangeCurrencyBO exchangeCurrencyBO;
 
+    @Autowired
+    ISYSConfigBO sysConfigBO;
+
     @Override
     public XN002500Res getPrepayIdApp(String applyUser, String toUser,
             String payGroup, String refNo, String bizType, String bizNote,
@@ -84,13 +88,17 @@ public class WeChatAOImpl implements IWeChatAO {
         // 获取收款方账户信息
         Account toAccount = accountBO.getAccountByUser(toUser,
             ECurrency.CNY.getCode());
+        String systemCode = toAccount.getSystemCode();
+        String companyCode = toAccount.getCompanyCode();
+        // 支付前提验证
+        chargeBO.doCheckTodayPayAmount(applyUser, transAmount,
+            EChannelType.WeChat_APP, companyCode, systemCode);
+
         // 落地此次付款的订单信息
         String chargeOrderCode = chargeBO.applyOrderOnline(toAccount, payGroup,
             refNo, EJourBizType.getBizType(bizType), bizNote, transAmount,
             EChannelType.WeChat_APP, applyUser);
         // 获取支付宝支付配置参数
-        String systemCode = toAccount.getSystemCode();
-        String companyCode = toAccount.getCompanyCode();
         CompanyChannel companyChannel = companyChannelBO.getCompanyChannel(
             companyCode, systemCode, EChannelType.WeChat_APP.getCode());
 

@@ -26,4 +26,7 @@ public interface IChargeBO extends IPaginableBO<Charge> {
 
     Charge getCharge(String code, String systemCode);
 
+    // 验证渠道今日支付金额是否超限
+    void doCheckTodayPayAmount(String applyUser, Long payAmount,
+            EChannelType channelType, String companyCode, String systemCode);
 }
