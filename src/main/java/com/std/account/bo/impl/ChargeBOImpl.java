@@ -157,9 +157,10 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
     public void doCheckTodayPayAmount(String applyUser, Long payAmount,
             EChannelType channelType, String companyCode, String systemCode) {
         String dayMaxAmountKey = null;
-        if (EChannelType.Alipay.getCode().equals(channelType)) {
+        if (EChannelType.Alipay.getCode().equals(channelType.getCode())) {
             dayMaxAmountKey = SysConstant.ZFB_DAY_MAX_AMOUNT;
-        } else if (EChannelType.WeChat_APP.getCode().equals(channelType)) {
+        } else if (EChannelType.WeChat_APP.getCode().equals(
+            channelType.getCode())) {
             dayMaxAmountKey = SysConstant.WX_DAY_MAX_AMOUNT;
         }
         SYSConfig sysConfig = sysConfigBO.getSYSConfigNotException(
