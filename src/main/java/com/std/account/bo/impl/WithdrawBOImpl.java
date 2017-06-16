@@ -26,6 +26,7 @@ import com.std.account.enums.EChannelType;
 import com.std.account.enums.EGeneratePrefix;
 import com.std.account.enums.EWithdrawStatus;
 import com.std.account.exception.BizException;
+import com.std.account.util.AmountUtil;
 
 @Component
 public class WithdrawBOImpl extends PaginableBOImpl<Withdraw> implements
@@ -127,14 +128,11 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw> implements
         return order;
     }
 
-    /** 
-     * @see com.std.account.bo.IWithdrawBO#doCheckTimes(java.lang.String)
-     */
     @Override
-    public void doCheckTimes(Account account) {
-        // 判断本月申请次数是否达到上限
+    public void doCheckArgs(Account account, Long amount) {
         Map<String, String> argsMap = sysConfigBO.getConfigsMap(
             account.getSystemCode(), account.getCompanyCode());
+        // 判断本月申请次数是否达到上限
         String monthTimesKey = null;
         if (EAccountType.Customer.getCode().equals(account.getType())) {
             monthTimesKey = SysConstant.CUSERMONTIMES;
@@ -162,5 +160,55 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw> implements
         if (withdrawDAO.selectTotalCount(condition) > 0) {
             throw new BizException("xn000000", "上笔取现申请还未处理成功，不能再次申请");
         }
+
+        // 取现金额验证
+        if (amount <= 0) {
+            throw new BizException("xn000000", "提现金额需大于零");
+        }
+        String qxDbzdjeValue = argsMap.get(SysConstant.QXDBZDJE);
+        if (StringUtils.isNotBlank(qxDbzdjeValue)) {
+            Long qxDbzdje = AmountUtil
+                .mul(1000L, Double.valueOf(qxDbzdjeValue));
+            if (amount > qxDbzdje) {
+                throw new BizException("xn000000", "取现单笔最大金额不能超过"
+                        + qxDbzdjeValue + "元。");
+            }
+        }
+        String qxbs = null; // 取现倍数
+        if (EAccountType.Customer.getCode().equals(account.getType())) {
+            qxbs = SysConstant.CUSERQXBS;
+        } else if (EAccountType.Business.getCode().equals(account.getType())) {
+            qxbs = SysConstant.BUSERQXBS;
+        }
+        String qxBsValue = argsMap.get(qxbs);
+        if (StringUtils.isNotBlank(qxBsValue)) {
+            // 取现金额倍数
+            Long qxBs = AmountUtil.mul(1000L, Double.valueOf(qxBsValue));
+            if (qxBs > 0 && amount % qxBs > 0) {
+                throw new BizException("xn000000", "金额请取" + qxBsValue + "的倍数");
+            }
+        }
+    }
+
+    // 获取手续费
+    @Override
+    public Long doGetFee(Account account, Long amount) {
+        long fee = 0;
+        double feeRate = 0;
+        Map<String, String> argsMap = sysConfigBO.getConfigsMap(
+            account.getSystemCode(), account.getCompanyCode());
+        String qxfl = null;
+        if (EAccountType.Customer.getCode().equals(account.getType())) {
+            qxfl = SysConstant.CUSERQXFL;
+        } else if (EAccountType.Business.getCode().equals(account.getType())) {
+            qxfl = SysConstant.BUSERQXFL;
+        }
+        String feeRateValue = argsMap.get(qxfl);
+        if (StringUtils.isNotBlank(feeRateValue)) {
+            feeRate = Double.valueOf(feeRateValue);
+        }
+        fee = AmountUtil.mul(amount, feeRate);
+
+        return fee;
     }
 }
