@@ -170,7 +170,7 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
             Long dayMaxAmount = AmountUtil.mul(1000L,
                 Double.valueOf(dayMaxAmountValue));
             if (dayMaxAmount.longValue() <= 0) {
-                throw new BizException("xn0000", "当前支付渠道维护中，请使用其他支付方式。");
+                throw new BizException("xn0000", "当前渠道维护中，请使用其他支付方式。");
             }
             Charge condition = new Charge();
             condition.setChannelType(channelType.getCode());
