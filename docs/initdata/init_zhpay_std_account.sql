@@ -19,8 +19,8 @@ INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`r
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('3','QXDBZDJE','50000','',now(),'取现单笔最大金额','CD-CZH000001','CD-CZH000001');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('3','CUSERQXFL','0.01','',now(),'C端取现手续费率','CD-CZH000001','CD-CZH000001');
 
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('O','WX_DAY_MAX_AMOUNT','500','admin',now(),'微信日累计支付最大金额','CD-CZH000001','CD-CZH000001');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('O','ZFB_DAY_MAX_AMOUNT','500','admin',now(),'支付宝日累计支付最大金额','CD-CZH000001','CD-CZH000001');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('4','WX_DAY_MAX_AMOUNT','500','admin',now(),'微信日累计支付最大金额','CD-CZH000001','CD-CZH000001');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('4','ZFB_DAY_MAX_AMOUNT','500','admin',now(),'支付宝日累计支付最大金额','CD-CZH000001','CD-CZH000001');
 /*
 -- Query: select `type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code` from tsys_dict
 LIMIT 0, 10000
