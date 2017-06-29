@@ -157,9 +157,10 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
     public void doCheckTodayPayAmount(String applyUser, Long payAmount,
             EChannelType channelType, String companyCode, String systemCode) {
         String dayMaxAmountKey = null;
-        if (EChannelType.Alipay.getCode().equals(channelType)) {
+        if (EChannelType.Alipay.getCode().equals(channelType.getCode())) {
             dayMaxAmountKey = SysConstant.ZFB_DAY_MAX_AMOUNT;
-        } else if (EChannelType.WeChat_APP.getCode().equals(channelType)) {
+        } else if (EChannelType.WeChat_APP.getCode().equals(
+            channelType.getCode())) {
             dayMaxAmountKey = SysConstant.WX_DAY_MAX_AMOUNT;
         }
         SYSConfig sysConfig = sysConfigBO.getSYSConfigNotException(
@@ -169,7 +170,7 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
             Long dayMaxAmount = AmountUtil.mul(1000L,
                 Double.valueOf(dayMaxAmountValue));
             if (dayMaxAmount.longValue() <= 0) {
-                throw new BizException("xn0000", "支付通道维护中，请使用余额支付。");
+                throw new BizException("xn0000", "当前支付通道维护中，请使用其他支付方式。");
             }
             Charge condition = new Charge();
             condition.setChannelType(channelType.getCode());
