@@ -164,7 +164,7 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
             toBizNote = "账户[" + fromAccount.getRealName() + "]代发代销";
         }
         String code = exchangeCurrencyBO.saveExchange(fromUserId, transAmount,
-            fromCurrency, toUserId, toAmount, toCurrency,
+            fromCurrency, toUserId, toAmount, toCurrency, null,
             fromAccount.getCompanyCode(), fromAccount.getSystemCode());
         accountBO.changeAmount(fromAccount.getAccountNumber(),
             EChannelType.NBZ, null, null, code, EJourBizType.Transfer_CURRENCY,
@@ -219,7 +219,7 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
             .getExchangeRate(ECurrency.CNY.getCode(), currency));
         // 产生记录
         String code = exchangeCurrencyBO.saveExchange(fromUser.getUserId(),
-            rmbAmount, ECurrency.CNY.getCode(), toUser, amount, currency,
+            rmbAmount, ECurrency.CNY.getCode(), toUser, amount, currency, null,
             fromUser.getCompanyCode(), fromUser.getSystemCode());
         // 人民币划转
         accountBO.transAmountCZB(fromUser.getUserId(), ECurrency.CNY.getCode(),
@@ -378,7 +378,7 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
                 + CalculationUtil.divi(transAmount);
 
         String code = exchangeCurrencyBO.saveExchange(fromUserId, transAmount,
-            currency, toUserId, transAmount, currency,
+            currency, toUserId, transAmount, currency, null,
             fromAccount.getCompanyCode(), fromAccount.getSystemCode());
 
         accountBO.changeAmount(fromAccount.getAccountNumber(),
@@ -387,5 +387,49 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
         accountBO.changeAmount(toAccount.getAccountNumber(), EChannelType.NBZ,
             null, null, code, EJourBizType.Transfer_CURRENCY_C2C, bizNote,
             transAmount);
+    }
+
+    @Override
+    public void doTransfer(String fromUserId, String fromCurrency,
+            String toUserId, String toCurrency, Long amount, Long tranAmount,
+            String remark) {
+        // 转化前提是否满足
+        if (ECurrency.CNY.getCode().equals(toCurrency)) {
+            throw new BizException("xn000000", "转化币种不能是人民币");
+        }
+        Account fromAccount = accountBO.getAccountByUser(fromUserId,
+            fromCurrency);
+        Account toAccount = accountBO.getAccountByUser(toUserId, toCurrency);
+        // 开始资金划转
+        String bizNote = CalculationUtil.divi(amount)
+                + ECurrency.getCurrencyMap().get(fromCurrency).getValue()
+                + "转化为" + CalculationUtil.divi(tranAmount)
+                + ECurrency.getCurrencyMap().get(toCurrency).getValue();
+        String fromBizNote = bizNote;
+        String toBizNote = bizNote;
+        if (fromCurrency.equals(toCurrency)) {
+            fromBizNote = "代发代销至账户[" + toAccount.getRealName() + "]";
+            toBizNote = "账户[" + fromAccount.getRealName() + "]代发代销";
+        }
+        String code = exchangeCurrencyBO.saveExchange(fromUserId, amount,
+            fromCurrency, toUserId, tranAmount, toCurrency, remark,
+            fromAccount.getCompanyCode(), fromAccount.getSystemCode());
+        accountBO.changeAmount(fromAccount.getAccountNumber(),
+            EChannelType.NBZ, null, null, code, EJourBizType.Transfer_CURRENCY,
+            fromBizNote, -amount);
+        accountBO
+            .changeAmount(toAccount.getAccountNumber(), EChannelType.NBZ, null,
+                null, code, EJourBizType.Transfer_CURRENCY, toBizNote, amount);
+    }
+
+    @Override
+    public void updateGdStatus(String code) {
+        ExchangeCurrency exchangeCurrency = exchangeCurrencyBO
+            .getExchangeCurrency(code);
+        if (!EExchangeCurrencyStatus.PAYED.getCode().equalsIgnoreCase(
+            exchangeCurrency.getStatus())) {
+            throw new BizException("xn000000", "该转化不能归档");
+        }
+        exchangeCurrencyBO.updateGdStatus(exchangeCurrency);
     }
 }

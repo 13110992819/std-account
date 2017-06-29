@@ -24,6 +24,11 @@ public interface IExchangeCurrencyAO {
     public void doTransfer(String fromUserId, String fromCurrency,
             String toUserId, String toCurrency, Long amount);
 
+    // 不同用户间同币种或不同币种划转资金
+    public void doTransfer(String fromUserId, String fromCurrency,
+            String toUserId, String toCurrency, Long amount, Long tranAmount,
+            String remark);
+
     public Object payExchange(String fromUserId, String toUserId, Long amount,
             String currency, String payType);
 
@@ -32,4 +37,6 @@ public interface IExchangeCurrencyAO {
     // C端用户间分润划转资金(正汇)
     public void doTransferC2CByZhFR(String fromUserId, String toMobile,
             Long amount, String tradePwd);
+
+    public void updateGdStatus(String code);
 }

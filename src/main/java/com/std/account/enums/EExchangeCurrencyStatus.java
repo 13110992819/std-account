@@ -7,7 +7,8 @@ package com.std.account.enums;
  */
 public enum EExchangeCurrencyStatus {
 
-    TO_PAY("0", "待支付"), PAYED("1", "已支付"), CANCEL("2", "已取消");
+    TO_PAY("0", "待支付"), PAYED("1", "已支付/已发放"), CANCEL("2", "已取消"), GUIDAN("3",
+            "已归档");
 
     EExchangeCurrencyStatus(String code, String value) {
         this.code = code;

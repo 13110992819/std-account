@@ -125,6 +125,7 @@
 		,from_user_id
 		,from_amount
 		,from_currency
+		,remark
 		
 		,create_datetime
 		,status
@@ -143,6 +144,7 @@
 		,#{fromUserId}
 		,#{fromAmount}
 		,#{fromCurrency}
+		,#{remark}
 		
 		,#{createDatetime}
 		,#{status}
@@ -174,4 +176,10 @@
 		WHERE code = #{code}
 	</update>
 	
+	<update id="update_gdStatus" parameterType="exchangeCurrency">
+		UPDATE tstd_exchange_currency
+		SET
+		status = #{status}
+		WHERE code = #{code}
+	</update>
 </mapper>
